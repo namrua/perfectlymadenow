@@ -1,0 +1,131 @@
+﻿@model ClassPreferenceDetail
+@{
+    ViewBag.Title = CommonResources.MenuCommonProfiles;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CommonProfiles;
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.Profile, TabItemId.ProfileClassPreference, new { id = Model.ProfileId });
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Link(CommonResources.Edit, ButtonStyle.Primary, Url.Action("ClassPreferenceEdit", new { id = Model.ProfileId }))
+    @bg.Link("Edit expenses layout", ButtonStyle.Primary, Url.Action("ExpensesLayoutEdit", new { id = Model.ProfileId }))
+    @bg.Link("Preview style", ButtonStyle.Normal, Url.Action("ProfileStyle", "Preview", new { id = Model.ProfileId }))
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Index"))
+}
+
+<div class="row">
+
+    <div class="col-xl-6 align-content-start">
+
+        <h5>Class style</h5>
+
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.HomepageUrl)</dt>
+            @if (!string.IsNullOrEmpty(Model.HomepageUrl))
+            {
+                <dd class="col-sm-8"><a href="@Model.HomepageUrl" target="_blank">@Model.HomepageUrl</a></dd>
+            }
+            else
+            {
+                <dd class="col-sm-8"><em>default</em></dd>
+            }
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.RegistrationColorScheme)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.RegistrationColorScheme)</dd>
+
+            @if (Model.HeaderPictureId.HasValue)
+            {
+                <dt class="col-12">Header picture</dt>
+                <dd class="col-12">
+                    <div class="img-preview-placeholder-detail-2 ">
+                        <img src="@Url.Action("Image", "File", new {id = Model.HeaderPictureId})" />
+                    </div>
+                </dd>
+            }
+            else
+            {
+                <dt class="col-sm-4">Header picture</dt>
+                <dd class="col-sm-8"><em>default</em></dd>
+            }
+        </dl>
+
+        <h5>Class behavior</h5>
+
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.SendCertificatesByEmail)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.SendCertificatesByEmail)</dd>
+        </dl>
+
+    </div>
+
+
+    <div class="col-xl-6 align-content-start">
+
+        <h5>Report settings</h5>
+
+        <dl class="row dl-compact">
+
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.VenueName)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.VenueName)</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.LocationCode)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.LocationCode)</dd>
+            @if (!string.IsNullOrEmpty(Model.LocationInfo))
+            {
+                <dt class="col-sm-4">@Html.DisplayNameFor(x => x.LocationInfo)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(x => x.LocationInfo)</dd>
+            }
+        </dl>
+
+        <h5>Finance</h5>
+
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Currency)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Currency)</dd>
+        </dl>
+
+    </div>
+
+</div>
+
+
+<h5>Expenses</h5>
+@if (Model.Expenses.Count == 0)
+{
+    <p>
+        <em>@CommonResources.NoRecords</em>
+    </p>
+}
+else
+{
+    @*List of ClassExpenses*@
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.Expenses[0].Order)</th>
+                <th>@Html.DisplayNameFor(x => x.Expenses[0].Text)</th>
+                <th>@Html.DisplayNameFor(x => x.Expenses[0].Value)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Expenses.OrderBy(x => x.Order))
+            {
+                <tr>
+                    <td><strong>@Html.DisplayFor(x => item.Order).</strong></td>
+                    <td>@Html.DisplayFor(x => item.Text)</td>
+                    <td>
+                        @if (item.ClassExpenseTypeId == ClassExpenseTypeEnum.Custom)
+                        {
+                            @Html.DisplayFor(x => item.Value, new { Currency = Model.CurrencyCode })
+                        }
+                        else
+                        {
+                            <em>computed</em>
+                        }
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}

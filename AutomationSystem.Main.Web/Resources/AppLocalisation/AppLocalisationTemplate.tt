@@ -1,0 +1,74 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Xml.Linq" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="EnvDTE" #>  
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Xml.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#
+	// USER INPUT	
+	var modelFile = "AppLocalisationModel.xml";			// model file
+	var rootNamespace = "Resources";
+	var callFormat = "localisationService.Value.GetLocalisedHtmlString(\"{0}\", \"{1}\")";
+	var callPlainFormat = "localisationService.Value.GetLocalisedString(\"{0}\", \"{1}\")";
+
+	// PARSING PART 
+
+	// read the model file	
+	EnvDTE.DTE dte = (EnvDTE.DTE) ((IServiceProvider) this.Host).GetService(typeof(EnvDTE.DTE));  	
+	XElement rootElem = XElement.Load(System.IO.Path.Combine(dte.ActiveDocument.Path, modelFile));		
+
+	// WRITING PART 
+#>
+using System;
+using System.Web;
+using AutomationSystem.Main.Web;
+using AutomationSystem.Shared.Contract.Localisation.System;
+
+namespace <#= rootNamespace #>
+{
+<#
+	string moduleName;
+	foreach(var moduleElem in rootElem.Elements("module")) 
+	{
+		moduleName = moduleElem.Attribute("name").Value;		
+#>
+
+	/// <summary>
+	/// <#= "Resource module " + moduleName  #>
+	/// </summary>
+	public static class <#= moduleName + "Texts" #> 
+	{
+		private static readonly Lazy<ILocalisationService> localisationService = new Lazy<ILocalisationService>(IocProvider.Get<ILocalisationService>);
+
+	<#
+		string labelName;
+		string labelNamePlain;
+		foreach(var labelElem in moduleElem.Elements("label"))
+		{
+			labelName = labelElem.Attribute("name").Value;
+			labelNamePlain = labelName + "String";
+										
+	#>
+	/// <summary>
+		/// <#= "Resource text HtmlString" + labelName #>
+		/// </summary>
+		public static HtmlString <#= labelName #> => <#= string.Format(callFormat, moduleName, labelName) #>; 		
+
+		/// <summary>
+		/// <#= "Resource text " + labelName #>
+		/// </summary>
+		public <#= labelName == "To" ? "new " : "" #>static string <#= labelNamePlain #> => <#= string.Format(callPlainFormat, moduleName, labelName) #>;		
+			
+	<#
+		}
+	#>
+}
+
+<#
+	}
+#>
+}

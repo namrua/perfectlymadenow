@@ -1,0 +1,15 @@
+﻿@model MaterialRecipientPageModel
+@{
+    ViewBag.Title = CommonResources.TitleMaterials;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+
+    if (Model.RecipientId?.TypeId == EntityTypeEnum.MainClassRegistration)
+    {
+        var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.Registration, TabItemId.RegistrationMaterials, new {id = Model.RecipientId.Id });
+        Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+    }
+}
+
+<p>
+    <em>@Model.MaterialsDisabledMessage</em>
+</p>

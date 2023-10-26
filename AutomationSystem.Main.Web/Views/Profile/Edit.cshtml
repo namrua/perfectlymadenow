@@ -1,0 +1,109 @@
+﻿@model ProfileForm
+@{
+    ViewBag.Title = CommonResources.MenuCommonProfiles;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CommonProfiles;
+}
+
+<form id="profileForm" method="post" action="@Url.Action("Edit")">
+    
+    @if (Model.ProfileId == 0)
+    {
+        <div class="alert alert-primary" role="alert">
+            <p>
+                Access to profile's functionality are secured by user's access privileges. Privileges are set automatically for new profile and user who create it.
+                In some cases, this action needs to <strong>logging out and logging in</strong> the user.
+            </p>
+            <p>
+                When you save a new profile, <strong>the system could log you out</strong> to ensure you the correct access to the new profile.
+            </p>
+        </div>
+    }
+
+    @Html.EditorFor(x => x.ProfileId)
+    @Html.EditorFor(x => x.OriginMoniker)
+
+    <div class="row">
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Name)
+            @Html.EditorFor(x => x.Name)
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Moniker)
+            @Html.EditorFor(x => x.Moniker)
+        </div>
+
+    </div>
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save)
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, Model.ProfileId == 0 ? Url.Action("Index") : Url.Action("Detail", new {id = Model.ProfileId}))
+    }
+
+</form>
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function() {
+
+            // INITIALIZATION AND VALIDATION
+            var originMoniker = "@Ajax.JavaScriptStringEncode(Model.OriginMoniker)";
+
+            // registers validators
+            @*todo: encapsulate to corabeu form library*@
+            jQuery.validator.addMethod("notEqualLower",
+                function (value, element, param) {
+                    return !(value.toLowerCase() === param.toLowerCase());
+                },
+                "Not lowercase equal validation error");
+
+            // adds regex validator
+            @*todo: encapsulate to corabeu form library*@
+            jQuery.validator.addMethod("regex",
+                function (value, element, param) {
+                    return !(value == null || value == "" || !(new RegExp(param)).test(value));
+                },
+                "Value does not match a regex");
+
+            var profileForm = new CorabeuControl.Form("profileForm");
+
+            var moniker = new CorabeuControl.TextBox("moniker", "Moniker");
+
+            profileForm.validateControl($("#name"), "@Html.DisplayNameForJava(x => x.Name)", { required: true, maxlength: 128 });
+            profileForm.validateControl(moniker.element, "@Html.DisplayNameForJava(x => x.Moniker)", { required: true, maxlength: 16 });
+
+            @*todo: encapsulate to corabeu form library*@
+            CorabeuControl.ValidationHelper.addRule($("#moniker"), "regex", "^[a-zA-Z]*$", "@Html.DisplayNameForJava(x => x.Moniker) can only consist of letters");
+
+            @if (Model.ForbiddenMoniker != null)
+            {
+                @:CorabeuControl.ValidationHelper.addRule(moniker.element, "notEqualLower", "@Model.ForbiddenMoniker", "Profile with moniker '@Model.ForbiddenMoniker' already exist");
+            }
+
+            // confirmates changes on moniker
+            profileForm.element.submit(function (event) {                @*todo: encapsulate to corabeu form*@
+                var isValid = profileForm.element.valid();               @*todo: rewrite to isValid inner method*@
+                if (!isValid)
+                    return;
+                var newMoniker = moniker.getValue();
+                var confirmSumbit = originMoniker !== "" && newMoniker.toLowerCase() !== originMoniker.toLowerCase();
+                if (confirmSumbit && !confirm("Are you sure to change Moniker value from '" + originMoniker + "' to '" + newMoniker + "'?\n This change causes change of URL of some public pages!"))
+                    event.preventDefault();
+            });
+
+
+            @if (ViewBag.TriggerValidation != null)
+            {
+                @:profileForm.valid();
+            }
+
+        }
+
+    </script>
+
+}

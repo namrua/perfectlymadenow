@@ -1,0 +1,72 @@
+﻿@model RegistrationForEdit<RegistrationWwaForm>
+@{
+    ViewBag.Title = CommonResources.TitleCoordinatedRegistrations;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+   
+}
+
+<form id="registrationForm" method="post" action="@Url.Action(ViewBag.ActionForSave)">
+    
+    @Html.EditorFor(x => x.Form.ClassId)
+    @Html.EditorFor(x => x.Form.ClassRegistrationId)
+    @Html.EditorFor(x => x.Form.RegistrationTypeId)
+
+    <h5>@Html.DisplayNameFor(x => x.Form.ParticipantAddress)</h5>
+
+    @Html.EditorFor(x => x.Form.ParticipantAddress, new { Model.Countries })
+   
+
+    <h5>@Html.DisplayNameFor(x => x.Form.RegistrantAddress)</h5>
+
+    @Html.EditorFor(x => x.Form.RegistrantAddress, new { Model.Countries })
+
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.RegistrantEmail)
+            @Html.EditorFor(x => x.Form.RegistrantEmail)
+        </div>
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.LanguageId)
+            @Html.EditorFor(x => x.Form.LanguageId, new { Items = Model.Languages.Select(x => DropDownItem.Item((LanguageEnum)x.Id, x.Description)) })
+        </div>
+    </div>
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save);
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, Model.Form.ClassRegistrationId == 0
+            ? Url.Action("Registrations", "Class", new { id = Model.Form.ClassId })
+            : Url.Action("PersonalData", new { id = Model.Form.ClassRegistrationId }))
+    }
+  
+</form>
+
+
+@section scripts
+{
+
+<script type="text/javascript">
+
+        var runPageScript = function() {
+
+            // INITIALIZATION AND VALIDATION
+
+            var registrationForm = new CorabeuControl.Form("registrationForm");
+
+            var languageId = new CorabeuControl.DropDownList("languageId", "LanguageId");
+            var participantAddressComponent = new AutomationSystem.Address(registrationForm, "ParticipantAddress", { isIncomplete: true });
+            var registrantAddressComponent = new AutomationSystem.Address(registrationForm, "RegistrantAddress");
+
+            registrationForm.validateControl($("#registrantEmail"), "@Html.DisplayNameFor(x => x.Form.RegistrantEmail)", { required: true, maxlength: 128, email: true });            
+            registrationForm.validateControl(languageId.element, "@Html.DisplayNameFor(x => x.Form.LanguageId)", { notSelected: true });
+
+            @if (ViewBag.TriggerValidation != null)
+            {
+                @:registrationForm.valid();
+            }
+
+        }
+
+</script>
+
+}

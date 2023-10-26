@@ -1,0 +1,27 @@
+﻿@{
+
+    // creates base text input
+    var metadata = new EditorTemplateMetadataProvider<dynamic>(ViewData);
+    var name = metadata.Name;
+    var id = metadata.Id;
+    var picker = DateTimePicker.New(id, name, (DateTime?)Model, metadata.Placeholder);
+
+    // obtains date time input options and sets them to text input
+    var dateTimeInputOptions = metadata.GetAttribute<DateTimeInputOptions>();
+
+    // applies date time input options
+    var useCurrentCulture = false;
+    if (dateTimeInputOptions != null)
+    {
+        useCurrentCulture = dateTimeInputOptions.UseCurrentCulture;
+    }
+    picker.SetCulture(null, useCurrentCulture);
+
+}
+
+
+@InputControl.AddDateTimePicker(this, picker)
+@if (!metadata.NoErrorPlaceholder)
+{
+    <div id="@TextHelper.DecorateName(id, "error-placeholder")"></div>
+}

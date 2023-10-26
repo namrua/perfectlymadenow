@@ -1,0 +1,92 @@
+﻿@model MainAccountForm
+
+@{
+    ViewBag.Title = CommonResources.MenuCommonConferenceAccounts;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CommonConferenceAccounts;
+}
+
+<form id="accountForm" method="post" action="@Url.Action("Edit", "ConferenceAccount")">
+
+    @Html.EditorFor(x => x.ConferenceAccountId)
+    @Html.EditorFor(x => x.AccountId)
+    @Html.EditorFor(x => x.ProfileId)
+    @Html.EditorFor(x => x.CanDelete)
+
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Name)
+            @Html.EditorFor(x => x.Name)
+        </div>
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.SiteName)
+            @Html.EditorFor(x => x.SiteName)
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Login)
+            @Html.EditorFor(x => x.Login)
+        </div>
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Password)
+            @Html.EditorFor(x => x.Password)
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-12">
+            @Html.LabelFor(x => x.ServiceUrl)
+            @Html.EditorFor(x => x.ServiceUrl)
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.EditorFor(x => x.Active)
+        </div>
+    </div>
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save)
+        @bg.Command(CommonResources.Delete, ButtonStyle.Primary, !Model.CanDelete, new {id = "delete-button"})
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Index", "ConferenceAccount"))
+    }
+</form>
+
+
+@section scripts
+{
+
+<script type="text/javascript">
+
+    var runPageScript = function () {
+
+        // DELETE FUNCTIONALITY
+
+        var requestHelper = new CorabeuControl.RequestHelper();
+        requestHelper.addAction("delete", "@Url.Action("Delete", "ConferenceAccount")");
+
+        $("#delete-button").click(function () {
+            var confirmed = confirm("@TextHelper.ToHtmlString($"Are you sure you want to delete WebEx account {Model.Name}?")");
+            if (!confirmed) return;
+            requestHelper.executePost("delete", { id: @Model.AccountId });
+        });
+
+        // INITIALIZATION AND VALIDATION
+
+        var accountForm = new CorabeuControl.Form("accountForm");
+
+        accountForm.validateControl($("#name"), "@Html.DisplayNameFor(x => x.Name)", { required: true, maxlength: 128 });
+        accountForm.validateControl($("#siteName"), "@Html.DisplayNameFor(x => x.SiteName)", { required: true, maxlength: 128 });
+        accountForm.validateControl($("#login"), "@Html.DisplayNameFor(x => x.Login)", { required: true, maxlength: 64 });
+        accountForm.validateControl($("#password"), "@Html.DisplayNameFor(x => x.Password)", { required: true, maxlength: 64 });
+        accountForm.validateControl($("#serviceUrl"), "@Html.DisplayNameFor(x => x.ServiceUrl)", { required: true, maxlength: 128 });
+
+        @if (ViewBag.TriggerValidation != null)
+        {
+            <text>accountForm.valid();</text>
+        }
+    }
+
+</script>
+
+}

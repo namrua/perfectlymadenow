@@ -1,0 +1,97 @@
+﻿@model FormerClassForEdit
+@{
+    IContextManager cm = ContextHelper.GetContextManager(ViewBag);    
+}
+
+<form id="formerClassForm" method="post" action="@Url.Action("ClassEdit", new { context = cm.Get() })">
+    
+    @Html.EditorFor(x => x.Form.FormerClassId)
+    
+    <div class="row">
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.EventStart)
+            @Html.EditorFor(x => x.Form.EventStart)
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.EventEnd)
+            @Html.EditorFor(x => x.Form.EventEnd)
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.Location)
+            @Html.EditorFor(x => x.Form.Location)
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.ClassTypeId)
+            @Html.EditorFor(x => x.Form.ClassTypeId, new { Items = Model.ClassTypes.Select(x => DropDownItem.Item((ClassTypeEnum)x.Id, x.Description)) })
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.ProfileId)
+            @Html.EditorFor(x => x.Form.ProfileId, new { Items = Model.Profiles })
+        </div>
+
+    </div>
+    
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save)
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, cm.GetBackUrl(Model.Form.FormerClassId == 0
+            ? Url.Action("Index")
+            : Url.Action("ClassDetail", new { id = Model.Form.FormerClassId })))
+    }
+
+</form>
+
+@section scripts
+{
+
+<script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // INITIALIZATION AND VALIDATION
+                       
+            var eventStart = new CorabeuControl.DateTimePicker("eventStart", "EventStart", { format: "MMMM DD, YYYY" });
+            var eventEnd = new CorabeuControl.DateTimePicker("eventEnd", "EventEnd", { format: "MMMM DD, YYYY" });
+            var classTypeId = new CorabeuControl.DropDownList("classTypeId", "ClassTypeId");
+            var profileId = new CorabeuControl.DropDownList("profileId", "ProfileId");
+
+            var formerClassForm = new CorabeuControl.Form("formerClassForm");
+            formerClassForm.registerDateTimeValidators();
+
+            var minMoment = moment({ y: 2000 });
+            var minMomentText = "1/1/2000";
+            var eventStartName = "@Html.DisplayNameFor(x => x.Form.EventStart)";
+
+            formerClassForm.validateControl($("#location"), "@Html.DisplayNameFor(x => x.Form.Location)", { required: true, maxlength: 255 });
+            formerClassForm.validateDateTimeControl(eventStart, eventStartName,
+                {
+                    required: true,
+                    dateMin: minMoment, dateMinText: minMomentText
+                });
+            formerClassForm.validateDateTimeControl(eventEnd, "@Html.DisplayNameFor(x => x.Form.EventEnd)",
+                {
+                    required: true,
+                    dateMin: minMoment, dateMinText: minMomentText,
+                    dateMinPicker: eventStart, dateMinPickerText: eventStartName
+                });          
+            formerClassForm.validateControl(classTypeId.element, "@Html.DisplayNameFor(x => x.Form.ClassTypeId)", { notSelected: true });
+
+            // validation group binding
+            formerClassForm.validationBindOne(eventStart, eventEnd);
+
+
+            @if (ViewBag.TriggerValidation != null)
+            {
+                @:formerClassForm.valid();                                  
+            }
+
+        }
+
+</script>
+
+}

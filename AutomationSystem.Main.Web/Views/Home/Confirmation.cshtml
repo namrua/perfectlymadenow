@@ -1,0 +1,126 @@
+﻿@model RegistrationConfirmationPageModel
+@{
+    ViewBag.Title = LayoutTexts.PageTitleRegistrationString;
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+
+    var isReviewedRegistration = Model.WorkflowState.Properties.HasFlag(HomeWorkflowProperty.IsReviewRegistration);
+}
+
+<content>
+
+    <h2>@TitleTexts.RegistrationSummary</h2>
+    <hr class="headline-hr" />
+
+    @{
+        Html.RenderPartial(Model.DetailView, Model.Registration);
+    }
+
+</content>
+
+
+@if (isReviewedRegistration)
+{
+    if (Model.FormerStudent != null)
+    {
+
+        <content>
+
+            <h2>@TitleTexts.FormerSummary</h2>
+            <hr class="headline-hr"/>
+
+
+            <div class="row">
+
+                <div class="col-xl-6 align-content-start">
+
+                    <dl class="row dl-compact">
+                        <dt class="col-sm-4">@Html.DisplayNameFor(x => x.FormerStudent.Address.FullName)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(x => x.FormerStudent.Address.FullName)</dd>
+                    </dl>
+
+                    <dl class="row dl-compact">
+
+                        <dt class="col-sm-4">@MetadataTexts.Address</dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(x => x.FormerStudent.Address.FullStreet)<br/>
+                            @Html.DisplayFor(x => x.FormerStudent.Address.FullCity)<br/>
+                            @Html.DisplayFor(x => x.FormerStudent.Address.Country)
+                        </dd>
+
+                    </dl>
+
+                    <dl class="row dl-compact">
+                        <dt class="col-sm-4">@Html.DisplayNameFor(x => x.FormerStudent.Email)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(x => x.FormerStudent.Email)</dd>
+                    </dl>
+
+                </div>
+
+                <div class="col-xl-6 align-content-start">
+
+                    <dl class="row dl-compact">
+                        <dt class="col-sm-4">@Html.DisplayNameFor(x => x.FormerStudent.FullClassDate)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(x => x.FormerStudent.FullClassDate)</dd>
+                        <dt class="col-sm-4">@Html.DisplayNameFor(x => x.FormerStudent.Location)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(x => x.FormerStudent.Location)</dd>
+                        <dt class="col-sm-4">@Html.DisplayNameFor(x => x.FormerStudent.ClassType)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(x => x.FormerStudent.ClassType)</dd>
+                    </dl>
+
+                </div>
+
+            </div>            
+
+        </content>
+    }
+    else
+    {
+
+        <content>
+
+            <h2>@TitleTexts.FormerClassSummary</h2>
+            <hr class="headline-hr"/>
+
+            <div class="row">
+
+                <div class="col-xl-6 align-content-start">
+
+                    <dl class="row dl-compact">
+                        <dt class="col-sm-4">@Html.DisplayNameFor(x => x.LastClass.Location)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(x => x.LastClass.Location)</dd>
+                        <dt class="col-sm-4">@Html.DisplayNameFor(x => x.LastClass.Month)</dt>
+                        <dd class="col-sm-8">@MainTextHelper.GetMonthName(Model.LastClass.Month, CultureInfo.CurrentCulture)</dd>
+                        <dt class="col-sm-4">@Html.DisplayNameFor(x => x.LastClass.Year)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(x => x.LastClass.Year)</dd>
+                    </dl>
+
+
+                </div>
+            </div>
+
+            @*<p>
+                <em>@TextTexts.ManualReviewInstruction</em>
+            </p>*@
+
+        </content>
+
+    }
+
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+{
+    @bg.Link(ButtonTexts.ConfirmString, ButtonStyle.PublicPrimary, Url.Action("Agreement", new {id = Model.Registration.ClassRegistrationId}))
+
+
+    if (isReviewedRegistration)
+    {
+        @bg.Link(ButtonTexts.ModifyPersonalString, ButtonStyle.PublicNormal, Url.Action("Edit", new {id = Model.Registration.ClassRegistrationId}))
+        @bg.Link(ButtonTexts.ChangeFormerString, ButtonStyle.PublicNormal, Url.Action("SelectStudent", new {id = Model.Registration.ClassRegistrationId}))
+    }
+    else
+    {
+        @bg.Link(ButtonTexts.ModifyString, ButtonStyle.PublicNormal, Url.Action("Edit", new {id = Model.Registration.ClassRegistrationId}))
+    }
+}
+    

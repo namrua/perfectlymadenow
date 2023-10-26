@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = LayoutTexts.PageTitleRegistrationString;
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+
+    var style = RegistrationPageStyleHelper.GetStyle(ViewBag);
+}
+
+
+<content>
+
+    <h2>@TitleTexts.RegistrationComplete</h2>
+    <hr class="headline-hr" />
+
+    <p>
+        @TextTexts.RegistrationComplete
+    </p>
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Link(ButtonTexts.BackToHomeString, ButtonStyle.PublicPrimary, style.HomepageUrl ?? Url.Action("Index"))
+    }
+
+</content>

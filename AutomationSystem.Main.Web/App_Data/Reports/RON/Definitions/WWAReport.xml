@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<definition templatePath="Templates\IZI CRF WWA CLASS.xlsx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <blocks>
+    <textBlock id="CanceledHeader">
+      <textCell>CANCELED STUDENTS</textCell>
+    </textBlock>
+    <cellFormatBlock id="FormatBlockTemplateName">
+      <selection left="0" top="0" right="3" merge="true">
+        <text horizontalAlign="Left" verticalAlign="Center"/>
+      </selection>
+      <selection left="0" top="1" right="2" merge="true">
+        <text horizontalAlign="Left" verticalAlign="Center"/>
+      </selection>
+    </cellFormatBlock>
+    <cellFormatBlock id="FormatBlockCanceledStudents">
+      <selection left="0" top="0" right="15" merge="true">
+        <colors backgroundColor="#FFF" textColor="#000090"/>
+        <text fontName="Calibri" size="12" type="Bold" horizontalAlign="Left" verticalAlign="Center"/>
+      </selection>
+    </cellFormatBlock>
+        <cellFormatBlock id="FormatBlockCanceledStudents">
+      <selection left="0" top="0" right="15" merge="true">
+        <colors backgroundColor="#FFF" textColor="#000090"/>
+        <text fontName="Calibri" size="12" type="Bold" horizontalAlign="Left" verticalAlign="Center"/>
+      </selection>
+    </cellFormatBlock>
+   <formatBlock id="MemberInfoFormat">
+      <formatCell positionX="10" type="Number">[>=1000]"RON "#_)##0.00;"RON "###0.00</formatCell>
+      <formatCell positionX="11" type="Number">[>=1000]"RON "#_)##0.00;"RON "###0.00</formatCell>
+      <formatCell positionX="12" type="Number">[>=1000]"RON "#_)##0.00;"RON "###0.00</formatCell>
+      <formatCell positionX="13" type="Number">[>=1000]"RON "#_)##0.00;"RON "###0.00</formatCell>
+   </formatBlock>
+    <dataBlock id="EventInfoDataBlock">
+      <dataCell bind="EventName" positionX="2"/>
+      <dataCell bind="EventLocation" positionX="2" positionY="1" />
+      <dataCell bind="EventDate" positionX="2" positionY="2" />
+      <dataCell bind="ClassCoordinator" positionX="4" positionY="0"/>
+      <dataCell bind="CoordinatorId" positionX="4" positionY="1" />
+      <dataCell bind="Instructors" positionX="4" positionY="2" />
+      <dataCell bind="TotalAbsentee" positionX="13" positionY="1" />
+    </dataBlock>
+    <dataBlock id="MemberDataBlockTable">
+      <dataCell bind="LastNameRegistrant" positionX="2" />
+      <dataCell bind="FirstNameRegistrant" positionX="3" />
+      <dataCell bind="CompleteAddressRegistrant" positionX="4" />
+      <dataCell bind="Email" positionX="8" />
+      <dataCell bind="CheckNumber" positionX="9" />
+      <dataCell bind="TransactionNumber" positionX="10" />
+      <dataCell bind="TotalCheck" positionX="11" />
+      <dataCell bind="TotalCash" positionX="12" />
+      <dataCell bind="TotalCreditCard" positionX="13" />
+      <dataCell bind="TotalRevenue" positionX="14" />
+      <dataCell bind="LastNameParticipant" positionX="2" positionY="1"/>
+      <dataCell bind="FirstNameParticipant" positionX="3" positionY="1"/>
+      <dataCell bind="CompleteAddressParticipant" positionX="4" positionY="1"/>
+      <dataCell bind="CountryParticipant" positionX="6" positionY="1"/>
+    </dataBlock>
+  </blocks>
+  <layout>
+    <solid id="TempleteName" positionX="1" positionY="1">
+      <block blockId="FormatBlockTemplateName"/>
+    </solid>    
+    <solid id="EventInfoSolid" positionX="1" positionY="3" bind="EventInfo">
+      <block blockId="EventInfoDataBlock"/>
+    </solid>
+    <group id="group1" positionX="1" positionY="8" verticalSpace="252">
+      <table id="Students" rowCount="2" verticalSpace="30" bind="Students">
+        <block blockId="MemberDataBlockTable"/>
+        <block blockId="MemberInfoFormat"/>
+      </table>
+      <solid id="HeaderSolid" rowCount="1" forceNewRows="true">
+        <condition bind="CanceledStudents" type="ListNotEmpty" />
+        <block blockId="CanceledHeader"/>
+        <block blockId="FormatBlockCanceledStudents"/>
+      </solid>
+      <table id="CanceledStudents" rowCount="2" verticalSpace="30" bind="CanceledStudents">
+        <condition bind="CanceledStudents" type="ListNotEmpty" />
+        <block blockId="MemberDataBlockTable" />
+        <block blockId="MemberInfoFormat"/>
+      </table>
+    </group>
+  </layout>
+</definition>

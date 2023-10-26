@@ -1,0 +1,11 @@
+﻿@{
+
+    // creates base text input
+    var metadata = new EditorTemplateMetadataProvider<dynamic>(ViewData);
+    var name = metadata.Name;
+    var id = metadata.Id;
+    var hidden = HiddenInput.New(id, name, Model);
+
+}
+
+@InputControl.AddHidden(this, hidden)

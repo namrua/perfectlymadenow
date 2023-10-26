@@ -1,0 +1,45 @@
+﻿@model List<ProfileListItem>
+@{
+    ViewBag.Title = CommonResources.MenuCommonProfiles;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CommonProfiles;
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Link(CommonResources.AddNew, ButtonStyle.Primary, Url.Action("New"))
+}
+
+@*List of persons*@
+@if (Model.Count == 0)
+{
+    <p>
+        <em>@CommonResources.NoRecords</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x[0].Name)</th>
+                <th>@Html.DisplayNameFor(x => x[0].Moniker)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(x => item.Name)</td>
+                    <td>@Html.DisplayFor(x => item.Moniker)</td>
+                    <td>
+                        @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                        {
+                            @bg.Link(CommonResources.Detail, ButtonStyle.Primary, Url.Action("Detail", new { id = item.ProfileId }))
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

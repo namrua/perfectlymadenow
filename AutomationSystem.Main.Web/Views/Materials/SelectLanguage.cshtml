@@ -1,0 +1,49 @@
+﻿@model PublicLanguageSelectionPageModel
+@{
+    ViewBag.Title = LayoutTexts.PageTitleRegistrationString;
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+
+<content>
+
+    <h2>@TitleTexts.ClassMaterials</h2>
+    <hr class="headline-hr" />
+    
+    <p>
+        @TextTexts.MaterialLanguageInstruction
+    </p>
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        foreach (var item in Model.Languages)
+        {
+            @bg.Command(item.Description, "language", ButtonStyle.PublicPrimary, false, "language", item.Id)
+        }
+    }
+
+</content>
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // LANGUAGES
+
+            // file material requests
+            var requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("language", "@Url.Action("SelectLanguage", new { request = Model.RequestCode })");
+
+            // connects command-materials
+            $(".command-language").click(function() {
+                var sender = $(this);
+                var id = sender.attr("data-id");
+                requestHelper.executePost("language", { languageId: id });
+            });
+        }
+
+    </script>
+
+}

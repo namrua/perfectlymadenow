@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "Administration";
+}
+
+<h3>An error occurred while processing the request!</h3>
+@if (ViewBag.IncidentId != null)
+{
+    <p>
+        The following <a href="@Url.Action("Detail", "Incident", new {id = ViewBag.IncidentId})">incident</a> was assigned to the error.
+    </p>
+}
+else
+{
+    <p>
+        Please, check <a href="@Url.Action("Index", "Incident")">incidents</a> or system logs to resolve the problem.
+    </p>
+}

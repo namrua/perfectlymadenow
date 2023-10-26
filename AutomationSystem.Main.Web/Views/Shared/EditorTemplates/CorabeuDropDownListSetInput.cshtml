@@ -1,0 +1,21 @@
+﻿@{
+
+    // creates base text input
+    var metadata = new EditorTemplateMetadataProvider<dynamic>(ViewData);
+    var name = metadata.Name;
+    var id = metadata.Id;
+    var setInput = SetInput.New(id, name, metadata.Placeholder);
+
+    // obtains pick input options and sets them to text input
+    var pickInputOptions = metadata.GetAttribute<PickInputOptions>();
+
+    // applyes typeahead input
+    setInput.SetPickInputOptions(pickInputOptions);
+
+}
+
+@InputControl.AddDropDownSetInput(this, setInput)
+@if (!metadata.NoErrorPlaceholder)
+{
+    <div id="@TextHelper.DecorateName(id, "error-placeholder")"></div>
+}

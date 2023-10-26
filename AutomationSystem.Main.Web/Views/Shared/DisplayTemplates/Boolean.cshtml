@@ -1,0 +1,5 @@
+﻿@model Boolean
+@{
+}
+
+<input type="checkbox" @HtmlPropertyHelper.New().AddIf(Model, "checked").Render() disabled/>

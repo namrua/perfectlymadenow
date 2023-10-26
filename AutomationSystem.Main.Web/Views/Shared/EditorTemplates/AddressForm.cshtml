@@ -1,0 +1,40 @@
+﻿@model AddressForm
+@{
+
+    var metadata = new EditorTemplateMetadataProvider<AddressForm>(ViewData);
+    var countries = metadata.GetRequiredViewObject<IEnumerable<IEnumItem>>("Countries");
+
+}
+
+<div class="row">
+    <div class="form-group col-md-6">
+        @Html.LabelFor(x => x.FirstName)
+        @Html.EditorFor(x => x.FirstName)
+    </div>
+    <div class="form-group col-md-6">
+        @Html.LabelFor(x => x.LastName)
+        @Html.EditorFor(x => x.LastName)
+    </div>
+</div>
+
+<div class="row">
+    <div class="form-group col-md-12">
+        <label>Address</label>
+        @Html.EditorFor(x => x.Street)
+    </div>
+    <div class="form-group col-md-12">
+        @Html.EditorFor(x => x.Street2)
+    </div>
+    <div class="form-group col-md-6">
+        @Html.EditorFor(x => x.City)
+    </div>
+    <div class="form-group col-md-6">
+        @Html.EditorFor(x => x.State)
+    </div>
+    <div class="form-group col-md-6">
+        @Html.EditorFor(x => x.CountryId, new { Items = countries.Select(x => DropDownItem.Item((CountryEnum)x.Id, x.Description)) })
+    </div>
+    <div class="form-group col-md-6">
+        @Html.EditorFor(x => x.ZipCode)
+    </div>
+</div>

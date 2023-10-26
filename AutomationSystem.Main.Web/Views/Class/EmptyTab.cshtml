@@ -1,0 +1,18 @@
+﻿@model EmptyClassPageModel
+@{
+    ViewBag.Title = CommonResources.MenuCoordinatorClasses;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.Class, Model.TabItemId, new { id = Model.Class.ClassId });
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+}
+
+<div class="badge-title">
+    <h4>@Model.Class.ClassTitle</h4>
+    @Html.ClassCategoryBadge(Model.Class.ClassCategoryId)
+    @Html.ClassStateBadge(Model.Class.ClassState)
+</div>
+
+<p>
+    <em>@Model.Message</em>
+</p>

@@ -1,0 +1,118 @@
+﻿@model DistanceClassTemplateDetail
+@{
+    ViewBag.Title = CommonResources.MenuDistanceCoordinatorDistanceTemplates;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.DistanceCoordinatorDistanceTemplates;
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.DistanceTemplate, TabItemId.DistanceTemplateDetail, new { id = Model.DistanceClassTemplateId });
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Link(CommonResources.Edit, ButtonStyle.Primary, Url.Action("Edit", new { id = Model.DistanceClassTemplateId }), !Model.CanEdit)
+    @bg.Command(CommonResources.Approve, ButtonStyle.Primary, !Model.CanApprove, new { id = "approve-button" })
+    @bg.Command(CommonResources.Delete, ButtonStyle.Primary, !Model.CanDelete, new { id = "delete-button" })
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Index"))
+}
+
+<div class="badge-title">
+    <h4>@Model.Title</h4>
+    @Html.DistanceClassTemplateStateBadge(Model.TemplateState)
+</div>
+
+<div class="row">
+
+    <div class="col-xl-6 align-content-start">
+
+        <h5>Distance template</h5>
+
+        <dl class="row dl-compact">
+
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.EventStart)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.EventStart, new { ShowOnlyDate = true })</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.EventEnd)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.EventEnd, new { ShowOnlyDate = true })</dd>
+
+        </dl>
+
+        <dl class="row dl-compact">
+
+
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Location)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Location)</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.ClassType)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.ClassType)</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.TransLanguage)</dt>
+            <dd class="col-sm-4">(@MainTextHelper.GetTranslation(Model.OriginLanguage, Model.TransLanguage))</dd>
+
+        </dl>
+
+    </div>
+
+    <div class="col-xl-6 align-content-start">
+
+        <h5>Registration</h5>
+
+        <dl class="row dl-compact">
+
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.RegistrationStart)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.RegistrationStart, new { ShowOnlyDate = true })</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.RegistrationEnd)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.RegistrationEnd, new { ShowOnlyDate = true })</dd>
+
+        </dl>
+
+    </div>
+
+    <div class="col-xl-6 align-content-start">
+
+        <h5>Participants</h5>
+
+        <dl class="row dl-compact">
+
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.GuestInstructor)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.GuestInstructor)</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Instructors)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Instructors)</dd>
+
+        </dl>
+
+    </div>
+
+</div>
+
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            var requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("approve", "@Url.Action("Approve", "DistanceClassTemplate")");
+            requestHelper.addAction("delete", "@Url.Action("Delete", new { id = Model.DistanceClassTemplateId })");
+
+            $("#approve-button").click(function () {
+                var confirmed = confirm("@TextHelper.ToHtmlString($"Are you sure to approve distance class template {Model.Title}? Approving cause creating of distance classes for distance profiles.")");
+                if (!confirmed)
+                {
+                    return;
+                }
+
+                requestHelper.executePost("approve", { id: @Model.DistanceClassTemplateId });
+            });
+
+            $("#delete-button").click(function () {
+                var confirmed = confirm("@Html.Raw($"Are you sure to delete distance class template {Model.Title}?")");
+                if (!confirmed) {
+                    return;
+                }
+
+                requestHelper.executePost("delete");
+            });
+
+        }
+
+    </script>
+}

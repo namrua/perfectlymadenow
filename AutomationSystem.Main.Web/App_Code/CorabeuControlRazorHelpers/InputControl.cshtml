@@ -1,0 +1,225 @@
+﻿@using System.Web.Mvc;
+@using global::CorabeuControl.Components
+@using global::CorabeuControl.Helpers
+
+
+@helper AddAceEditor(WebViewPage view, TextInput item)
+    {
+        <div id="@TextHelper.DecorateName(item.Id, "editor")" class="@item.Css.Render(TextInput.CssInput, "ace-editor")">@item.Value</div>
+        <input type="hidden" id="@item.Id" name="@item.Name" value="@item.Value" />
+}
+
+@helper AddHidden(WebViewPage view, HiddenInput item)
+    {
+        <input id="@item.Id" name="@item.Name" value="@item.Value" type="hidden" />
+}
+
+@helper AddTextInput(WebViewPage view, TextInput item)
+    {
+        if (item.IsTextArea)
+        {
+            <textarea id="@item.Id" name="@item.Name" placeholder="@item.Placeholder"
+                      class="@item.Css.Render(TextInput.CssInput, "form-control form-control-sm")" rows="@item.TextAreaRows"
+                      @HtmlPropertyHelper.New().AddIf(item.IsDisabled, "disabled").Render()
+                      @HtmlPropertyHelper.New().AddIf(item.ValidationInfo.IsRequired, "required").Render()
+                      @HtmlPropertyHelper.New().AddIf(item.ValidationInfo.MaxLenght.HasValue, "maxlength", item.ValidationInfo.MaxLenght).Render()>@item.Value</textarea>
+        }
+        else if (!string.IsNullOrEmpty(item.RightAddonText))
+        {
+            <div class="input-group input-group-sm">
+                <input id="@item.Id" name="@item.Name" placeholder="@item.Placeholder" value="@item.Value" type="@(item.ValidationInfo.Type ?? "text")"
+                       class="@item.Css.Render(TextInput.CssInput, "form-control form-control-sm")"
+                       @HtmlPropertyHelper.New().AddIf(item.IsDisabled, "disabled").Render()
+                       @HtmlPropertyHelper.New().AddIf(item.ValidationInfo.IsRequired, "required").Render()
+                       @HtmlPropertyHelper.New().AddIf(item.ValidationInfo.MaxLenght.HasValue, "maxlength", item.ValidationInfo.MaxLenght).Render() />
+                <div class="input-group-append">
+                    <span class="input-group-text">@item.RightAddonText</span>
+                </div>
+            </div>
+        }
+        else
+        {
+            <input id="@item.Id" name="@item.Name" placeholder="@item.Placeholder" value="@item.Value" type="@(item.ValidationInfo.Type ?? "text")"
+                   class="@item.Css.Render(TextInput.CssInput, "form-control form-control-sm")"
+                   @HtmlPropertyHelper.New().AddIf(item.IsDisabled, "disabled").Render()
+                   @HtmlPropertyHelper.New().AddIf(item.ValidationInfo.IsRequired, "required").Render()
+                   @HtmlPropertyHelper.New().AddIf(item.ValidationInfo.MaxLenght.HasValue, "maxlength", item.ValidationInfo.MaxLenght).Render() />
+        }
+}
+
+
+@helper AddTypeaheadTextInput(WebViewPage view, TypeaheadInput item)
+    {
+        <div id="@TextHelper.DecorateName(item.Id, "typeahead")" class="@item.Css.Render(TypeaheadInput.CssMainDiv)">
+            <input id="@item.Id" type="text" name="@item.Name" value="@item.Value" placeholder="@item.Placeholder" class="@item.Css.Render(TypeaheadInput.CssInput, "form-control form-control-sm typeahead")" />
+        </div>
+}
+
+
+@helper AddTypeaheadDropDownInput(WebViewPage view, TypeaheadInput item)
+    {
+
+        <div id="@TextHelper.DecorateName(item.Id, "typeahead")" class="@item.Css.Render(TypeaheadInput.CssMainDiv)">
+            <input id="@TextHelper.DecorateName(item.Id, "text")" type="text" value="@item.TextValue"
+                   placeholder="@item.Placeholder" class="@item.Css.Render(TypeaheadInput.CssInput, "form-control form-control-sm typeahead")" />
+            <input id="@item.Id" type="hidden" name="@item.Name" value="@item.Value" />
+        </div>
+}
+
+
+@helper AddSpinnerInput(WebViewPage view, SpinnerInput item)
+    {
+        <div class="input-group input-group-sm">
+            <span class="input-group-prepend">
+                <button type="button" class="@item.Css.Render(SpinnerInput.CssCommand, "btn btn-sm btn-outline-secondary", TextHelper.DecorateName(item.Id, "command"))" data-command="minus">
+                    <span class="fas fa-minus"></span>
+                </button>
+            </span>
+            <input id="@item.Id" class="@item.Css.Render(SpinnerInput.CssInput, "form-control")" type="text" name="@item.Name"
+                   placeholder="@item.Placeholder" value="@(item.Value ?? "0")"
+                   @HtmlPropertyHelper.New().AddIf(item.Min.HasValue, "min", item.Min).AddIf(item.Max.HasValue, "max", item.Max).Render()>
+            <span class="input-group-append">
+                <button type="button" class="@item.Css.Render(SpinnerInput.CssCommand, "btn btn-sm btn-outline-secondary", TextHelper.DecorateName(item.Id, "command"))" data-command="plus">
+                    <span class="fas fa-plus"></span>
+                </button>
+            </span>
+        </div>
+}
+
+
+@helper AddDateTimePicker(WebViewPage view, DateTimePicker item)
+    {
+        <div class="input-group input-group-sm date" id="@TextHelper.DecorateName(item.Id, "picker")">
+            <input id="@item.Id" class="@item.Css.Render(DateTimePicker.CssInput, "form-control")"
+                   type="text" name="@item.Name" placeholder="@item.Placeholder" value="@item.Value" />
+            <span class="input-group-append">
+                <button type="button" class="@item.Css.Render(SpinnerInput.CssCommand, "btn btn-outline-secondary input-group-addon")">
+                    <span class="far fa-calendar-alt"></span>
+                </button>
+            </span>
+        </div>
+}
+
+
+@helper AddDropDownList(WebViewPage view, DropDownInput item)
+    {
+        var actionClass = TextHelper.DecorateName(item.Id, "action");
+        <div class="@item.Css.Render(DropDownInput.CssMainDiv, "dropdown")">
+
+            <button class="@item.Css.Render(DropDownInput.CssButton, "btn btn-sm btn-outline-secondary dropdown-toggle form-control")" type="button" id="@TextHelper.DecorateName(item.Id, "button")"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span id="@TextHelper.DecorateName(item.Id, "caption")">@item.Placeholder</span>
+            </button>
+
+            <input id="@item.Id" type="hidden" name="@item.Name" value="@item.GetValue()" data-selectedstyle="active" />
+            <div id="@TextHelper.DecorateName(item.Id, "items")" class="@item.Css.Render(DropDownInput.CssList, "dropdown-menu dropdown-oversize")" aria-labelledby="@TextHelper.DecorateName(item.Id, "button")">
+                @foreach (var ddlItem in item.Items)
+                {
+                    @_AddDropDownItem(view, item, ddlItem, actionClass)
+                }
+            </div>
+        </div>
+}
+
+@helper _AddDropDownItem(WebViewPage view, DropDownInput input, DropDownItem item, string actionClass)
+    {
+        switch (item.Role)
+        {
+            case DropDownItemRole.Item:
+                <a data-type="item" data-id="@item.Id" data-buttontext="@item.ExtensionText" href="javascript: return false;"
+                   class="@input.Css.Render(DropDownInput.CssItem, actionClass, "dropdown-item", input.IsSelected(item) ? "active" : "")">@item.Text</a>
+                break;
+
+            case DropDownItemRole.ClearItem:
+                <a data-type="clearitem" data-buttontext="@item.ExtensionText" href="javascript: return false;"
+                   class="@input.Css.Render(DropDownInput.CssItem, actionClass, "dropdown-item")">@item.Text</a>
+                break;
+
+            case DropDownItemRole.Separator:
+                <div class="dropdown-divider"></div>
+                break;
+
+            case DropDownItemRole.Command:
+                <a data-type="command" data-command="@item.ExtensionText" href="javascript: return false;"
+                   class="@input.Css.Render(DropDownInput.CssItem, actionClass, "dropdown-item")">@item.Text</a>
+                break;
+        }
+}
+
+
+
+@helper AddTypeaheadSetInput(WebViewPage view, SetInput item)
+    {
+
+        <div class="@item.Css.Render(SetInput.CssMainDiv)">
+            <input id="@item.Id" type="hidden" name="@item.Name" value="@item.GetValue()" />
+            <div id="@TextHelper.DecorateName(item.Id, "typeahead")" class="@item.Css.Render(SetInput.CssTypeaheadDiv)">
+                <input type="text" placeholder="@item.Placeholder" class="@item.Css.Render(SetInput.CssInput, "form-control form-control-sm typeahead")" />
+            </div>
+            <div id="@TextHelper.DecorateName(item.Id, "container")">
+                @foreach (var setItem in item.Items)
+                {
+                    @_AddSetItem(view, item, setItem)
+                }
+            </div>
+        </div>
+}
+
+@helper AddDropDownSetInput(WebViewPage view, SetInput input)
+{
+    var actionClass = TextHelper.DecorateName(input.Id, "action");
+    <div class="@input.Css.Render(SetInput.CssMainDiv)">
+        <input id="@input.Id" type="hidden" name="@input.Name" value="@input.GetValue()" />                            
+       
+        <button class="@input.Css.Render(SetInput.CssDdlButton, "btn btn-sm btn-outline-secondary dropdown-toggle form-control")" type="button" id="@TextHelper.DecorateName(input.Id, "button")"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span>@input.Placeholder</span>
+        </button>
+            
+        <div id="@TextHelper.DecorateName(input.Id, "option")" class="@input.Css.Render(SetInput.CssDdlList, "dropdown-menu dropdown-oversize")" aria-labelledby="@TextHelper.DecorateName(input.Id, "button")">
+            @foreach (var ddlItem in input.DdlItems)
+            {
+                <a data-type="item" data-id="@ddlItem.Id" data-buttontext="@ddlItem.ExtensionText" href="#" 
+                   class="@input.Css.Render(SetInput.CssDdlItem, actionClass, "dropdown-item")">@ddlItem.Text</a>
+            }
+        </div>               
+
+        <div id="@TextHelper.DecorateName(input.Id, "container")">
+            @foreach (var setItem in input.Items)
+            {
+                @_AddSetItem(view, input, setItem)
+            }
+        </div>
+    </div>    
+}
+
+@helper _AddSetItem(WebViewPage view, SetInput input, PickerItem item)
+    {
+        <div id="@TextHelper.DecorateName(input.Id, "item", item.Value)" class="@input.Css.Render(SetInput.CssItemDiv, "input-group input-group-sm set-item", TextHelper.DecorateName(input.Id, "item"))">
+            <input type="text" class="@input.Css.Render(SetInput.CssItemInput, "form-control")" value="@item.Text" disabled />
+            <span class="input-group-append">
+                <button type="button" class="@input.Css.Render(SetInput.CssItemButton, "btn btn-outline-secondary", TextHelper.DecorateName(input.Id, "command"))" id="@TextHelper.DecorateName(input.Id, "command", item.Value)" data-command="remove" data-id="@item.Value">
+                    <span class="fas fa-trash-alt"></span>
+                </button>
+            </span>
+        </div>
+}
+
+@helper AddSetItemTemplate(WebViewPage view, string id)
+{
+    <script id="@id" type="text/html">
+        <div id="item-{{mainId}}-{{value}}" class="input-group input-group-sm set-item item-{{mainId}}">
+            <input type="text" class="form-control" value="{{text}}" disabled />
+            <span class="input-group-append">
+                <button type="button" class="btn btn-outline-secondary command-{{mainId}}" id="command-{{mainId}}-{{value}}" data-command="remove" data-id="{{value}}">
+                    <span class="fas fa-trash-alt"></span>
+                </button>
+            </span>
+        </div>
+    </script>
+}
+
+
+
+
+

@@ -1,0 +1,188 @@
+﻿@model ClassDetail
+@{
+    ViewBag.Title = CommonResources.MenuCoordinatorClasses;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.Class, TabItemId.ClassDetail,
+        new { id = Model.ClassId });
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Link(CommonResources.Edit, ButtonStyle.Primary, Url.Action("Edit", new { id = Model.ClassId }), !Model.CanEdit)
+    @bg.Command(CommonResources.Delete, ButtonStyle.Primary, !Model.CanDelete, new { id = "delete-button" })
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Index"))
+}
+
+<div class="badge-title">
+    <h4>@Model.Title</h4>
+    @Html.ClassCategoryBadge(Model.ClassCategoryId)
+    @Html.ClassStateBadge(Model.ClassState)
+</div>
+
+<div class="row">
+
+    <div class="col-xl-6 align-content-start">
+
+        <h5>Class</h5>
+
+        <dl class="row dl-compact">
+
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.EventStart)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.EventStart, new { ShowOnlyDate = Model.FormConfiguration.ShowOnlyDates })</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.EventEnd)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.EventEnd, new { ShowOnlyDate = Model.FormConfiguration.ShowOnlyDates })</dd>
+            @if (!Model.FormConfiguration.ShowOnlyDates)
+            {
+                <dt class="col-sm-4">@Html.DisplayNameFor(x => x.TimeZone)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(x => x.TimeZone)</dd>
+            }
+        </dl>
+
+        <dl class="row dl-compact">
+
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Location)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Location)</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.ClassType)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.ClassType)</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.TransLanguage)</dt>
+            <dd class="col-sm-8">(@MainTextHelper.GetTranslation(Model.OriginLanguage, Model.TransLanguage))</dd>
+
+            @if (Model.EnvironmentTypeId != EnvironmentTypeEnum.Production)
+            {
+                <dt class="col-sm-4">@Html.DisplayNameFor(x => x.EnvironmentTypeId)</dt>
+                <dd class="col-sm-8 warning-text">@Html.DisplayFor(x => x.EnvironmentTypeId)</dd>
+            }
+        </dl>
+
+        <dl class="row dl-compact">
+
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Profile)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Profile)</dd>
+
+        </dl>
+
+    </div>
+    
+    <div class="col-xl-6 align-content-start">
+
+        <h5>Registration</h5>
+
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.RegistrationStart)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.RegistrationStart, new { ShowOnlyDate = Model.FormConfiguration.ShowOnlyDates })</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.RegistrationEnd)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.RegistrationEnd, new { ShowOnlyDate = Model.FormConfiguration.ShowOnlyDates })</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.ApprovedRegistrations)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.ApprovedRegistrations)</dd>
+            @if (!Model.FormConfiguration.IsWwaAllowedValue.HasValue)
+            {
+                <dt class="col-sm-4">@Html.DisplayNameFor(x => x.IsWwaFormAllowed)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(x => x.IsWwaFormAllowed)</dd>
+            }
+        </dl>
+
+        @if (Model.ShowLink)
+        {
+            <dl class="row dl-compact">
+                <dt class="col-sm-4">Link</dt>
+                <dd class="col-sm-8">
+                    <a href="@Url.Action("SelectRegistration", "Home", new {id = Model.ClassId})" target="_blank">
+                        @Url.Action("SelectRegistration", "Home", new {id = Model.ClassId}, Request.Url.Scheme)
+                    </a>
+                </dd>
+            </dl>
+        }
+
+    </div>
+
+    <div class="col-xl-6 align-content-start">
+
+        <h5>Participants</h5>
+
+        <dl class="row dl-compact">
+            @if (Model.FormConfiguration.UseDistanceCoordinator)
+            {
+                <dt class="col-sm-4">Distance coordinator</dt>
+            }
+            else
+            {
+                <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Coordinator)</dt>
+            }
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Coordinator)</dd>
+            @if (!string.IsNullOrEmpty(Model.GuestInstructor))
+            {
+                <dt class="col-sm-4">@Html.DisplayNameFor(x => x.GuestInstructor)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(x => x.GuestInstructor)</dd>
+            }
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Instructors)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Instructors)</dd>
+            @if (Model.FormConfiguration.ShowApprovedStaffIds)
+            {
+                <dt class="col-sm-4">@Html.DisplayNameFor(x => x.ApprovedStaffs)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(x => x.ApprovedStaffs)</dd>
+            }
+        </dl>
+
+    </div>
+   
+    <div class="col-xl-6 align-content-start">
+
+        <h5>Payment and integration</h5>
+
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.PriceList)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.PriceList)</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Currency)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Currency)</dd>
+            
+            @if (Model.FormConfiguration.ShowPayPalKey)
+            {
+                <dt class="col-sm-4">@Html.DisplayNameFor(x => x.PayPalKey)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(x => x.PayPalKey)</dd>
+            }
+        </dl>
+        
+        @if (Model.FormConfiguration.ShowIntegrationCode)
+        {
+            <dl class="row dl-compact">
+                <dt class="col-sm-4">@Html.DisplayNameFor(x => x.IntegrationType)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(x => x.IntegrationType)</dd>
+
+                @if (Model.IntegrationEntityId.HasValue && Model.IntegrationTypeId == IntegrationTypeEnum.WebExProgram)
+                {
+                    <dt class="col-sm-4">@Html.DisplayNameFor(x => x.IntegrationEntityName)</dt>
+                    <dd class="col-sm-8"><a href="@Url.Action("Detail", "Program", new {id = Model.IntegrationEntityId})">@Model.IntegrationEntityName</a></dd>
+                }
+            </dl>
+        }
+    </div>        
+
+</div>
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // DELETE FUNCTIONALITY
+
+            // registration helper
+            var requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("delete", "@Url.Action("Delete", new { id = Model.ClassId })");
+
+            // connect delete-button
+            $("#delete-button").click(function () {
+                var confirmed = confirm("@Html.Raw($"Are you sure to delete class {Model.Title}?")");
+                if (!confirmed) return;
+                requestHelper.executePost("delete");
+            });
+
+        }
+
+    </script>
+
+}

@@ -1,0 +1,67 @@
+﻿@model RegistrationWwaDetail
+
+<div class="row">
+
+    <div class="col-xl-6 align-content-start">
+
+        <h5>@Html.DisplayNameFor(x => x.ParticipantAddress)</h5>
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.ParticipantAddress.FullName)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.ParticipantAddress.FullName)</dd>
+
+        </dl>
+        <dl class="row dl-compact">
+
+            <dt class="col-sm-4">@MetadataTexts.Address</dt>
+            <dd class="col-sm-8">
+                @if (Model.ParticipantAddress.FullStreet != null)
+                {
+                    @Html.DisplayFor(x => x.ParticipantAddress.FullStreet)<br />
+                }
+                @if (Model.ParticipantAddress.FullCity != null)
+                {
+                    @Html.DisplayFor(x => x.ParticipantAddress.FullCity)<br />
+                }
+                @Html.DisplayFor(x => x.ParticipantAddress.Country)
+            </dd>
+
+        </dl>
+    </div>
+
+    <div class="col-xl-6 align-content-start">
+
+        <h5>@Html.DisplayNameFor(x => x.RegistrantAddress)</h5>
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.RegistrantAddress.FullName)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.RegistrantAddress.FullName)</dd>
+
+        </dl>
+        <dl class="row dl-compact">
+
+            <dt class="col-sm-4">@MetadataTexts.Address</dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(x => x.RegistrantAddress.FullStreet)<br />
+                @Html.DisplayFor(x => x.RegistrantAddress.FullCity)<br />
+                @Html.DisplayFor(x => x.RegistrantAddress.Country)
+            </dd>
+
+        </dl>
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.RegistrantEmail)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.RegistrantEmail)</dd>
+        </dl>
+
+    </div>
+
+    <div class="w-100"></div>
+
+    <div class="col-xl-6 align-content-start">
+
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Language)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Language)</dd>
+        </dl>
+
+    </div>
+
+</div>

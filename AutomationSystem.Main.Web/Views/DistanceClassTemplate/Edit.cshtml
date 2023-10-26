@@ -1,0 +1,190 @@
+﻿@model DistanceClassTemplateForEdit
+@{
+    ViewBag.Title = CommonResources.MenuDistanceCoordinatorDistanceTemplates;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.DistanceCoordinatorDistanceTemplates;
+
+    var personHelper = Model.Persons;
+}
+
+<form id="distanceClassTemplateForm" method="post" action="@Url.Action("Edit")">
+
+    @Html.EditorFor(x => x.Form.DistanceClassTemplateId)
+
+    <div class="row">
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.EventStart)
+            @Html.EditorFor(x => x.Form.EventStart)
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.EventEnd)
+            @Html.EditorFor(x => x.Form.EventEnd)
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.Location)
+            @Html.EditorFor(x => x.Form.Location)
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.ClassTypeId)
+            @Html.EditorFor(x => x.Form.ClassTypeId, new { Items = Model.ClassTypes.Select(x => DropDownItem.Item((ClassTypeEnum)x.Id, x.Description)) })
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.TranslationCode)
+            @Html.EditorFor(x => x.Form.TranslationCode, new { Items = Model.Translations })
+        </div>
+
+    </div>
+
+    <hr />
+
+    <div class="row">
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.RegistrationStart)
+            @Html.EditorFor(x => x.Form.RegistrationStart)
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.RegistrationEnd)
+            @Html.EditorFor(x => x.Form.RegistrationEnd)
+        </div>
+
+    </div>
+
+    <hr />
+
+    <div class="row">
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.GuestInstructorId)
+            @Html.EditorFor(x => x.Form.GuestInstructorId, new { Text = personHelper.GetPersonNameById(Model.Form.GuestInstructorId) })
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.InstructorIds)
+            @Html.EditorFor(x => x.Form.InstructorIds, new { Set = Model.Form.InstructorIds.Select(x => new PickerItem(x, personHelper.GetPersonNameById(x))) })
+        </div>
+
+    </div>
+
+    <hr />
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save, htmlAttributes: new { id = "save-button" })
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, Model.Form.DistanceClassTemplateId == 0
+                                                        ? Url.Action("Index")
+                                                        : Url.Action("Detail", new { id = Model.Form.DistanceClassTemplateId }))
+    }
+
+</form>
+
+@InputControl.AddSetItemTemplate(this, "set-item-template")
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            @Html.TypeaheadDropDownSource("instructors", personHelper.GetPickerItemsForRole(PersonRoleTypeEnum.Instructor))
+            @Html.TypeaheadDropDownSource("guestInstructors", personHelper.GetPickerItemsForRole(PersonRoleTypeEnum.GuestInstructor))
+
+            var instructorOptions = { typeaheadSource: instructors, itemTemplateId: "set-item-template" }
+
+            // initialization
+            var location = new CorabeuControl.TextBox("location", "Location");
+            var classTypeId = new CorabeuControl.DropDownList("classTypeId", "ClassTypeId");
+            var translationCode = new CorabeuControl.DropDownList("translationCode", "TranslationCode");
+
+            var pickerOptions = { format: 'MMMM DD, YYYY', startOf: 'day' };
+            var registrationStart = new CorabeuControl.DateTimePicker("registrationStart", "RegistrationStart", pickerOptions);
+            var registrationEnd = new CorabeuControl.DateTimePicker("registrationEnd", "RegistrationEnd", pickerOptions);
+            var eventStart = new CorabeuControl.DateTimePicker("eventStart", "EventStart", pickerOptions);
+            var eventEnd = new CorabeuControl.DateTimePicker("eventEnd", "EventEnd", pickerOptions);
+            var instructorIds = new CorabeuControl.TypeaheadSetInput("instructorIds", "InstructorIds", instructorOptions);
+            var guestInstructorId = new CorabeuControl.TypeaheadDropDownInput("guestInstructorId", "GuestInstructorId", guestInstructors);
+
+            var distanceForm = new CorabeuControl.Form("distanceClassTemplateForm");
+            distanceForm.registerDateTimeValidators();
+
+            // behavior
+
+            // registration end = event start
+
+            eventStart.onChange.subscribe(this, function() {
+                registrationEnd.setValue(eventStart.getValue());
+            });
+
+            // validation
+
+            // help variables
+            var minMoment = moment({ y: 2000 });
+            var minText = "1/1/2000";
+            var registrationStartName = "@Html.DisplayNameForJava(x => x.Form.RegistrationStart)";
+            var registrationEndName = "@Html.DisplayNameForJava(x => x.Form.RegistrationEnd)";
+            var eventStartName = "@Html.DisplayNameForJava(x => x.Form.EventStart)";
+            var eventEndName = "@Html.DisplayNameForJava(x => x.Form.EventEnd)";
+
+            // validation rules
+            distanceForm.validateControl(classTypeId.element, "@Html.DisplayNameForJava(x => x.Form.ClassTypeId)", { notSelected: true });
+            distanceForm.validateControl(translationCode.element, "@Html.DisplayNameForJava(x => x.Form.TranslationCode)", { notSelected: true });
+            distanceForm.validateControl(location.element, "@Html.DisplayNameForJava(x => x.Form.Location)", { required: true, maxlenght: 255 });
+            distanceForm.validateDateTimeControl(
+                registrationStart,
+                registrationStartName,
+                {
+                    required: true,
+                    dateMin: minMoment,
+                    datMinText: minText
+                });
+            distanceForm.validateDateTimeControl(
+                registrationEnd,
+                registrationEndName,
+                {
+                    required: true,
+                    dateMin: minMoment,
+                    dateMinText: minText,
+                    dateMinPicker: registrationStart,
+                    dateMinPickerText: registrationStartName
+                });
+            distanceForm.validateDateTimeControl(
+                eventStart,
+                eventStartName,
+                {
+                    required: true,
+                    dateMin: minMoment,
+                    dateMinText: minText,
+                    dateMinPicker: registrationEnd,
+                    dateMinPickerText: registrationEndName
+                });
+            distanceForm.validateDateTimeControl(
+                eventEnd,
+                eventEndName,
+                {
+                    required: true,
+                    dateMin: minMoment,
+                    dateMinText: minText,
+                    dateMinPicker: eventStart,
+                    dateMinPickerText: eventStartName
+                });
+
+            // validation binds
+            distanceForm.validationBindOne(registrationStart, registrationEnd);
+            distanceForm.validationBindOne(registrationEnd, eventStart);
+            distanceForm.validationBindOne(eventStart, eventEnd);
+
+            @if (ViewBag.TriggerValidation != null)
+            {
+                @:distanceForm.valid();
+            }
+        }
+
+    </script>
+}
+

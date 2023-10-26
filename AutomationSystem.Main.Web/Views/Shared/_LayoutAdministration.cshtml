@@ -1,0 +1,131 @@
+﻿@using Microsoft.AspNet.Identity
+@{
+    var messageContainer = new MessageContainer(Session);
+    var message = messageContainer.PopMessage();
+}
+
+<!DOCTYPE html>
+<html lang="en" class="full-height">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title | Automation System</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body class="full-height footer-placeholder expand-placeholder">
+
+    <div class="expand-height">
+
+        @* main navigation *@
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="@Url.Action("Index", "Administration")">Automation System</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div id="navbarSupportedContent" class="collapse navbar-collapse">
+                    
+                    @if (ViewBag.NoLayoutMenu != true)
+                    {
+
+
+                        Html.RenderPartial("~/Views/Shared/_MainMenu.cshtml");
+
+
+                        if (Request.IsAuthenticated)
+                        {
+                            using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new {id = "logoutForm"}))
+                            {
+                                @Html.AntiForgeryToken()
+                                <ul class="navbar-nav">
+                                    <li class="nav-item">
+                                        <a class="nav-link" alt="Log off @User.Identity.GetUserName()!" href="javascript:document.getElementById('logoutForm').submit()">
+                                            @User.Identity.GetUserName() <span class="far fa-times-circle"></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            }
+                        }
+                        else
+                        {
+                            <ul class="navbar-nav">
+                                <li class="nav-item">@Html.ActionLink("Log in", "Index", "Administration", routeValues: null, htmlAttributes: new {@class = "nav-link"})</li>
+                            </ul>
+                        }
+
+                    }
+
+                </div>
+            </div>
+        </nav>
+
+        @* messaging placeholder *@
+        <div id="alert-placeholder" class="container message-content">
+            @if (message != null && !message.IsAlert)
+            {
+                <div class="@CssClassHelper.New().Add("alert", "alert-dismissible", "fade", "show").AddIfElse(message.IsError, "alert-warning", "alert-primary").Render()" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    @TextHelper.ReplaceNewLines(Html.Encode(message.Message))
+                </div>
+            }
+        </div>
+
+        @* main content *@
+        <section class="container main-content">
+            @RenderBody()
+        </section>
+
+    </div>
+
+    @* footer *@
+    <footer class="container">
+        <hr />
+        <div class="row">
+            <div class="col-md-auto">
+                Copyright 2018 © Perfectly Made, Inc., <a href="http:\\www.zerolag.biz" target="_blank">Zerolag.biz</a>
+            </div>
+            <div class="col-sm-auto ml-md-auto">
+                <a href="@Url.Action("Index", "Home")">Automation System</a> Main #{Build.BuildNumber}#
+            </div>
+        </div>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/datetimepicker")
+    @Scripts.Render("~/bundles/ace")
+    @Scripts.Render("~/bundles/typeahead")    
+    @Scripts.Render("~/bundles/pagescripts")
+
+
+    <script type="text/javascript">
+        // initialize of empty run page script
+        var runPageScript = function () { }
+    </script>
+
+    @RenderSection("scripts", required: false)
+
+    <script type="text/javascript">
+
+    // ready event
+    $(document).ready(function () {
+
+        @if (message != null && message.IsAlert)
+        {
+            <text>alert("@message.Message");</text>
+        }
+
+        @RenderSection("javascript_ready", required: false)
+
+        // runs page script
+        runPageScript();
+    });
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,90 @@
+﻿@model ClassMaterialMonitoringPageModel
+@{
+    ViewBag.Title = CommonResources.MenuCoordinatorClasses;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Class", new { id = Model.ClassId }))
+}
+
+@*List of recipients*@
+@if (Model.Recipients.Count == 0)
+{
+    <p>
+        <em>@CommonResources.NoRecords</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.Recipients[0].Name)</th>
+                <th>@Html.DisplayNameFor(x => x.Recipients[0].Password)</th>
+                <th>@Html.DisplayNameFor(x => x.Recipients[0].TotalDonwnloadCount)</th>
+                <th>@Html.DisplayNameFor(x => x.Recipients[0].Notified)</th>
+
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Recipients.OrderBy(x => x.Name))
+            {
+                <tr>
+                    <td>@Html.DisplayFor(x => item.Name)</td>
+                    <td><a href="#" class="show-pwd" data-password="@item.Password">???</a></td>
+                    <td>@Html.DisplayFor(x => item.TotalDonwnloadCount)</td>
+                    <td>@Html.DisplayFor(x => item.Notified)</td>
+
+                    <td>
+                        @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                        {
+                            @bg.Link(
+                                CommonResources.Detail,
+                                ButtonStyle.Primary,
+                                Url.MaterialRecipientUrl(item.RecipientId, item.ClassMaterialRecipientId),
+                                item.RecipientId.TypeId != EntityTypeEnum.MainClassRegistration && !item.ClassMaterialRecipientId.HasValue)
+                            @bg.Command("Public download page", "download", ButtonStyle.Normal, false, "download", item.RequestCode)
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // DETAIL
+
+            // connects password showing
+            $(".show-pwd").click(function () {
+                var sender = $(this);
+                var id = sender.attr("data-password");
+                alert(id);
+            });
+
+            // connects command-download
+            $(".command-download").click(function () {
+                var sender = $(this);
+                var requestCode = sender.attr("data-id");
+
+                var confirmed = confirm("Warning: any activity on the public download pages affect behavior of the pages for the student (like language selection or download counting). Do you want to proceed?");
+                if (!confirmed)
+                    return;
+
+                window.location.href = "@Url.Action("Index")?request=" + requestCode;
+            });
+        }
+
+    </script>
+
+}

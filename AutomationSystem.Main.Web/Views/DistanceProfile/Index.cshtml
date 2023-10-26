@@ -1,0 +1,55 @@
+﻿@model DistanceProfilePageModel
+@{
+    ViewBag.Title = CommonResources.MenuDistanceCoordinatorDistanceProfiles;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.DistanceCoordinatorDistanceProfiles;
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.DropdownLink(CommonResources.AddNew, ButtonStyle.Primary, "new-button", false,
+        Model.Profiles.Select(x => PickerItem.Item(Url.Action("New", "DistanceProfile", new { profileId = x.Id}), x.Text)))
+}
+
+@if (Model.Items.Count == 0)
+{
+    <p>
+        <em>@CommonResources.NoRecords</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+        <tr>
+            <th> @Html.DisplayNameFor(x => x.Items[0].Profile)</th>
+            <th> @Html.DisplayNameFor(x => x.Items[0].PriceList)</th>
+            <th> @Html.DisplayNameFor(x => x.Items[0].PayPalKey)</th>
+            <th> @Html.DisplayNameFor(x => x.Items[0].DistanceCoordinator)</th>
+            <th> @Html.DisplayNameFor(x => x.Items[0].IsActive)</th>
+            <th></th>
+        </tr>
+
+        </thead>
+
+        <tbody>
+        @foreach (var item in Model.Items.OrderByDescending(x => x.IsActive).ThenBy(x => x.Profile))
+        {
+            <tr class="@CssClassHelper.New().AddIf(item.IsActive == false, "table-secondary").Render()">
+                <td> @Html.DisplayFor(x => item.Profile)</td>
+                <td> @Html.DisplayFor(x => item.PriceList)</td>
+                <td> @Html.DisplayFor(x => item.PayPalKey)</td>
+                <td> @Html.DisplayFor(x => item.DistanceCoordinator)</td>
+                <td> @Html.DisplayFor(x => item.IsActive)</td>
+
+                <td>
+                    @using (var buttonGroup = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                    {
+                        @buttonGroup.Link(CommonResources.Detail, ButtonStyle.Primary, Url.Action("Detail", "DistanceProfile", new { id = item.DistanceProfileId }))
+                    }
+                </td>
+            </tr>
+        }
+
+        </tbody>
+    </table>
+}

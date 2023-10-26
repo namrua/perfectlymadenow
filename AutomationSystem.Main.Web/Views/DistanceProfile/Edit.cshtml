@@ -1,0 +1,75 @@
+﻿@model DistanceProfileForEdit
+@{
+    ViewBag.Title = CommonResources.MenuDistanceCoordinatorDistanceProfiles;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.DistanceCoordinatorDistanceProfiles;
+
+    var personHelper = Model.Persons;
+}
+
+<form id="distanceProfileForm" method="post" action="@Url.Action("Edit")">
+
+    @Html.EditorFor(x => x.Form.ProfileId)
+    @Html.EditorFor(x => x.Form.DistanceProfileId)
+    @Html.EditorFor(x => x.Form.CurrentPriceListId)
+    @Html.EditorFor(x => x.Form.CurrentPayPalKeyId)
+
+    <div class="row">
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.DistanceCoordinatorId)
+            @Html.EditorFor(x => x.Form.DistanceCoordinatorId, new { Text = personHelper.GetPersonNameById(Model.Form.DistanceCoordinatorId) })
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.PriceListId)
+            @Html.EditorFor(x => x.Form.PriceListId, new { Items = Model.PriceLists })
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.PayPalKeyId)
+            @Html.EditorFor(x => x.Form.PayPalKeyId, new { Items = Model.PayPalKeys })
+        </div>
+
+    </div>
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save, htmlAttributes: new { id = "save-button" })
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, Model.Form.DistanceProfileId == 0
+                                                            ? Url.Action("Index")
+                                                            : Url.Action("Detail", new { id = Model.Form.DistanceProfileId }))
+    }
+
+</form>
+
+@section scripts
+{
+
+<script type="text/javascript">
+
+    var runPageScript = function () {
+
+        @Html.TypeaheadDropDownSource("distanceCoordinators", personHelper.GetPickerItemsForRole(PersonRoleTypeEnum.DistanceDoordinator))
+
+        // initialization
+        var priceListId = new CorabeuControl.DropDownList("priceListId", "PriceListId");
+        var payPalKeyId = new CorabeuControl.DropDownList("payPalKeyId", "PayPalKeyId");
+        var distanceCoordinatorId = new CorabeuControl.TypeaheadDropDownInput("distanceCoordinatorId", "DistanceCoordinatorId", distanceCoordinators);
+        var distanceProfileForm = new CorabeuControl.Form("distanceProfileForm");
+
+        // validation
+        distanceProfileForm.validateControl(distanceCoordinatorId.element, "@Html.DisplayNameForJava(x => x.Form.DistanceCoordinatorId)", { notSelected: true });
+        distanceProfileForm.validateControl(priceListId.element, "@Html.DisplayNameForJava(x => x.Form.PriceListId)", { notSelected: true });
+        distanceProfileForm.validateControl(payPalKeyId.element, "@Html.DisplayNameForJava(x => x.Form.PayPalKeyId)", { notSelected: true });
+
+
+        @if (ViewBag.TriggerValidation != null)
+        {
+            @:distanceProfileForm.valid();
+        }
+
+    }
+
+</script>
+
+}

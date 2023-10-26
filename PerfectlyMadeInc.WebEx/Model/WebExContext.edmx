@@ -1,0 +1,680 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="WebExModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="AccountId" />
+          </Key>
+          <Property Name="AccountId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SiteName" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Login" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="ServiceUrl" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Created" Type="datetime" Nullable="false" />
+          <Property Name="Changed" Type="datetime" />
+          <Property Name="Deleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Event">
+          <Key>
+            <PropertyRef Name="EventId" />
+          </Key>
+          <Property Name="EventId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccountId" Type="bigint" Nullable="false" />
+          <Property Name="ProgramId" Type="bigint" />
+          <Property Name="EntityTypeId" Type="int" />
+          <Property Name="EntityId" Type="bigint" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="SessionId" Type="bigint" Nullable="false" />
+          <Property Name="Created" Type="datetime" Nullable="false" />
+          <Property Name="Changed" Type="datetime" />
+          <Property Name="Deleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="IntegrationState">
+          <Key>
+            <PropertyRef Name="IntegrationStateId" />
+          </Key>
+          <Property Name="IntegrationStateId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EventId" Type="bigint" Nullable="false" />
+          <Property Name="EntityTypeId" Type="int" Nullable="false" />
+          <Property Name="EntityId" Type="bigint" Nullable="false" />
+          <Property Name="AttendeeId" Type="bigint" />
+          <Property Name="IntegrationStateTypeId" Type="int" Nullable="false" />
+          <Property Name="LastChecked" Type="datetime" />
+          <Property Name="ErrorMessage" Type="nvarchar" MaxLength="255" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="64" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="64" />
+          <Property Name="Street" Type="nvarchar" MaxLength="64" />
+          <Property Name="Street2" Type="nvarchar" MaxLength="64" />
+          <Property Name="City" Type="nvarchar" MaxLength="64" />
+          <Property Name="State" Type="nvarchar" MaxLength="64" />
+          <Property Name="Country" Type="nvarchar" MaxLength="64" />
+          <Property Name="ZipCode" Type="nvarchar" MaxLength="16" />
+          <Property Name="Email" Type="nvarchar" MaxLength="128" />
+          <Property Name="Created" Type="datetime" Nullable="false" />
+          <Property Name="Changed" Type="datetime" />
+          <Property Name="Deleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="IntegrationStateType">
+          <Key>
+            <PropertyRef Name="IntegrationStateTypeId" />
+          </Key>
+          <Property Name="IntegrationStateTypeId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="512" />
+        </EntityType>
+        <EntityType Name="Program">
+          <Key>
+            <PropertyRef Name="ProgramId" />
+          </Key>
+          <Property Name="ProgramId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccountId" Type="bigint" Nullable="false" />
+          <Property Name="EntityTypeId" Type="int" />
+          <Property Name="EntityId" Type="bigint" />
+          <Property Name="ProgramOuterId" Type="bigint" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="ProgramUrl" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Created" Type="datetime" Nullable="false" />
+          <Property Name="Changed" Type="datetime" />
+          <Property Name="Deleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Event_AccountId">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="Event" Type="Self.Event" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountId" />
+            </Principal>
+            <Dependent Role="Event">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Event_ProgramId">
+          <End Role="Program" Type="Self.Program" Multiplicity="0..1" />
+          <End Role="Event" Type="Self.Event" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Program">
+              <PropertyRef Name="ProgramId" />
+            </Principal>
+            <Dependent Role="Event">
+              <PropertyRef Name="ProgramId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IntegrationState_EventId">
+          <End Role="Event" Type="Self.Event" Multiplicity="1" />
+          <End Role="IntegrationState" Type="Self.IntegrationState" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="EventId" />
+            </Principal>
+            <Dependent Role="IntegrationState">
+              <PropertyRef Name="EventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IntegrationState_IntegrationStateTypeId">
+          <End Role="IntegrationStateType" Type="Self.IntegrationStateType" Multiplicity="1" />
+          <End Role="IntegrationState" Type="Self.IntegrationState" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IntegrationStateType">
+              <PropertyRef Name="IntegrationStateTypeId" />
+            </Principal>
+            <Dependent Role="IntegrationState">
+              <PropertyRef Name="IntegrationStateTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Program_AccountId">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="Program" Type="Self.Program" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountId" />
+            </Principal>
+            <Dependent Role="Program">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="CreateAccount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="webex">
+          <Parameter Name="SiteName" Type="nvarchar" Mode="In" />
+          <Parameter Name="Login" Type="nvarchar" Mode="In" />
+          <Parameter Name="Password" Type="nvarchar" Mode="In" />
+          <Parameter Name="ServiceUrl" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="CreateEvent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="webex">
+          <Parameter Name="AccountId" Type="bigint" Mode="In" />
+          <Parameter Name="ProgramId" Type="bigint" Mode="In" />
+          <Parameter Name="EntityTypeId" Type="int" Mode="In" />
+          <Parameter Name="EntityId" Type="bigint" Mode="In" />
+          <Parameter Name="Name" Type="nvarchar" Mode="In" />
+          <Parameter Name="SessionId" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="CreateIntegrationState" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="webex">
+          <Parameter Name="EventId" Type="bigint" Mode="In" />
+          <Parameter Name="EntityTypeId" Type="int" Mode="In" />
+          <Parameter Name="EntityId" Type="bigint" Mode="In" />
+          <Parameter Name="AttendeeId" Type="bigint" Mode="In" />
+          <Parameter Name="IntegrationStateTypeId" Type="int" Mode="In" />
+          <Parameter Name="LastChecked" Type="datetime" Mode="In" />
+          <Parameter Name="ErrorMessage" Type="nvarchar" Mode="In" />
+          <Parameter Name="FirstName" Type="nvarchar" Mode="In" />
+          <Parameter Name="LastName" Type="nvarchar" Mode="In" />
+          <Parameter Name="Street" Type="nvarchar" Mode="In" />
+          <Parameter Name="Street2" Type="nvarchar" Mode="In" />
+          <Parameter Name="City" Type="nvarchar" Mode="In" />
+          <Parameter Name="State" Type="nvarchar" Mode="In" />
+          <Parameter Name="Country" Type="nvarchar" Mode="In" />
+          <Parameter Name="ZipCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="Email" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="CreateProgram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="webex">
+          <Parameter Name="AccountId" Type="bigint" Mode="In" />
+          <Parameter Name="EntityTypeId" Type="int" Mode="In" />
+          <Parameter Name="EntityId" Type="bigint" Mode="In" />
+          <Parameter Name="ProgramOuterId" Type="bigint" Mode="In" />
+          <Parameter Name="Name" Type="nvarchar" Mode="In" />
+          <Parameter Name="ProgramUrl" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="DeleteAccount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="webex">
+          <Parameter Name="AccountId" Type="bigint" Mode="In" />
+          <Parameter Name="RowCount" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="DeleteEvent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="webex">
+          <Parameter Name="EventId" Type="bigint" Mode="In" />
+          <Parameter Name="RowCount" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="DeleteIntegrationState" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="webex">
+          <Parameter Name="IntegrationStateId" Type="bigint" Mode="In" />
+          <Parameter Name="RowCount" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="DeleteProgram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="webex">
+          <Parameter Name="ProgramId" Type="bigint" Mode="In" />
+          <Parameter Name="RowCount" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="UpdateAccount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="webex">
+          <Parameter Name="AccountId" Type="bigint" Mode="In" />
+          <Parameter Name="SiteName" Type="nvarchar" Mode="In" />
+          <Parameter Name="Login" Type="nvarchar" Mode="In" />
+          <Parameter Name="Password" Type="nvarchar" Mode="In" />
+          <Parameter Name="ServiceUrl" Type="nvarchar" Mode="In" />
+          <Parameter Name="Rowcount" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="UpdateEvent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="webex">
+          <Parameter Name="EventId" Type="bigint" Mode="In" />
+          <Parameter Name="AccountId" Type="bigint" Mode="In" />
+          <Parameter Name="ProgramId" Type="bigint" Mode="In" />
+          <Parameter Name="EntityTypeId" Type="int" Mode="In" />
+          <Parameter Name="EntityId" Type="bigint" Mode="In" />
+          <Parameter Name="Name" Type="nvarchar" Mode="In" />
+          <Parameter Name="SessionId" Type="bigint" Mode="In" />
+          <Parameter Name="Rowcount" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="UpdateIntegrationState" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="webex">
+          <Parameter Name="IntegrationStateId" Type="bigint" Mode="In" />
+          <Parameter Name="EventId" Type="bigint" Mode="In" />
+          <Parameter Name="EntityTypeId" Type="int" Mode="In" />
+          <Parameter Name="EntityId" Type="bigint" Mode="In" />
+          <Parameter Name="AttendeeId" Type="bigint" Mode="In" />
+          <Parameter Name="IntegrationStateTypeId" Type="int" Mode="In" />
+          <Parameter Name="LastChecked" Type="datetime" Mode="In" />
+          <Parameter Name="ErrorMessage" Type="nvarchar" Mode="In" />
+          <Parameter Name="FirstName" Type="nvarchar" Mode="In" />
+          <Parameter Name="LastName" Type="nvarchar" Mode="In" />
+          <Parameter Name="Street" Type="nvarchar" Mode="In" />
+          <Parameter Name="Street2" Type="nvarchar" Mode="In" />
+          <Parameter Name="City" Type="nvarchar" Mode="In" />
+          <Parameter Name="State" Type="nvarchar" Mode="In" />
+          <Parameter Name="Country" Type="nvarchar" Mode="In" />
+          <Parameter Name="ZipCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="Email" Type="nvarchar" Mode="In" />
+          <Parameter Name="Rowcount" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="UpdateProgram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="webex">
+          <Parameter Name="ProgramId" Type="bigint" Mode="In" />
+          <Parameter Name="AccountId" Type="bigint" Mode="In" />
+          <Parameter Name="EntityTypeId" Type="int" Mode="In" />
+          <Parameter Name="EntityId" Type="bigint" Mode="In" />
+          <Parameter Name="ProgramOuterId" Type="bigint" Mode="In" />
+          <Parameter Name="Name" Type="nvarchar" Mode="In" />
+          <Parameter Name="ProgramUrl" Type="nvarchar" Mode="In" />
+          <Parameter Name="Rowcount" Type="int" Mode="InOut" />
+        </Function>
+        <EntityContainer Name="WebExModelStoreContainer">
+          <EntitySet Name="Account" EntityType="Self.Account" Schema="webex" store:Type="Tables" />
+          <EntitySet Name="Event" EntityType="Self.Event" Schema="webex" store:Type="Tables" />
+          <EntitySet Name="IntegrationState" EntityType="Self.IntegrationState" Schema="webex" store:Type="Tables" />
+          <EntitySet Name="IntegrationStateType" EntityType="Self.IntegrationStateType" Schema="webex" store:Type="Tables" />
+          <EntitySet Name="Program" EntityType="Self.Program" Schema="webex" store:Type="Tables" />
+          <AssociationSet Name="FK_Event_AccountId" Association="Self.FK_Event_AccountId">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="Event" EntitySet="Event" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Event_ProgramId" Association="Self.FK_Event_ProgramId">
+            <End Role="Program" EntitySet="Program" />
+            <End Role="Event" EntitySet="Event" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IntegrationState_EventId" Association="Self.FK_IntegrationState_EventId">
+            <End Role="Event" EntitySet="Event" />
+            <End Role="IntegrationState" EntitySet="IntegrationState" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IntegrationState_IntegrationStateTypeId" Association="Self.FK_IntegrationState_IntegrationStateTypeId">
+            <End Role="IntegrationStateType" EntitySet="IntegrationStateType" />
+            <End Role="IntegrationState" EntitySet="IntegrationState" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Program_AccountId" Association="Self.FK_Program_AccountId">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="Program" EntitySet="Program" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="WebExModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="AccountId" />
+          </Key>
+          <Property Name="AccountId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SiteName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Login" Type="String" MaxLength="64" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="64" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ServiceUrl" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Created" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Changed" Type="DateTime" Precision="3" />
+          <Property Name="Deleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Programs" Relationship="Self.FK_Program_AccountId" FromRole="Account" ToRole="Program" />
+          <NavigationProperty Name="Events" Relationship="WebExModel.FK_Event_AccountId" FromRole="Account" ToRole="Event" />
+        </EntityType>
+        <EntityType Name="IntegrationState">
+          <Key>
+            <PropertyRef Name="IntegrationStateId" />
+          </Key>
+          <Property Name="IntegrationStateId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EventId" Type="Int64" Nullable="false" />
+          <Property Name="EntityTypeId" Type="WebExModel.EntityTypeEnum" Nullable="false" />
+          <Property Name="EntityId" Type="Int64" Nullable="false" />
+          <Property Name="AttendeeId" Type="Int64" />
+          <Property Name="IntegrationStateTypeId" Type="WebExModel.IntegrationStateTypeEnum" Nullable="false" />
+          <Property Name="LastChecked" Type="DateTime" Precision="3" />
+          <Property Name="ErrorMessage" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="Street" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="Street2" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="ZipCode" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Created" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Changed" Type="DateTime" Precision="3" />
+          <Property Name="Deleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="IntegrationStateType" Relationship="Self.FK_IntegrationState_IntegrationStateTypeId" FromRole="IntegrationState" ToRole="IntegrationStateType" />
+          <NavigationProperty Name="Event" Relationship="WebExModel.FK_IntegrationState_EventId" FromRole="IntegrationState" ToRole="Event" />
+        </EntityType>
+        <EntityType Name="IntegrationStateType">
+          <Key>
+            <PropertyRef Name="IntegrationStateTypeId" />
+          </Key>
+          <Property Name="IntegrationStateTypeId" Type="WebExModel.IntegrationStateTypeEnum" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="IntegrationStates" Relationship="Self.FK_IntegrationState_IntegrationStateTypeId" FromRole="IntegrationStateType" ToRole="IntegrationState" />
+        </EntityType>
+        <EntityType Name="Program">
+          <Key>
+            <PropertyRef Name="ProgramId" />
+          </Key>
+          <Property Name="ProgramId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountId" Type="Int64" Nullable="false" />
+          <Property Name="EntityTypeId" Type="WebExModel.EntityTypeEnum" />
+          <Property Name="EntityId" Type="Int64" />
+          <Property Name="ProgramOuterId" Type="Int64" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ProgramUrl" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Created" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Changed" Type="DateTime" Precision="3" />
+          <Property Name="Deleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_Program_AccountId" FromRole="Program" ToRole="Account" />
+          <NavigationProperty Name="Events" Relationship="WebExModel.FK_Event_ProgramId" FromRole="Program" ToRole="Event" />
+        </EntityType>
+        <Association Name="FK_Program_AccountId">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="Program" Type="Self.Program" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountId" />
+            </Principal>
+            <Dependent Role="Program">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IntegrationState_IntegrationStateTypeId">
+          <End Role="IntegrationStateType" Type="Self.IntegrationStateType" Multiplicity="1" />
+          <End Role="IntegrationState" Type="Self.IntegrationState" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="IntegrationStateType">
+              <PropertyRef Name="IntegrationStateTypeId" />
+            </Principal>
+            <Dependent Role="IntegrationState">
+              <PropertyRef Name="IntegrationStateTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="WebExEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Accounts" EntityType="Self.Account" />
+          <EntitySet Name="IntegrationStates" EntityType="Self.IntegrationState" />
+          <EntitySet Name="IntegrationStateTypes" EntityType="Self.IntegrationStateType" />
+          <EntitySet Name="Programs" EntityType="Self.Program" />
+          <AssociationSet Name="FK_Program_AccountId" Association="Self.FK_Program_AccountId">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="Program" EntitySet="Programs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IntegrationState_IntegrationStateTypeId" Association="Self.FK_IntegrationState_IntegrationStateTypeId">
+            <End Role="IntegrationStateType" EntitySet="IntegrationStateTypes" />
+            <End Role="IntegrationState" EntitySet="IntegrationStates" />
+          </AssociationSet>
+          <EntitySet Name="Events" EntityType="WebExModel.Event" />
+          <AssociationSet Name="FK_Event_AccountId" Association="WebExModel.FK_Event_AccountId">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="Event" EntitySet="Events" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Event_ProgramId" Association="WebExModel.FK_Event_ProgramId">
+            <End Role="Program" EntitySet="Programs" />
+            <End Role="Event" EntitySet="Events" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IntegrationState_EventId" Association="WebExModel.FK_IntegrationState_EventId">
+            <End Role="Event" EntitySet="Events" />
+            <End Role="IntegrationState" EntitySet="IntegrationStates" />
+          </AssociationSet>
+        </EntityContainer>
+        <EnumType Name="EntityTypeEnum" a:ExternalTypeName="AutomationSystem.Base.Contract.Enums.EntityTypeEnum" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="IntegrationStateTypeEnum" a:ExternalTypeName="AutomationSystem.Base.Contract.Enums.IntegrationStateTypeEnum" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EntityType Name="Event">
+          <Key>
+            <PropertyRef Name="EventId" />
+          </Key>
+          <Property Name="EventId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountId" Type="Int64" Nullable="false" />
+          <Property Name="ProgramId" Type="Int64" />
+          <Property Name="EntityTypeId" Type="WebExModel.EntityTypeEnum" />
+          <Property Name="EntityId" Type="Int64" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="SessionId" Type="Int64" Nullable="false" />
+          <Property Name="Created" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Changed" Type="DateTime" Precision="3" />
+          <Property Name="Deleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Account" Relationship="WebExModel.FK_Event_AccountId" FromRole="Event" ToRole="Account" />
+          <NavigationProperty Name="Program" Relationship="WebExModel.FK_Event_ProgramId" FromRole="Event" ToRole="Program" />
+          <NavigationProperty Name="IntegrationStates" Relationship="WebExModel.FK_IntegrationState_EventId" FromRole="Event" ToRole="IntegrationState" />
+        </EntityType>
+        <Association Name="FK_Event_AccountId">
+          <End Type="WebExModel.Account" Role="Account" Multiplicity="1" />
+          <End Type="WebExModel.Event" Role="Event" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountId" />
+            </Principal>
+            <Dependent Role="Event">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Event_ProgramId">
+          <End Type="WebExModel.Program" Role="Program" Multiplicity="0..1" />
+          <End Type="WebExModel.Event" Role="Event" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Program">
+              <PropertyRef Name="ProgramId" />
+            </Principal>
+            <Dependent Role="Event">
+              <PropertyRef Name="ProgramId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IntegrationState_EventId">
+          <End Type="WebExModel.Event" Role="Event" Multiplicity="1" />
+          <End Type="WebExModel.IntegrationState" Role="IntegrationState" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Event">
+              <PropertyRef Name="EventId" />
+            </Principal>
+            <Dependent Role="IntegrationState">
+              <PropertyRef Name="EventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="WebExModelStoreContainer" CdmEntityContainer="WebExEntities">
+          <EntitySetMapping Name="Accounts">
+            <EntityTypeMapping TypeName="WebExModel.Account">
+              <MappingFragment StoreEntitySet="Account">
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="SiteName" ColumnName="SiteName" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="ServiceUrl" ColumnName="ServiceUrl" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="Changed" ColumnName="Changed" />
+                <ScalarProperty Name="Deleted" ColumnName="Deleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="WebExModel.Account">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="WebExModel.Store.CreateAccount">
+                  <ScalarProperty Name="ServiceUrl" ParameterName="ServiceUrl" />
+                  <ScalarProperty Name="Password" ParameterName="Password" />
+                  <ScalarProperty Name="Login" ParameterName="Login" />
+                  <ScalarProperty Name="SiteName" ParameterName="SiteName" />
+                  <ResultBinding Name="AccountId" ColumnName="AccountId" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="WebExModel.Store.UpdateAccount" RowsAffectedParameter="Rowcount">
+                  <ScalarProperty Name="ServiceUrl" ParameterName="ServiceUrl" Version="Current" />
+                  <ScalarProperty Name="Password" ParameterName="Password" Version="Current" />
+                  <ScalarProperty Name="Login" ParameterName="Login" Version="Current" />
+                  <ScalarProperty Name="SiteName" ParameterName="SiteName" Version="Current" />
+                  <ScalarProperty Name="AccountId" ParameterName="AccountId" Version="Current" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="WebExModel.Store.DeleteAccount" RowsAffectedParameter="RowCount">
+                  <ScalarProperty Name="AccountId" ParameterName="AccountId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IntegrationStates">
+            <EntityTypeMapping TypeName="WebExModel.IntegrationState">
+              <MappingFragment StoreEntitySet="IntegrationState">
+                <ScalarProperty Name="IntegrationStateId" ColumnName="IntegrationStateId" />
+                <ScalarProperty Name="EventId" ColumnName="EventId" />
+                <ScalarProperty Name="EntityTypeId" ColumnName="EntityTypeId" />
+                <ScalarProperty Name="EntityId" ColumnName="EntityId" />
+                <ScalarProperty Name="AttendeeId" ColumnName="AttendeeId" />
+                <ScalarProperty Name="IntegrationStateTypeId" ColumnName="IntegrationStateTypeId" />
+                <ScalarProperty Name="LastChecked" ColumnName="LastChecked" />
+                <ScalarProperty Name="ErrorMessage" ColumnName="ErrorMessage" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Street" ColumnName="Street" />
+                <ScalarProperty Name="Street2" ColumnName="Street2" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="Changed" ColumnName="Changed" />
+                <ScalarProperty Name="Deleted" ColumnName="Deleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="WebExModel.IntegrationState">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="WebExModel.Store.CreateIntegrationState">
+                  <ScalarProperty Name="Email" ParameterName="Email" />
+                  <ScalarProperty Name="ZipCode" ParameterName="ZipCode" />
+                  <ScalarProperty Name="Country" ParameterName="Country" />
+                  <ScalarProperty Name="State" ParameterName="State" />
+                  <ScalarProperty Name="City" ParameterName="City" />
+                  <ScalarProperty Name="Street2" ParameterName="Street2" />
+                  <ScalarProperty Name="Street" ParameterName="Street" />
+                  <ScalarProperty Name="LastName" ParameterName="LastName" />
+                  <ScalarProperty Name="FirstName" ParameterName="FirstName" />
+                  <ScalarProperty Name="ErrorMessage" ParameterName="ErrorMessage" />
+                  <ScalarProperty Name="LastChecked" ParameterName="LastChecked" />
+                  <ScalarProperty Name="IntegrationStateTypeId" ParameterName="IntegrationStateTypeId" />
+                  <ScalarProperty Name="AttendeeId" ParameterName="AttendeeId" />
+                  <ScalarProperty Name="EntityId" ParameterName="EntityId" />
+                  <ScalarProperty Name="EntityTypeId" ParameterName="EntityTypeId" />
+                  <ScalarProperty Name="EventId" ParameterName="EventId" />
+                  <ResultBinding Name="IntegrationStateId" ColumnName="IntegrationStateId" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="WebExModel.Store.UpdateIntegrationState" RowsAffectedParameter="Rowcount">
+                  <ScalarProperty Name="Email" ParameterName="Email" Version="Current" />
+                  <ScalarProperty Name="ZipCode" ParameterName="ZipCode" Version="Current" />
+                  <ScalarProperty Name="Country" ParameterName="Country" Version="Current" />
+                  <ScalarProperty Name="State" ParameterName="State" Version="Current" />
+                  <ScalarProperty Name="City" ParameterName="City" Version="Current" />
+                  <ScalarProperty Name="Street2" ParameterName="Street2" Version="Current" />
+                  <ScalarProperty Name="Street" ParameterName="Street" Version="Current" />
+                  <ScalarProperty Name="LastName" ParameterName="LastName" Version="Current" />
+                  <ScalarProperty Name="FirstName" ParameterName="FirstName" Version="Current" />
+                  <ScalarProperty Name="ErrorMessage" ParameterName="ErrorMessage" Version="Current" />
+                  <ScalarProperty Name="LastChecked" ParameterName="LastChecked" Version="Current" />
+                  <ScalarProperty Name="IntegrationStateTypeId" ParameterName="IntegrationStateTypeId" Version="Current" />
+                  <ScalarProperty Name="AttendeeId" ParameterName="AttendeeId" Version="Current" />
+                  <ScalarProperty Name="EntityId" ParameterName="EntityId" Version="Current" />
+                  <ScalarProperty Name="EntityTypeId" ParameterName="EntityTypeId" Version="Current" />
+                  <ScalarProperty Name="EventId" ParameterName="EventId" Version="Current" />
+                  <ScalarProperty Name="IntegrationStateId" ParameterName="IntegrationStateId" Version="Current" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="WebExModel.Store.DeleteIntegrationState" RowsAffectedParameter="RowCount">
+                  <ScalarProperty Name="IntegrationStateId" ParameterName="IntegrationStateId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IntegrationStateTypes">
+            <EntityTypeMapping TypeName="WebExModel.IntegrationStateType">
+              <MappingFragment StoreEntitySet="IntegrationStateType">
+                <ScalarProperty Name="IntegrationStateTypeId" ColumnName="IntegrationStateTypeId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Programs">
+            <EntityTypeMapping TypeName="WebExModel.Program">
+              <MappingFragment StoreEntitySet="Program">
+                <ScalarProperty Name="ProgramId" ColumnName="ProgramId" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="EntityTypeId" ColumnName="EntityTypeId" />
+                <ScalarProperty Name="EntityId" ColumnName="EntityId" />
+                <ScalarProperty Name="ProgramOuterId" ColumnName="ProgramOuterId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ProgramUrl" ColumnName="ProgramUrl" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="Changed" ColumnName="Changed" />
+                <ScalarProperty Name="Deleted" ColumnName="Deleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="WebExModel.Program">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="WebExModel.Store.CreateProgram">
+                  <ScalarProperty Name="ProgramUrl" ParameterName="ProgramUrl" />
+                  <ScalarProperty Name="Name" ParameterName="Name" />
+                  <ScalarProperty Name="ProgramOuterId" ParameterName="ProgramOuterId" />
+                  <ScalarProperty Name="EntityId" ParameterName="EntityId" />
+                  <ScalarProperty Name="EntityTypeId" ParameterName="EntityTypeId" />
+                  <ScalarProperty Name="AccountId" ParameterName="AccountId" />
+                  <ResultBinding Name="ProgramId" ColumnName="ProgramId" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="WebExModel.Store.UpdateProgram" RowsAffectedParameter="Rowcount">
+                  <ScalarProperty Name="ProgramUrl" ParameterName="ProgramUrl" Version="Current" />
+                  <ScalarProperty Name="Name" ParameterName="Name" Version="Current" />
+                  <ScalarProperty Name="ProgramOuterId" ParameterName="ProgramOuterId" Version="Current" />
+                  <ScalarProperty Name="EntityId" ParameterName="EntityId" Version="Current" />
+                  <ScalarProperty Name="EntityTypeId" ParameterName="EntityTypeId" Version="Current" />
+                  <ScalarProperty Name="AccountId" ParameterName="AccountId" Version="Current" />
+                  <ScalarProperty Name="ProgramId" ParameterName="ProgramId" Version="Current" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="WebExModel.Store.DeleteProgram" RowsAffectedParameter="RowCount">
+                  <ScalarProperty Name="ProgramId" ParameterName="ProgramId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Events">
+            <EntityTypeMapping TypeName="WebExModel.Event">
+              <MappingFragment StoreEntitySet="Event">
+                <ScalarProperty Name="Deleted" ColumnName="Deleted" />
+                <ScalarProperty Name="Changed" ColumnName="Changed" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="SessionId" ColumnName="SessionId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="EntityId" ColumnName="EntityId" />
+                <ScalarProperty Name="EntityTypeId" ColumnName="EntityTypeId" />
+                <ScalarProperty Name="ProgramId" ColumnName="ProgramId" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="EventId" ColumnName="EventId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="WebExModel.Event">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="WebExModel.Store.CreateEvent">
+                  <ScalarProperty Name="SessionId" ParameterName="SessionId" />
+                  <ScalarProperty Name="Name" ParameterName="Name" />
+                  <ScalarProperty Name="EntityId" ParameterName="EntityId" />
+                  <ScalarProperty Name="EntityTypeId" ParameterName="EntityTypeId" />
+                  <ScalarProperty Name="ProgramId" ParameterName="ProgramId" />
+                  <ScalarProperty Name="AccountId" ParameterName="AccountId" />
+                  <ResultBinding Name="EventId" ColumnName="EventId" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="WebExModel.Store.UpdateEvent" RowsAffectedParameter="Rowcount">
+                  <ScalarProperty Name="SessionId" ParameterName="SessionId" Version="Current" />
+                  <ScalarProperty Name="Name" ParameterName="Name" Version="Current" />
+                  <ScalarProperty Name="EntityId" ParameterName="EntityId" Version="Current" />
+                  <ScalarProperty Name="EntityTypeId" ParameterName="EntityTypeId" Version="Current" />
+                  <ScalarProperty Name="ProgramId" ParameterName="ProgramId" Version="Current" />
+                  <ScalarProperty Name="AccountId" ParameterName="AccountId" Version="Current" />
+                  <ScalarProperty Name="EventId" ParameterName="EventId" Version="Current" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="WebExModel.Store.DeleteEvent" RowsAffectedParameter="RowCount">
+                  <ScalarProperty Name="EventId" ParameterName="EventId" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

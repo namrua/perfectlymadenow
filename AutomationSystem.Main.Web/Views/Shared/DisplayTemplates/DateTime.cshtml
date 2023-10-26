@@ -1,0 +1,24 @@
+﻿@model DateTime?
+@{
+
+    // loads options
+    var showOnlyDate = (bool?)ViewData[DisplayOptions.ShowOnlyDate] ?? false;
+    var showOnlyTime = (bool?)ViewData[DisplayOptions.ShowOnlyTime] ?? false;
+    var useCurrentCulture = (bool?)ViewData[DisplayOptions.UseCurrentCulture] ?? false;
+
+
+    CultureInfo culture = useCurrentCulture ? CultureInfo.CurrentUICulture : null;
+
+}
+@if (showOnlyDate)
+{ 
+    @TextHelper.GetStringDate(Model, culture)
+}
+else if (showOnlyTime)
+{
+    @TextHelper.GetStringTime(Model, culture)
+}
+else
+{
+    @TextHelper.GetStringDateTime(Model, culture)
+}

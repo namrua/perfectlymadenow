@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="DatabaseEnums.tt" />
+    <None Remove="Enums\DatabaseEnums.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Enums\DatabaseEnums.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </Content>
+    <Content Include="Enums\DatabaseEnums.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PerfectlyMadeInc.DesignTools.Contract\PerfectlyMadeInc.DesignTools.Contract.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Enums\DatabaseEnums.cs">
+      <DependentUpon>DatabaseEnums.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Enums\DatabaseEnums.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>DatabaseEnums.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+</Project>

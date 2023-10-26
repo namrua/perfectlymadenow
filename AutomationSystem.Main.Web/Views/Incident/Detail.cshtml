@@ -1,0 +1,125 @@
+﻿@model IncidentDetail
+@{
+    ViewBag.Title = CommonResources.MenuCoreIncidents;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoreIncidents;
+
+    IContextManager cm = ContextHelper.GetContextManager(ViewBag);
+    var pushContext = cm.UpdateBacks().Get();
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Command(CommonResources.Resolve, "incidents", ButtonStyle.Primary, Model.IsResolved, "resolve", Model.IncidentId)
+    @bg.Command(CommonResources.Report, "incidents", ButtonStyle.Primary, Model.IsReported, "report", Model.IncidentId)
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, cm.GetBackUrl(Url.Action("Index")))
+}
+
+<div class="badge-title">
+    <h5>@Model.Message</h5>
+    @if (Model.IsResolved)
+    {
+        <small class="badge badge-primary">resolved</small>
+    }
+</div>
+
+<p>
+    @TextHelper.ReplaceNewLines(Html.Encode(Model.Description))
+</p>
+
+<div class="row">
+
+    <div class="col-xl-6 align-content-start">
+
+        <dl class="row dl-compact">
+
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.IncidentType)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.IncidentType)</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Occurred)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Occurred)</dd>
+            <dt class="col-sm-4">@CommonResources.RelatedTo</dt>
+            <dd class="col-sm-8">@MainTextHelper.GetRelation(Model.EntityType, Model.EntityId)</dd>
+
+        </dl>
+
+    </div>
+
+    <div class="col-xl-6 align-content-start">
+
+        <dl class="row dl-compact">
+
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Resolved)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Resolved)</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Reported)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Reported)</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.ReportingAttempts)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.ReportingAttempts)</dd>
+
+        </dl>
+
+    </div>
+
+    <div class="col-xl-6 align-content-start">
+
+        <dl class="row dl-compact">
+
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.ParentIncidentId)</dt>
+            <dd class="col-sm-8">
+                @if (Model.ParentIncidentId.HasValue)
+                {
+                    @Html.ActionLink("1 parent incident", "Detail", new { id = Model.ParentIncidentId.Value, context = pushContext })
+                }
+                else
+                {
+                    <em>no parent incident</em>
+                }
+            </dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.InnerIncidentsCount)</dt>
+            <dd class="col-sm-8">
+                @if (Model.InnerIncidentsCount > 0)
+                {
+                    @Html.ActionLink($"{Model.InnerIncidentsCount} inner incidents", "Index", 
+                        new { parentIncidentId = Model.IncidentId, search = true, context = pushContext })
+                }
+                else
+                {
+                    <em>no inner incident</em>
+                }
+            </dd>
+
+        </dl>
+
+    </div>
+
+</div>
+
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // COMMANDS
+         
+            var requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("resolve", "@Url.Action("Resolve", "Incident", new { context = pushContext})");
+            requestHelper.addAction("report", "@Url.Action("Report", "Incident", new { context = pushContext})");
+
+            // connects command-incidents
+            $(".command-incidents").click(function() {
+                var sender = $(this);
+                var id = sender.attr("data-id");
+                var command = sender.attr("data-command");
+                if (requestHelper.hasAction(command))
+                    requestHelper.executePost(command, { id: id });
+                else
+                    alert("Unknown action " + command);
+
+            });          
+
+        }
+
+    </script>
+
+}

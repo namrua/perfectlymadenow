@@ -1,0 +1,48 @@
+﻿@model DistanceClassTemplateCompletionForm
+@{
+    ViewBag.Title = CommonResources.MenuDistanceCoordinatorDistanceTemplates;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.DistanceCoordinatorDistanceTemplates;
+}
+
+<form id="distanceClassTemplateCompletionForm" method="post" action="@Url.Action("CompletionSettings")">
+
+    @Html.EditorFor(x => x.DistanceClassTemplateId)
+
+    <div class="row">
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.AutomationCompleteTime)
+            @Html.EditorFor(x => x.AutomationCompleteTime)
+        </div>
+
+    </div>
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save, htmlAttributes: new { id = "save-button"})
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Detail", new { id = Model.DistanceClassTemplateId }))
+    }
+
+</form>
+
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            var settingForm = new CorabeuControl.Form("distanceClassTemplateCompletionForm");
+
+            var pickerOptions = { format: 'MMMM, DD, YYYY', startOf: 'day' };
+            var automationCompletionTime = new CorabeuControl.DateTimePicker("automationCompleteTime", "AutomationCompleteTime", pickerOptions);
+
+            @if (ViewBag.TriggerValidation != null)
+            {
+                @:settingForm.valid();
+            }
+        }
+
+    </script>
+}

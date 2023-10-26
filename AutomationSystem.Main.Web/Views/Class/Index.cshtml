@@ -1,0 +1,150 @@
+﻿@model ClassesForList
+@{
+    ViewBag.Title = CommonResources.MenuCoordinatorClasses;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    foreach (var classCategory in Model.ClassCategories)
+    {
+        @bg.DropdownLink("Add " + classCategory.Description, ButtonStyle.Primary, "new-class-button", false,
+            Model.Profiles.Select(x => PickerItem.Item(Url.Action("New", new {profileId = x.Id, category = classCategory.ClassCategoryId}), x.Text)))
+    }
+}
+
+<form id="filterForm" class="alert alert-info" method="get" action="@Url.Action("Index")">
+
+    @Html.HiddenConstant("search", true)
+
+    <div class="row">
+
+        <div class="form-group col-md-6 col-lg-4">
+            @Html.LabelFor(x => x.Filter.ClassState)
+            @Html.EditorFor(x => x.Filter.ClassState, new { Items = Model.ClassStates.Select(x => DropDownItem.Item(x, MainTextHelper.GetClassStateCapitalText(x))) })
+        </div>
+
+        <div class="form-group col-md-6 col-lg-4">
+            @Html.LabelFor(x => x.Filter.ClassCategoryId)
+            @Html.EditorFor(x => x.Filter.ClassCategoryId, new { Items = Model.ClassCategories.Select(x => DropDownItem.Item(x.ClassCategoryId, x.Description)) })
+        </div>
+
+        <div class="form-group col-md-6 col-lg-4">
+            @Html.LabelFor(x => x.Filter.ProfileId)
+            @Html.EditorFor(x => x.Filter.ProfileId, new { Items = Model.Profiles })
+        </div>
+
+
+    </div>
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.FilterGroup))
+    {
+        @bg.Submit(CommonResources.Search, ButtonStyle.FilterPrimary)
+        @bg.Command(CommonResources.Clear, ButtonStyle.FilterNormal, false, new { id = "clear-button" });
+    }
+
+</form>
+
+
+@*List of classes*@
+@if (Model.Items.Count == 0)
+{
+    if (Model.WasSearched)
+    {
+        <p>
+            <em>@CommonResources.NoRecords</em>
+        </p>
+    }
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <tbody>
+            @foreach (var item in Model.Items.OrderByDescending(x => x.EventStart))
+            {
+                <tr class="@CssClassHelper.New().AddIf(item.EnvironmentTypeId == EnvironmentTypeEnum.Test, "table-dark").Render()">
+                    <td>
+                        <div class="badge-title">
+                            <h5>@item.Title</h5>
+                            @Html.ClassCategoryBadge(item.ClassCategoryId)
+                            @Html.ClassStateBadge(item.ClassState)
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-lg-10 row">
+                                <div class="col-lg-6 col-xl-6">
+                                    <strong>@Html.DisplayNameFor(x => item.RegistrationStart)</strong>
+                                    @Html.DisplayFor(x => item.RegistrationStart, new { item.ShowOnlyDate })
+                                </div>
+                                <div class="col-lg-6 col-xl-6">
+                                    <strong>@Html.DisplayNameFor(x => item.RegistrationEnd)</strong>
+                                    @Html.DisplayFor(x => item.RegistrationEnd, new { item.ShowOnlyDate })
+                                </div>
+                                @if (item.ShowOnlyDate)
+                                {
+                                    <div class="col-lg-6 col-xl-6">
+                                        <strong>@Html.DisplayNameFor(x => item.TransLanguage)</strong>
+                                        (@MainTextHelper.GetTranslation(item.OriginLanguage, item.TransLanguage))
+                                    </div>
+                                    <div class="col-lg-6 col-xl-6">
+                                        <strong>@Html.DisplayNameFor(x => item.Profile)</strong>
+                                        @Html.DisplayFor(x => item.Profile)
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-lg-6 col-xl-4">
+                                        <strong>@Html.DisplayNameFor(x => item.TimeZone)</strong>
+                                        @Html.DisplayFor(x => item.TimeZone)
+                                    </div>
+                                    <div class="col-lg-6 col-xl-4">
+                                        <strong>@Html.DisplayNameFor(x => item.TransLanguage)</strong>
+                                        (@MainTextHelper.GetTranslation(item.OriginLanguage, item.TransLanguage))
+                                    </div>
+                                    <div class="col-lg-6 col-xl-4">
+                                        <strong>@Html.DisplayNameFor(x => item.Profile)</strong>
+                                        @Html.DisplayFor(x => item.Profile)
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-lg-2 row justify-content-center justify-content-lg-end align-self-end block-item-group-placeholder">
+                                @using (var bg = Html.ButtonGroup(ButtonGroupType.BlockItemGroup))
+                                {
+                                    @bg.Link(CommonResources.Detail, ButtonStyle.Primary, Url.Action("Detail", new { id = item.ClassId }))
+                                }
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // CLEAR LOGIC
+
+            var filterControls = [
+                new CorabeuControl.DropDownList("classState", "ClassState"),
+                new CorabeuControl.DropDownList("classCategoryId", "ClassCategoryId"),
+                new CorabeuControl.DropDownList("profileId", "ProfileId")
+            ];
+
+            // connect delete-button
+            $("#clear-button").click(function () {
+                $.each(filterControls, function (index, control) {
+                    control.setDefaultValue();
+                });
+            });
+
+        }
+
+    </script>
+
+}

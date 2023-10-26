@@ -1,0 +1,39 @@
+﻿@model EmailTypeSummary
+
+@if (Model.Items.Count == 0)
+{
+    <p>
+        <em>No records</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.Items[0].EmailType)</th>
+                <th>@Html.DisplayNameFor(x => x.Items[0].ValidEmailCount)</th>
+                <th>@Html.DisplayNameFor(x => x.Items[0].IsLocalisable)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr class="@CssClassHelper.New().AddIf(!item.IsAllValid, "table-warning").Render()">
+                    <td>@Html.DisplayFor(x => item.EmailType)</td>
+                    <td>@TextHelper.GetCountTotalRatio(item.ValidEmailCount, item.EmailCount)</td>
+                    <td>@Html.DisplayFor(x => item.IsLocalisable)</td>
+
+                    <td>
+                        @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                        {
+                            @bg.Link(CommonResources.Detail, ButtonStyle.Primary, Url.Action("List", "Email",
+                                new { id = item.EmailTypeId, entityTypeId = Model.EmailTemplateEntityId.TypeId, entityId = Model.EmailTemplateEntityId.Id }))
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

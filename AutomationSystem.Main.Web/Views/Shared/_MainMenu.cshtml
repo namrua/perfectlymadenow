@@ -1,0 +1,34 @@
+﻿@{    
+    List<HierarchicalMenuItem> menuItems = ViewServices.LayoutHelper.GetMainMenuItems(ViewBag.ActiveMainMenuItemId);
+}
+
+<ul class="navbar-nav mr-auto">
+             
+    
+    @foreach (var parent in menuItems)
+    {
+        if (!parent.HasChildren)
+        {
+            <li class="@CssClassHelper.New().Add("nav-item").AddIf(parent.IsActive, "active").Render()">
+                <a class="@CssClassHelper.New().Add("nav-link").AddIf(parent.IsDisabled, "disabled").Render()" 
+                   href="@(parent.IsDisabled ? "#" : Url.Action(parent.Activity, parent.Controller, parent.Parameters))">@parent.Text</a>
+            </li>
+        }
+        else
+        {           
+            <li class="@CssClassHelper.New().Add("nav-item", "dropdown").AddIf(parent.IsActive, "active").AddIf(parent.IsDisabled, "disabled").Render()">
+                <a class="nav-link dropdown-toggle" href="#" id="@TextHelper.DecorateName(parent.Id, "navbar-dropdown")" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    @TextHelper.GetMainMenuText(parent.Text, parent.ActiveChildText)
+                </a>
+                <div class="dropdown-menu" aria-labelledby="@TextHelper.DecorateName(parent.Id, "navbar-dropdown")">
+                    @foreach (var child in parent.Children)
+                    {
+                        <a class="@CssClassHelper.New().Add("dropdown-item").AddIf(child.IsActive, "active").AddIf(child.IsDisabled, "disabled").Render()"
+                           href="@(child.IsDisabled ? "#" : Url.Action(child.Activity, child.Controller, child.Parameters))">@child.Text</a>
+                    }                  
+                </div>
+            </li>
+        }
+    }                                              
+                    
+</ul>

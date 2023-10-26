@@ -1,0 +1,44 @@
+﻿@model ClassRecipientSelectionForEdit
+@{
+    ViewBag.Title = CommonResources.MenuCoordinatorClasses;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+
+    var isSelected = new HashSet<long>(Model.Form.RecipientIds);
+}
+
+<form method="post" action="@Url.Action("SendToRecipients")">
+    
+    @Html.EditorFor(x => x.Form.ClassId)
+    @Html.EditorFor(x => x.Form.Type)
+
+    @* There is always at least coordinator - check for no items is not necessary *@
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.Form.RecipientIds)</th>
+                <th>@Html.DisplayNameFor(x => x.Recipients[0].Name)</th>
+                <th>@Html.DisplayNameFor(x => x.Recipients[0].Email)</th>
+                <th>@Html.DisplayNameFor(x => x.Recipients[0].Roles)</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.Recipients)
+        {
+            <tr>
+                <td>@Html.TableCheckBoxFor(x => x.Form.RecipientIds, item.PersonId, isSelected.Contains(item.PersonId))</td>
+                <td>@Html.DisplayFor(x => item.Name)</td>
+                <td>@Html.DisplayFor(x => item.Email)</td>
+                <td>@Html.DisplayFor(x => item.Roles)</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    
+    
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Send)
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Reports", new { id = Model.Form.ClassId }))
+    }
+
+</form>

@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<definition templatePath="Templates\FOI Royalty Form.xlsx"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <blocks>    
+    <dataBlock id="GeneralInfoDataBlock">
+      <dataCell bind="ReportDate" positionX="1" fillingMethod="SheetUtility.AppendTextCellProcessor" />
+      <dataCell bind="Coordinator"  positionX="0" positionY="1" fillingMethod="SheetUtility.AppendTextCellProcessor"/>
+      <dataCell bind="Address" positionX="0" positionY="2" fillingMethod="SheetUtility.AppendTextCellProcessor"/>
+      <dataCell bind="Phone" positionX="0" positionY="3" fillingMethod="SheetUtility.AppendTextCellProcessor"/>
+      <dataCell bind="Email" positionX="0" positionY="4" fillingMethod="SheetUtility.AppendTextCellProcessor"/>
+      <dataCell bind="EventDates" positionX="0" positionY="5" fillingMethod="SheetUtility.AppendTextCellProcessor"/>
+      <dataCell bind="EventLocation" positionX="0" positionY="6" fillingMethod="SheetUtility.AppendTextCellProcessor"/>
+    </dataBlock>
+    <dataBlock id ="RoyaltyFeeItemsDataBlock">
+      <dataCell bind ="Rate" positionX="1"/>
+      <dataCell bind ="Number" positionX="2"/>
+    </dataBlock>
+    <dataBlock id="ReimbursementForPrintingBlock">
+      <dataCell bind="Rate" positionX="1" />
+      <dataCell bind="Number" positionX="2" />
+    </dataBlock>   
+  </blocks>
+  <layout>
+    <solid id="GeneralInfoSolid" positionX="1" positionY="7" bind="GeneralInfo">
+      <block blockId="GeneralInfoDataBlock"/>
+    </solid>
+    <table id="RoyaltyFeeItemsTable" positionX="1" positionY="17" rowCount="1" verticalSpace="4" bind="RoyaltyFeeItems">
+      <block blockId="RoyaltyFeeItemsDataBlock"/>
+    </table>
+    <solid id="ReimbursementForPrintingSolid" positionX="1" positionY="26" bind="ReimbursementForPrinting">
+      <block blockId="ReimbursementForPrintingBlock"/>     
+    </solid>       
+  </layout>
+</definition>

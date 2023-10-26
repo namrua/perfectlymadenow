@@ -1,0 +1,21 @@
+﻿@{
+
+    // creates base text input
+    var metadata = new EditorTemplateMetadataProvider<dynamic>(ViewData);
+    var name = metadata.Name;
+    var id = metadata.Id;
+    var spinner = SpinnerInput.New(id, name, Model, metadata.Placeholder, CssClassHelper.New());
+
+    // obtains text input options and sets them to text input
+    var spinnerInputOptions = metadata.GetAttribute<SpinnerInputOptions>();
+
+    // apply spinner input options
+    spinner.SetSpinnerInputOptions(spinnerInputOptions);
+
+}
+
+@InputControl.AddSpinnerInput(this, spinner)
+@if (!metadata.NoErrorPlaceholder)
+{
+    <div id="@TextHelper.DecorateName(id, "error-placeholder")"></div>
+}

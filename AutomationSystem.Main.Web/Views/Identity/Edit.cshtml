@@ -1,0 +1,118 @@
+﻿@model UserForEdit
+@{
+    ViewBag.Title = CommonResources.MenuCoreUserAccounts;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoreUserAccounts;
+
+    var assignedRoles = new HashSet<UserRoleTypeEnum>(Model.Form.UserRoles);
+}
+
+<form id="userForm" method="post" action="@Url.Action("Edit", "Identity")">
+    
+    <div class="alert alert-primary" role="alert">
+        All changes of user's setting, including change of assigned roles, will take effect after <strong>logging out and logging in</strong> the user!
+    </div>
+
+    <h5>User information</h5>
+
+    @Html.EditorFor(x => x.Form.UserId)
+
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.Name)
+            @Html.EditorFor(x => x.Form.Name)
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.GoogleAccount)
+            @Html.EditorFor(x => x.Form.GoogleAccount)
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.EditorFor(x => x.Form.Active)
+        </div>
+    </div>
+
+    <h5>Roles of user</h5>
+
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>Role name</th>
+                <th>Description</th>
+                <th>@Html.DisplayNameFor(x => x.Form.UserRoles)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.RoleTypes)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Description</td>
+                    <td>
+                        @Html.TableCheckBoxFor(x => x.Form.UserRoles, item.Name, assignedRoles.Contains(item.UserRoleTypeId))
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save);
+        @bg.Command(CommonResources.Delete, ButtonStyle.Primary, Model.Form.UserId == 0, new { id = "delete-button" })
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Index", "Identity"))
+    }
+
+</form>
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function() {
+
+            // DELETE FUNCTIONALITY
+
+            // registration helper
+            var requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("delete", "@Url.Action("Delete", "Identity")");
+
+            // connect delete-button
+            $("#delete-button").click(function() {
+                var confirmed = confirm("@TextHelper.ToHtmlString($"Are you sure to delete user {Model.Form.Name}?")");
+                if (!confirmed) return;
+                requestHelper.executePost("delete", { id: @Model.Form.UserId });
+            });
+
+            // INITIALIZATION AND VALIDATION
+
+            var userForm = new CorabeuControl.Form("userForm");
+            CorabeuControl.ValidationHelper.registerNotEqual();
+
+            var name = $("#name");
+            userForm.validateControl(name, "@Html.DisplayNameFor(x => x.Form.Name)", { required: true, maxlength: 64 });
+            @if (Model.ForbiddenName != null)
+            {
+                @:CorabeuControl.ValidationHelper.addRule(name, "notEqual", "@Model.ForbiddenName", "User with this Name already exists");
+            }
+
+            var googleAccount = $("#googleAccount");
+            userForm.validateControl(googleAccount, "@Html.DisplayNameFor(x => x.Form.GoogleAccount)", { required: true, maxlength: 64 });
+            @if (Model.ForbiddenGoogleAccount != null)
+            {
+                @:CorabeuControl.ValidationHelper.addRule(googleAccount, "notEqual", "@Model.ForbiddenGoogleAccount", "User with this Google account already exists");
+            }
+
+            @if (ViewBag.TriggerValidation != null)
+            {
+                <text>userForm.valid();</text>
+            }
+
+        }
+
+    </script>
+
+}

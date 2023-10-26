@@ -1,0 +1,61 @@
+﻿@model EmailDetail
+@{   
+    IContextManager cm = ContextHelper.GetContextManager(ViewBag);
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, cm.GetBackUrl(Url.Action("Index")))
+}
+
+<div class="row">
+
+    <div class="col-lg-6 align-content-start">
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.IsTestEmail)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.IsTestEmail)</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Recipient)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Recipient)</dd>
+            <dt class="col-sm-4">@CommonResources.RelatedTo</dt>
+            <dd class="col-sm-8">@MainTextHelper.GetRelation(Model.EntityType, Model.EntityId)</dd>
+        </dl>
+    </div>
+
+    <div class="col-lg-6 align-content-start">
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Created)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Created)</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Sent)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Sent)</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.SendingAttempts)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.SendingAttempts)</dd>
+        </dl>
+    </div>
+
+
+    <dl class="col-lg-12 row dl-compact">
+        <dt class="col-sm-12">@Html.DisplayNameFor(x => x.Subject)</dt>
+        <dd class="col-sm-12">@Html.DisplayFor(x => x.Subject)</dd>
+    </dl>
+
+    <dl class="col-lg-12 row dl-compact">
+        <dt class="col-sm-12">@Html.DisplayNameFor(x => x.Body)</dt>
+        <dd class="col-sm-12">@Html.EditorFor(x => x.Body)</dd>
+    </dl>  
+
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+
+        // runs page script
+        var runPageScript = function () {
+
+            // controls
+            var textEditor = new CorabeuControl.AceTextInput("body", "Body", { mode: "ace/mode/html", theme: "ace/theme/crimson_editor" });
+            textEditor.disable(); 
+        }
+
+    </script>
+}

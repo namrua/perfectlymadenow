@@ -1,0 +1,113 @@
+﻿@model PersonForEdit
+@{
+    ViewBag.Title = CommonResources.MenuCommonPersons;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CommonPersons;
+
+    var assignedRoles = new HashSet<PersonRoleTypeEnum>(Model.Form.PersonRoles);
+    var defaultRoles = new HashSet<PersonRoleTypeEnum>(Model.Form.DefaultPersonRoles);
+}
+
+<form id="personForm" method="post" action="@Url.Action("Edit", "Person")">
+
+    <h5>Personal information</h5>
+
+    @Html.EditorFor(x => x.Form.PersonId)
+    @Html.EditorFor(x => x.Form.ProfileId)
+    @Html.EditorFor(x => x.Form.AssignedUserId)
+
+    @Html.EditorFor(x => x.Form.Address, new { Model.Countries })
+
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.Email)
+            @Html.EditorFor(x => x.Form.Email)
+        </div>
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.Phone)
+            @Html.EditorFor(x => x.Form.Phone)
+        </div>
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.CoordinatorNumber)
+            @Html.EditorFor(x => x.Form.CoordinatorNumber)
+        </div>
+    </div>
+
+    <h5>Roles of persons</h5>
+
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>Role name</th>              
+                <th>@Html.DisplayNameFor(x => x.Form.PersonRoles)</th>
+                <th>@Html.DisplayNameFor(x => x.Form.DefaultPersonRoles)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.RoleTypes.OrderBy(x => x.Description))
+            {                
+                var defaultCheckboxId = TextHelper.DecorateName("person-role", "default", item.PersonRoleTypeId);                           
+                <tr>
+                    <td>@item.Description</td>                   
+                    <td>
+                        @Html.TableCheckBoxFor(x => x.Form.PersonRoles, item.Name, assignedRoles.Contains(item.PersonRoleTypeId), false,
+                            new RouteValueDictionary {{"class", "assign-person-role"}, {"data-binded", defaultCheckboxId}})
+                    </td>
+                    <td>
+                        @Html.TableCheckBoxFor(x => x.Form.DefaultPersonRoles, item.Name, defaultRoles.Contains(item.PersonRoleTypeId),
+                            !assignedRoles.Contains(item.PersonRoleTypeId), new {id = defaultCheckboxId})
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save);
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, Model.Form.PersonId == 0 ? Url.Action("Index") : Url.Action("Detail", new { id = Model.Form.PersonId }))
+    }
+
+</form>
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function() {
+
+            // CHECKBOX FUNCTIONALITY
+
+            // disabling of default checkboxes
+            $(".assign-person-role").change(function() {
+                var assignCheckbox = $(this);
+                var isChecked = assignCheckbox.prop("checked");
+                var defaultCheckboxId = assignCheckbox.attr("data-binded");
+
+                var defaultCheckbox = $("#" + defaultCheckboxId);
+                defaultCheckbox.prop("disabled", !isChecked);
+                if (!isChecked)
+                    defaultCheckbox.prop("checked", false);
+            });
+
+            // INITIALIZATION AND VALIDATION
+
+            var personForm = new CorabeuControl.Form("personForm");
+
+            var addressComponent = new AutomationSystem.Address(personForm, "Address");
+            var coordinatorNumber = new CorabeuControl.Spinner("coordinatorNumber", "CoordinatorNumber");
+
+            personForm.validateControl($("#email"), "@Html.DisplayNameForJava(x => x.Form.Email)", { required: true, maxlength: 128, email: true });
+            personForm.validateControl($("#phone"), "@Html.DisplayNameForJava(x => x.Form.Phone)", { required: true, maxlength: 15 });
+            personForm.validateControl($("#coordinatorNumber"), "@Html.DisplayNameForJava(x => x.Form.CoordinatorNumber)", { min: 0, max: 1000000, number: true });
+
+            @if (ViewBag.TriggerValidation != null)
+            {
+                @:personForm.valid();
+            }
+
+        }
+
+    </script>
+
+}

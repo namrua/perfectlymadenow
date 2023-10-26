@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<definition templatePath="Templates\IZI CRF LECTURE.xlsx" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<blocks>
+  <formatBlock id="MemberInfoFormat">
+    <formatCell positionX="14" type="Number">[>=1000]"$"#_)##0.00;"$"###0.00</formatCell>
+    <formatCell positionX="15" type="Number">[>=1000]"$"#_)##0.00;"$"###0.00</formatCell>
+    <formatCell positionX="16" type="Number">[>=1000]"$"#_)##0.00;"$"###0.00</formatCell>
+    <formatCell positionX="17" type="Number">[>=1000]"$"#_)##0.00;"$"###0.00</formatCell>
+  </formatBlock>
+  <textBlock id="CanceledHeader">
+    <textCell>CANCELED STUDENTS:</textCell>
+  </textBlock>
+  <cellFormatBlock id="FormatBlockCanceledStudents">
+    <selection left="0" top="0" right="19" merge="true">
+      <colors backgroundColor="#FFF" textColor="#000090"/>
+      <text fontName="Calibri" size="12" type="Bold" horizontalAlign="Left" verticalAlign="Center"/>
+      <borders style="Medium" color="#000090">
+        <border type="Top" color="#000090" style="Medium"/>
+      </borders>
+    </selection>
+  </cellFormatBlock>
+  <dataBlock id="EventInfoDataBlock">
+    <dataCell bind="EventName" positionX="1"/>
+    <dataCell bind="EventLocation" positionX="1" positionY="1" />
+    <dataCell bind="EventDate" positionX="1" positionY="2" />
+    <dataCell bind="Coordinators" positionX="1" positionY="3" />
+    <dataCell bind="InstructorsFirstCell" positionX="1" positionY="4" />
+    <dataCell bind="InstructorsSecondCell" positionX="1" positionY="5" />
+    <dataCell bind="InstructorsThirdCell" positionX="1" positionY="6" />
+  </dataBlock>
+  <dataBlock id="LocationInfoDataBlock">
+    <dataCell bind="VenueName" positionX="1"/>
+    <dataCell bind="ContactNames" positionX="1" positionY="1" />
+    <dataCell bind="Address" positionX="1" positionY="2" />
+    <dataCell bind="ContactPhone" positionX="1" positionY="3" />
+  </dataBlock>
+  <dataBlock id="EventsLocationInfoDataBlock">
+    <dataCell bind="EventName" positionX="1"/>
+    <dataCell bind="EventLocation" positionX="2"/>
+  </dataBlock>
+  <dataBlock id="ClassNumbersDataBlock">
+    <dataCell bind="NewStudents" positionX="1"/>
+    <dataCell bind="ReviewStudents" positionX="1" positionY="1" />
+    <dataCell bind="ApprovedGuests" positionX="1" positionY="2" />
+    <dataCell bind="ApprovedStaff" positionX="1" positionY="3" />
+    <dataCell bind="TotalInRoom" positionX="1" positionY="4" />
+  </dataBlock>
+  <dataBlock id="FinancialTotalsBlock">
+    <dataCell bind="TotalApproved" positionX="5" positionY="1" />
+  </dataBlock>
+  <dataBlock id="MemberDataBlockTable">    
+    <dataCell bind="LastName" />
+    <dataCell bind="FirstName" positionX="1"/>
+    <dataCell bind="AddressLine1" positionX="2"/>
+    <dataCell bind="AddressLine2" positionX="3"/>
+    <dataCell bind="City" positionX="4"/>
+    <dataCell bind="State" positionX="5"/>
+    <dataCell bind="Zip" positionX="6"/>
+    <dataCell bind="Country" positionX="7"/>
+    <dataCell bind="Phone" positionX="8"/>
+    <dataCell bind="Email" positionX="9"/>
+    <dataCell bind="StatCode" positionX="10"/>
+    <dataCell bind="Absentee" positionX="11"/>
+    <dataCell bind="CheckNumber" positionX="12"/>
+    <dataCell bind="TransactionNumber" positionX="13"/>
+    <dataCell bind="TotalCheck" positionX="14"/>
+    <dataCell bind="PayPalFee" positionX="15"/>
+    <dataCell bind="NetPayPal" positionX="16"/>
+    <dataCell bind="TotalRevenue" positionX="17"/>
+  </dataBlock>
+  <dataBlock id="MemberDataBlockTableWithoutTotalRevenue">
+    <dataCell bind="LastName"/>
+    <dataCell bind="FirstName" positionX="1"/>
+    <dataCell bind="AddressLine1" positionX="2"/>
+    <dataCell bind="AddressLine2" positionX="3"/>
+    <dataCell bind="City" positionX="4"/>
+    <dataCell bind="State" positionX="5"/>
+    <dataCell bind="Zip" positionX="6"/>
+    <dataCell bind="Country" positionX="7"/>
+    <dataCell bind="Phone" positionX="8"/>
+    <dataCell bind="Email" positionX="9"/>
+    <dataCell bind="StatCode" positionX="10"/>
+    <dataCell bind="Absentee" positionX="11"/>
+    <dataCell bind="CheckNumber" positionX="12"/>
+    <dataCell bind="TransactionNumber" positionX="13"/>
+    <dataCell bind="TotalCheck" positionX="14"/>
+    <dataCell bind="PayPalFee" positionX="15"/>
+    <dataCell bind="NetPayPal" positionX="16"/>   
+  </dataBlock>
+</blocks>
+<layout>
+
+  <solid id="EventInfoSolid" positionX="1" positionY="3" bind="EventInfo">
+    <block blockId="EventInfoDataBlock"/>
+  </solid>
+
+  <solid id="LocationInfoSolid" positionX="4" positionY="3" bind="LocationInfo">
+    <block blockId="LocationInfoDataBlock"/>
+  </solid>
+  <table id="EventLocationInfoTable" positionX="3" positionY="7" rowCount="1" verticalSpace="3" bind="EventsLocationInfo">
+    <block blockId="EventsLocationInfoDataBlock"/>
+  </table>
+
+  <solid id="ClassNumbersSolid" positionX="10" positionY="3" bind="ClassNumbers">
+    <block blockId="ClassNumbersDataBlock"/>
+  </solid>
+
+  <solid id="FinancialTotalsSolid" positionX="13" positionY="3" bind="FinancialTotals">
+    <block blockId="FinancialTotalsBlock"/>
+  </solid>
+  
+  <table id="ApprovedGuestTable" positionX="1" positionY="13" rowCount="1" verticalSpace="4" bind="ApprovedGuests">
+    <block blockId="MemberDataBlockTableWithoutTotalRevenue"/>
+    <block blockId="MemberInfoFormat"/>
+  </table>
+  <group id ="StaffGroup" positionX="1" positionY="19" verticalSpace="6">
+    <table id="ApprovedStaffTable" rowCount="1" bind="Instructors">
+      <block blockId="MemberDataBlockTableWithoutTotalRevenue" />
+      <block blockId="MemberInfoFormat"/>
+    </table>
+    <table id="ApprovedStaffTable" rowCount="1" bind="ApprovedStaff">
+      <block blockId="MemberDataBlockTableWithoutTotalRevenue" />
+      <block blockId="MemberInfoFormat"/>
+    </table>
+  </group>  
+  <group id="StudentGroup" positionX="1" positionY="27" verticalSpace="252">
+    <table id="PaidStudentsTable" rowCount="1" bind="PaidStudents">
+      <block blockId="MemberDataBlockTable" />
+      <block blockId="MemberInfoFormat"/>
+    </table>
+    <solid id="HeaderSolid" rowCount="1" forceNewRows="true">
+      <condition bind="CanceledStudents" type="ListNotEmpty" />
+      <block blockId="CanceledHeader"/>
+      <block blockId="FormatBlockCanceledStudents"/>
+    </solid>
+    <table id="CanceledStudentsTable" rowCount="1" bind="CanceledStudents">
+      <condition bind="CanceledStudents" type="ListNotEmpty" />
+      <block blockId="MemberDataBlockTableWithoutTotalRevenue" />
+      <block blockId="MemberInfoFormat"/>
+    </table>
+  </group>
+</layout>
+</definition>

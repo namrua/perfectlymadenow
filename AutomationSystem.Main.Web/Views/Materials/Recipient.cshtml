@@ -1,0 +1,148 @@
+﻿@model MaterialRecipientPageModel
+@{
+    ViewBag.Title = CommonResources.TitleMaterials;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+
+    if (Model.RecipientId.TypeId == EntityTypeEnum.MainClassRegistration)
+    {
+        var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.Registration, TabItemId.RegistrationMaterials, new {id = Model.RecipientId.Id });
+        Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+    }
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Command("Send notification", ButtonStyle.Primary,!Model.CanSendNotification, new { id = "notification-button" })
+    @bg.Command("Lock materials", ButtonStyle.Primary, !Model.CanLockMaterials, new { id = "lock-button" })
+    @bg.Command("Unlock materials", ButtonStyle.Primary, !Model.CanUnlockMaterials, new { id = "unlock-button" })
+
+    @bg.Link("Student's material settings", ButtonStyle.Normal, Url.Action("RecipientEdit", new { id = Model.ClassMaterialRecipientId }))
+    @bg.Command("Public download page", ButtonStyle.Normal, false, new { id = "public-page-button" })
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Class", new { id = Model.Class.ClassId }))
+}
+
+<p>
+    @if (Model.Detail.IsLocked)
+    {
+        @:Materials are locked for the recipient (<em>@TextHelper.GetStringDateTime(Model.Detail.Locked)</em>).
+    }
+</p>
+
+<div class="row">
+
+    <div class="col-xl-6 align-content-start">
+
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Detail.Password)</dt>
+            <dd class="col-sm-8"><a href="#" id="show-pwd">???</a></dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Detail.Language)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Detail.Language)</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Detail.DownloadLimit)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Detail.DownloadLimit)</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Detail.Notified)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Detail.Notified)</dd>
+        </dl>
+
+    </div>
+
+</div>
+
+<h4>PDF Materials</h4>
+
+@*List of materials*@
+@if (Model.Materials.Count == 0)
+{
+    <p>
+        <em>@CommonResources.NoRecords</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.Materials[0].DisplayName)</th>
+                <th>@Html.DisplayNameFor(x => x.Materials[0].Language)</th>
+                <th>@Html.DisplayNameFor(x => x.Materials[0].DownloadsCount)</th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Materials)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(x => item.DisplayName)</td>
+                    <td>@Html.DisplayFor(x => item.Language)</td>
+                    <td>@Html.DisplayFor(x => item.DownloadsCount)</td>
+
+                    <td>
+                        @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                        {
+                            @bg.Link("Download protected", ButtonStyle.Normal, Url.Action("DownloadRecipientMaterial",
+                                new { materialRecipientId = Model.ClassMaterialRecipientId, materialFileId = item.ClassMaterialFileId }))
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // DETAIL
+
+            $("#show-pwd").click(function() {
+                alert("@Html.Raw(HttpUtility.JavaScriptStringEncode(Model.Detail.Password))");
+            });
+
+            // CLASS MATERIAL COMMANDS
+
+            // class material requests
+            var  requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("unlock", "@Url.Action("UnlockRecipient", new { id = Model.ClassMaterialRecipientId })");
+            requestHelper.addAction("notification", "@Url.Action("SendNotificationToRecipient", new { id = Model.ClassMaterialRecipientId })");
+            requestHelper.addAction("lock", "@Url.Action("LockRecipient", new { id = Model.ClassMaterialRecipientId })");
+
+
+            // connect notification-button
+            $("#notification-button").click(function () {
+                var confirmed = confirm("Are you sure to notify the student?");
+                if (!confirmed) return;
+                requestHelper.executePost("notification");
+            });
+
+            // connect lock-button
+            $("#lock-button").click(function () {
+                var confirmed = confirm("Are you sure to lock materials for the student?");
+                if (!confirmed) return;
+                requestHelper.executePost("lock");
+            });
+
+            // connect unlock-button
+            $("#unlock-button").click(function () {
+                var confirmed = confirm("Are you sure to unlock materials for the student (no notification is sent)?");
+                if (!confirmed) return;
+                requestHelper.executePost("unlock");
+            });
+
+            // connects command-download
+            $("#public-page-button").click(function () {
+
+                var confirmed = confirm("Warning: any activity on the public download pages affect behavior of the pages for the student (like language selection or download counting). Do you want to proceed?");
+                if (!confirmed) return;
+                window.location.href = "@Url.Action("Index", new { request = Model.Detail.RequestCode })";
+            });
+          
+        }
+
+    </script>
+
+}

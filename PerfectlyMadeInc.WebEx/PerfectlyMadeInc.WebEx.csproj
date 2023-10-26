@@ -1,0 +1,254 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8D8C5BAA-6660-4D99-889B-301DDA952EC6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PerfectlyMadeInc.WebEx</RootNamespace>
+    <AssemblyName>PerfectlyMadeInc.WebEx</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MvasProdDebug|AnyCPU'">
+    <OutputPath>bin\MvasProdDebug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugMvasProd|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\DebugMvasProd\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MvasTest|AnyCPU'">
+    <OutputPath>bin\MvasTest\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CorabeuControl">
+      <HintPath>..\packages\CorabeuControl\CorabeuControl.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.5.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.5.0.0\lib\net461\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.5.0.0\lib\net461\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.4\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.4\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.4\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.4\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.4\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.4\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Accounts\AccountServiceCollectionExtensions.cs" />
+    <Compile Include="Accounts\AppLogic\IAccountConvertor.cs" />
+    <Compile Include="Connectors\AppLogic\IConsistencyResolver.cs" />
+    <Compile Include="Connectors\AppLogic\IIntegrationService.cs" />
+    <Compile Include="Connectors\ConnectorServiceCollectionExtensions.cs" />
+    <Compile Include="IntegrationStates\AppLogic\IIntegrationStateConvertor.cs" />
+    <Compile Include="Connectors\AppLogic\IIntegrationStatePairingProvider.cs" />
+    <Compile Include="Connectors\AppLogic\IWebExFactory.cs" />
+    <Compile Include="Connectors\AppLogic\IWebExPersonConvertor.cs" />
+    <Compile Include="Connectors\AppLogic\Models\WebExServiceResult.cs" />
+    <Compile Include="Connectors\AppLogic\Models\PairingResult.cs" />
+    <Compile Include="IntegrationStates\IntegrationStateServiceCollectionExtensions.cs" />
+    <Compile Include="Programs\AppLogic\IProgramConvertor.cs" />
+    <Compile Include="Accounts\AppLogic\AccountConvertor.cs" />
+    <Compile Include="Connectors\AppLogic\IntegrationStatePairingProvider.cs" />
+    <Compile Include="Programs\AppLogic\ProgramConvertor.cs" />
+    <Compile Include="Connectors\AppLogic\ConsistencyResolver.cs" />
+    <Compile Include="IntegrationStates\AppLogic\IntegrationStateConvertor.cs" />
+    <Compile Include="Connectors\AppLogic\WebExPersonConvertor.cs" />
+    <Compile Include="Accounts\AccountAdministration.cs" />
+    <Compile Include="Programs\EventDataProvider.cs" />
+    <Compile Include="Connectors\IntegrationRequestHandler.cs" />
+    <Compile Include="Connectors\IntegrationSyncExecutor.cs" />
+    <Compile Include="Programs\ProgramAdministration.cs" />
+    <Compile Include="Connectors\AppLogic\WebExFactory.cs" />
+    <Compile Include="Connectors\AppLogic\IntegrationService.cs" />
+    <Compile Include="IntegrationStates\IntegrationAdministration.cs" />
+    <Compile Include="Programs\ProgramEntityIntegrationProvider.cs" />
+    <Compile Include="Accounts\Data\IAccountDatabaseLayer.cs" />
+    <Compile Include="IntegrationStates\Data\IIntegrationDatabaseLayer.cs" />
+    <Compile Include="IntegrationStates\Data\Models\IntegrationStateIncludes.cs" />
+    <Compile Include="Programs\Data\IProgramDatabaseLayer.cs" />
+    <Compile Include="Programs\Data\Models\ProgramIncludes.cs" />
+    <Compile Include="Programs\Data\Queries\ProgramFilterExtensions.cs" />
+    <Compile Include="Programs\Data\Queries\ProgramIncludeExtensions.cs" />
+    <Compile Include="Accounts\Data\AccountDatabaseLayer.cs" />
+    <Compile Include="IntegrationStates\Data\IntegrationDatabaseLayer.cs" />
+    <Compile Include="Programs\Data\ProgramDatabaseLayer.cs" />
+    <Compile Include="IntegrationStates\Data\Queries\IntegrationStateIncludeExtensions.cs" />
+    <Compile Include="Programs\Data\Queries\ProgramRemoveInactive.cs" />
+    <Compile Include="Connectors\Integration\IWebExProvider.cs" />
+    <Compile Include="Connectors\Integration\Model\WebExAdditionalInfo.cs" />
+    <Compile Include="Connectors\Integration\Model\WebExEventInfo.cs" />
+    <Compile Include="Connectors\Integration\Model\WebExPerson.cs" />
+    <Compile Include="Connectors\Integration\Model\WebExPersonExtended.cs" />
+    <Compile Include="Connectors\Integration\Model\WebExPersonType.cs" />
+    <Compile Include="Connectors\Integration\Model\WebExProgramInfo.cs" />
+    <Compile Include="Connectors\Integration\Model\WebExRole.cs" />
+    <Compile Include="Connectors\Integration\Model\WebExSettingInfo.cs" />
+    <Compile Include="Connectors\Integration\Model\WebExStatus.cs" />
+    <Compile Include="Connectors\Integration\ResponseStatus.cs" />
+    <Compile Include="Connectors\Integration\WebExProvider.cs" />
+    <Compile Include="Connectors\Integration\XmlResponseWrapper.cs" />
+    <Compile Include="Model\Account.cs">
+      <DependentUpon>WebExModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Event.cs">
+      <DependentUpon>WebExModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\IntegrationState.cs">
+      <DependentUpon>WebExModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\IntegrationStateType.cs">
+      <DependentUpon>WebExModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Program.cs">
+      <DependentUpon>WebExModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Queries\ActiveExtensions.cs">
+      <DependentUpon>ActiveExtensions.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Model\WebExModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WebExModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\WebExModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WebExModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\WebExContext.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WebExContext.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Programs\ProgramServiceCollectionExtenisons.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebExServiceCollectionExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="Model\WebExContext.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>WebExContext.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="Model\WebExContext.edmx.diagram">
+      <DependentUpon>WebExContext.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Model\Queries\ActiveExtensions.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ActiveExtensions.cs</LastGenOutput>
+    </Content>
+    <Content Include="Model\Queries\TableModel.xml" />
+    <Content Include="Model\WebExModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>WebExModel.Context.cs</LastGenOutput>
+      <DependentUpon>WebExContext.edmx</DependentUpon>
+    </Content>
+    <Content Include="Model\WebExModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>WebExContext.edmx</DependentUpon>
+      <LastGenOutput>WebExModel.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\AutomationSystem.Base.Contract\AutomationSystem.Base.Contract.csproj">
+      <Project>{c359a55f-f29d-4b9d-905e-39f94684674d}</Project>
+      <Name>AutomationSystem.Base.Contract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PerfectlyMadeInc.DesignTools.Contract\PerfectlyMadeInc.DesignTools.Contract.csproj">
+      <Project>{0868f547-f2ab-4bb5-ad56-b1a6d31f8f93}</Project>
+      <Name>PerfectlyMadeInc.DesignTools.Contract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PerfectlyMadeInc.WebEx.Contract\PerfectlyMadeInc.WebEx.Contract.csproj">
+      <Project>{edb1f9e1-e3dc-4e78-b14b-3ba27c4b3f6d}</Project>
+      <Name>PerfectlyMadeInc.WebEx.Contract</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

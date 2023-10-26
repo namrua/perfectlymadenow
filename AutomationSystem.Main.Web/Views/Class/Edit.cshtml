@@ -1,0 +1,366 @@
+﻿@model ClassForEdit
+@{
+    ViewBag.Title = CommonResources.MenuCoordinatorClasses;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+
+    var personHelper = Model.PersonHelper;
+}
+
+<form id="classForm" method="post" action="@Url.Action("Edit")">
+    
+    @if (Model.Env.HasValue)
+    {
+        <h4>ENVIRONMENT - @Model.Env.Value</h4>   
+        @Html.HiddenConstant("env", Model.Env.Value)
+    }
+
+    @Html.EditorFor(x => x.Form.ClassId)
+    @Html.EditorFor(x => x.Form.ProfileId)
+    @Html.EditorFor(x => x.Form.CurrentPriceListId)
+    @Html.EditorFor(x => x.Form.CurrentPayPayKeyId)
+    @Html.EditorFor(x => x.Form.CurrentIntegrationCode)
+    @Html.EditorFor(x => x.Form.ClassState)
+    @Html.EditorFor(x => x.Form.ClassCategoryId)
+    @Html.EditorFor(x => x.Form.ProfileCurrencyId)
+
+        <div class="row">
+
+            <div class="form-group col-md-6">
+                @Html.LabelFor(x => x.Form.EventStart)
+                @Html.EditorFor(x => x.Form.EventStart)
+            </div>
+
+            <div class="form-group col-md-6">
+                @Html.LabelFor(x => x.Form.EventEnd)
+                @Html.EditorFor(x => x.Form.EventEnd)
+            </div>
+
+            <div class="form-group col-md-6">
+                @Html.LabelFor(x => x.Form.Location)
+                @Html.EditorFor(x => x.Form.Location)
+            </div>
+
+            <div class="form-group col-md-6">
+                @Html.LabelFor(x => x.Form.ClassTypeId)
+                @Html.EditorFor(x => x.Form.ClassTypeId, new { Items = Model.ClassTypes.Select(x => DropDownItem.Item((ClassTypeEnum)x.Id, x.Description)) })
+            </div>
+
+            @if (!Model.FormConfiguration.ShowOnlyDates)
+            {
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(x => x.Form.TimeZoneId)
+                    @Html.EditorFor(x => x.Form.TimeZoneId, new { Items = Model.TimeZones.Select(x => DropDownItem.Item((TimeZoneEnum)x.Id, x.Description)) })
+                </div>
+            }
+            else
+            {
+                @Html.HiddenConstantWithId("timeZoneId", "TimeZoneId", Model.Form.TimeZoneId);
+            }
+
+            <div class="form-group col-md-6">
+                @Html.LabelFor(x => x.Form.TranslationCode)
+                @Html.EditorFor(x => x.Form.TranslationCode, new { Items = Model.Translations })
+            </div>
+
+        </div>
+
+    <hr />
+
+    <div class="row">
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.RegistrationStart)
+            @Html.EditorFor(x => x.Form.RegistrationStart)
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.RegistrationEnd)
+            @Html.EditorFor(x => x.Form.RegistrationEnd)
+        </div>
+
+        @if (!Model.FormConfiguration.IsWwaAllowedValue.HasValue)
+        {
+            <div class="form-group col-md-6">
+                @Html.EditorFor(x => x.Form.IsWwaFormAllowed)
+            </div>
+        }
+        else
+        {
+            @Html.HiddenConstantWithId("isWwaFormAllowed", "IsWwaFormAllowed", Model.Form.IsWwaFormAllowed);
+        }
+
+    </div>
+
+    <hr />
+
+    <div class="row">
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.CoordinatorId)
+            @Html.EditorFor(x => x.Form.CoordinatorId, new { Text = personHelper.GetPersonNameById(Model.Form.CoordinatorId) })
+            @if (Model.FormConfiguration.UseDistanceCoordinator)
+            {
+                <small id="coordinatorIdHelp" class="form-text text-muted"><strong>Distance coordinator</strong> is required here.</small>
+            }
+        </div>
+        
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.GuestInstructorId)
+            @Html.EditorFor(x => x.Form.GuestInstructorId, new { Text = personHelper.GetPersonNameById(Model.Form.GuestInstructorId) })
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.InstructorIds)
+            @Html.EditorFor(x => x.Form.InstructorIds, new { Set = Model.Form.InstructorIds.Select(x => new PickerItem(x, personHelper.GetPersonNameById(x))) })
+        </div>
+
+        @if (Model.FormConfiguration.ShowApprovedStaffIds)
+        {
+            <div class="form-group col-md-6">
+                @Html.LabelFor(x => x.Form.ApprovedStaffIds)
+                @Html.EditorFor(x => x.Form.ApprovedStaffIds, new { Set = Model.Form.ApprovedStaffIds.Select(x => new PickerItem(x, personHelper.GetPersonNameById(x))) })
+            </div>
+        }
+        else
+        {
+            @Html.HiddenLongArrayConstantWithId("approvedStaffIds", "ApprovedStaffIds", Model.Form.ApprovedStaffIds);
+        }
+
+    </div>
+
+    <hr />
+
+    <div class="row">
+
+        @*integrationCode is available for non-WWA classes, othervise it is hidden*@
+        @if (Model.FormConfiguration.ShowIntegrationCode)
+        {
+            <div class="form-group col-md-6">
+                @Html.LabelFor(x => x.Form.IntegrationCode)
+                @Html.EditorFor(x => x.Form.IntegrationCode, new { Items = Model.IntegrationEntities })
+            </div>
+        }
+        else
+        {
+            @Html.HiddenConstantWithId("integrationCode", "IntegrationCode", Model.Form.IntegrationCode);
+        }
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.PriceListId)
+            @Html.EditorFor(x => x.Form.PriceListId, new { Items = Model.PriceLists })
+        </div>
+
+        @if (Model.FormConfiguration.ShowPayPalKey)
+        {
+            <div class="form-group col-md-6">
+                @Html.LabelFor(x => x.Form.PayPalKeyId)
+                @Html.EditorFor(x => x.Form.PayPalKeyId, new { Items = Model.PayPalKeys })
+            </div>
+        }
+        else
+        {
+            @Html.HiddenConstantWithId("payPalKeyId", "PayPalKeyId", Model.Form.PayPalKeyId);
+        }
+
+    </div>
+    
+    <hr />
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save, htmlAttributes: new { id = "save-button" })
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, Model.Form.ClassId == 0
+                                                         ? Url.Action("Index")
+                                                         : Url.Action("Detail", new { id = Model.Form.ClassId }))
+    }
+
+</form>
+
+@InputControl.AddSetItemTemplate(this, "set-item-template")
+
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function() {
+
+            var showIsWwaAllowed = @(!Model.FormConfiguration.IsWwaAllowedValue.HasValue ? "true" : "false");
+            var showOnlyDates = @(Model.FormConfiguration.ShowOnlyDates ? "true" : "false");
+            var showApprovedStaffIds = @(Model.FormConfiguration.ShowApprovedStaffIds ? "true" : "false");
+            var showIntegrationCode = @(Model.FormConfiguration.ShowIntegrationCode ? "true" : "false");
+            var showPayPalKey = @(Model.FormConfiguration.ShowPayPalKey ? "true" : "false");
+
+            @Html.TypeaheadDropDownSource("coordinators", personHelper.GetPickerItemsForRole(Model.FormConfiguration.UseDistanceCoordinator ? PersonRoleTypeEnum.DistanceDoordinator : PersonRoleTypeEnum.Coordinator))
+            @Html.TypeaheadDropDownSource("guestInstructors", personHelper.GetPickerItemsForRole(PersonRoleTypeEnum.GuestInstructor))
+            @Html.TypeaheadDropDownSource("instructors", personHelper.GetPickerItemsForRole(PersonRoleTypeEnum.Instructor))
+            @Html.TypeaheadDropDownSource("staff", personHelper.GetPickerItemsForRole(PersonRoleTypeEnum.ApprovedStaff))
+
+            var instructorsOptions = { typeaheadSource: instructors, itemTemplateId: "set-item-template" };
+            var staffOptions = { typeaheadSource: staff, itemTemplateId: "set-item-template" };
+
+            // INITIALIZATION
+
+            var location = new CorabeuControl.TextBox("location", "Location");
+            var classTypeId = new CorabeuControl.DropDownList("classTypeId", "ClassTypeId");
+            var timeZoneId = showOnlyDates
+                ? new CorabeuControl.Hidden("timeZoneId", "TimeZoneId")
+                : new CorabeuControl.DropDownList("timeZoneId", "TimeZoneId");
+            var translationCode = new CorabeuControl.DropDownList("translationCode", "TranslationCode");
+
+            var pickerOptions = showOnlyDates
+                ? { format: 'MMMM DD, YYYY', startOf: 'day' }
+                : { format: 'HH:mm MMMM DD, YYYY', startOf: 'minute' };
+            var registrationStart = new CorabeuControl.DateTimePicker("registrationStart", "RegistrationStart", pickerOptions);
+            var registrationEnd = new CorabeuControl.DateTimePicker("registrationEnd", "RegistrationEnd", pickerOptions);
+            var eventStart = new CorabeuControl.DateTimePicker("eventStart", "EventStart", pickerOptions);
+            var eventEnd = new CorabeuControl.DateTimePicker("eventEnd", "EventEnd", pickerOptions);
+
+            var isWwaFormAllowed = showIsWwaAllowed
+                ? new CorabeuControl.CheckBox("isWwaFormAllowed", "IsWwaFormAllowed")
+                : new CorabeuControl.Hidden("isWwaFormAllowed", "IsWwaFormAllowed");
+
+            var coordinatorId = new CorabeuControl.TypeaheadDropDownInput("coordinatorId", "CoordinatorId", coordinators);
+            var guestInstructorId = new CorabeuControl.TypeaheadDropDownInput("guestInstructorId", "GuestInstructorId", guestInstructors);
+            var instructorIds = new CorabeuControl.TypeaheadSetInput("instructorIds", "InstructorIds", instructorsOptions);
+            var approvedStaffIds = showApprovedStaffIds
+                ? new CorabeuControl.TypeaheadSetInput("approvedStaffIds", "ApprovedStaffIds", staffOptions)
+                : new CorabeuControl.Hidden("approvedStaffIds", "ApprovedStaffIds");
+
+            var priceListId = new CorabeuControl.DropDownList("priceListId", "PriceListId");
+            var payPalKeyId = showPayPalKey
+                ? new CorabeuControl.DropDownList("payPalKeyId", "PayPalKeyId")
+                : new CorabeuControl.Hidden("payPalKeyId", "PayPalKeyId");
+            var integrationCode = showIntegrationCode
+                ? new CorabeuControl.DropDownList("integrationCode", "IntegrationCode")
+                : new CorabeuControl.Hidden("integrationCode", "IntegrationCode");
+
+            var classForm = new CorabeuControl.Form("classForm");
+            classForm.registerDateTimeValidators();
+
+            // EDIT RESTRICTIONS
+
+            @if (!Model.CanFullEditClass)
+            {
+                <text>
+
+                    // disables components when conversation is in registration
+                    var disabledInRegistration = [classTypeId, translationCode, registrationStart, integrationCode, priceListId, isWwaFormAllowed];
+                    $.each(disabledInRegistration, function(_index, _value) { _value.disable() });
+
+                    // enables disabled items when submitting
+                    $('#save-button').click(function() {
+                        if (classForm.element.valid())
+                            $.each(disabledInRegistration, function(_index, _value) { _value.enable() });
+                    });
+
+
+                </text>
+            }
+
+            // VALIDATION
+
+            // help variables
+            var minMoment = moment({ y: 2000 });
+            var minText = "1/1/2000";
+            var registrationStartName = "@Html.DisplayNameForJava(x => x.Form.RegistrationStart)";
+            var registrationEndName = "@Html.DisplayNameForJava(x => x.Form.RegistrationEnd)";
+            var eventStartName = "@Html.DisplayNameForJava(x => x.Form.EventStart)";
+            var eventEndName = "@Html.DisplayNameForJava(x => x.Form.EventEnd)";
+
+
+            // validation rules
+
+            classForm.validateControl(classTypeId.element, "@Html.DisplayNameForJava(x => x.Form.ClassTypeId)", { notSelected: true });
+            classForm.validateControl(translationCode.element, "@Html.DisplayNameForJava(x => x.Form.TranslationCode)", { notSelected: true });
+            classForm.validateControl(location.element, "@Html.DisplayNameForJava(x => x.Form.Location)", { required: true, maxlength: 255 });
+            classForm.validateDateTimeControl(registrationStart,
+                registrationStartName,
+                {
+                    dateMin: minMoment,
+                    dateMinText: minText
+                });
+            classForm.validateDateTimeControl(registrationEnd,
+                registrationEndName,
+                {
+                    required: true,
+                    dateMin: minMoment,
+                    dateMinText: minText,
+                    dateMinPicker: registrationStart,
+                    dateMinPickerText: registrationStartName
+                });
+            classForm.validateDateTimeControl(eventStart,
+                eventStartName,
+                {
+                    required: true,
+                    dateMin: minMoment,
+                    dateMinText: minText,
+                    dateMinPicker: registrationEnd,
+                    dateMinPickerText: registrationEndName
+                });
+            classForm.validateDateTimeControl(eventEnd,
+                eventEndName,
+                {
+                    required: true,
+                    dateMin: minMoment,
+                    dateMinText: minText,
+                    dateMinPicker: eventStart,
+                    dateMinPickerText: eventStartName
+                });
+
+            classForm.validateControl(coordinatorId.element, "@Html.DisplayNameForJava(x => x.Form.CoordinatorId)", { notSelected: true });
+            classForm.validateControl(priceListId.element, "@Html.DisplayNameForJava(x => x.Form.PriceListId)", { notSelected: true });
+
+            if (showPayPalKey) {
+                classForm.validateControl(payPalKeyId.element, "@Html.DisplayNameForJava(x => x.Form.PayPalKeyId)", { notSelected: true });
+            }
+
+            if (showIntegrationCode) {
+                classForm.validateControl(integrationCode.element, "@Html.DisplayNameForJava(x => x.Form.IntegrationCode)", { notSelected: true });
+            }
+
+            // validation binds
+            classForm.validationBindOne(registrationStart, registrationEnd);
+            classForm.validationBindOne(registrationEnd, eventStart);
+            classForm.validationBindOne(eventStart, eventEnd);
+
+
+            // class type vs. price list type validation
+            @if (Model.IsInconsistentClassAndPriceListType)
+            {
+                <text>
+
+                    // register new rule method
+                    jQuery.validator.addMethod("classPriceListType",
+                        function(value, element, param) {
+
+                            var isForbidden = classTypeId.getValue() === "@Model.ForbiddenClassTypeId.Value" && priceListId.getValue() === "@Model.ForbiddenPriceListId.Value";
+                            return !isForbidden;
+                        },
+                        "Inconsistent Class type and Price list type");
+
+                    // set rule
+                    CorabeuControl.ValidationHelper.addRule(priceListId.element, "classPriceListType", true, "Price List does not support selected Class type");
+
+                    // set binding to class type
+                    classForm.validationBindOne(classTypeId, priceListId);
+
+                </text>
+            }
+
+
+            @if (ViewBag.TriggerValidation != null)
+            {
+                @:classForm.valid();
+            }
+
+        }
+
+    </script>
+
+}

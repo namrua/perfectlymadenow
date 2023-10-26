@@ -1,0 +1,96 @@
+﻿@model ExpensesLayoutForEdit
+@{
+    ViewBag.Title = CommonResources.MenuCoordinatorClasses;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+
+    var enabledExpenses = new HashSet<int>(Model.Form.EnabledExpenses);
+    var classExpensTypeItems = Model.ExpenseTypes.Select(x => DropDownItem.Item(x.ClassExpenseTypeId, x.Description));
+}
+
+<form id="expenseForm" method="post" action="@Url.Action("ExpensesLayoutEdit")">
+    
+    @Html.EditorFor(x => x.Form.EntityId)
+
+    @*Form for custom expenses *@
+   
+    <h5>Expenses</h5>
+    
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.Form.Expenses[0].Order)</th>
+                <th>@Html.DisplayNameFor(x => x.Form.EnabledExpenses)</th>
+                <th class="table-form-width-4">@Html.DisplayNameFor(x => x.Form.Expenses[0].Text)</th>
+                <th class="table-form-width-3">@Html.DisplayNameFor(x => x.Form.Expenses[0].ClassExpenseTypeId)</th>
+                <th class="table-form-width-3">@Html.DisplayNameFor(x => x.Form.Expenses[0].Value)</th>
+            </tr>
+        </thead>
+        <tbody>
+        @for (var i = 0; i < Model.Form.Expenses.Count; i++)
+        {
+            var item = Model.Form.Expenses[i];
+            <tr>
+                <td>
+                    <strong>@Html.DisplayFor(x => Model.Form.Expenses[i].Order).</strong>
+                    @Html.EditorFor(x => Model.Form.Expenses[i].Order)
+                </td>
+                <td class="form-group">
+                    @Html.TableCheckBoxFor(x => x.Form.EnabledExpenses, item.Order, enabledExpenses.Contains(item.Order))
+                </td>
+                <td class="form-group">
+                    @Html.EditorFor(x => Model.Form.Expenses[i].Text)
+                </td>
+                <td class="form-group">
+                    @Html.EditorFor(x => Model.Form.Expenses[i].ClassExpenseTypeId, new { Items = classExpensTypeItems })
+                </td>
+                <td class="form-group">
+                    @Html.EditorFor(x => Model.Form.Expenses[i].Value, new { RightAddonText = Model.CurrencyCode })
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save)
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Business", new { id = Model.Form.EntityId }))
+    }
+
+</form>
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function() {
+
+            // INITIALIZATION AND VALIDATION
+
+            var expenseForm = new CorabeuControl.Form("expenseForm");
+
+            
+            @for (var i = 0; i < Model.Form.Expenses.Count; i++)
+            {
+                var selectorPrefix = $"#expenses-{i}-";
+                var idPrefix = $"expenses-{i}-";
+                var namePrefix = $"Expenses[{i}].";
+                var fieldOrder = $"{Model.Form.Expenses[i].Order}.";
+                <text>
+                    new CorabeuControl.DropDownList("@(idPrefix + "classExpenseTypeId")", "@(namePrefix + "ClassExpenseTypeId")");
+                    expenseForm.validateControl($('@($"{selectorPrefix}text")'), '@($"{Html.DisplayNameForJava(x => x.Form.Expenses[0].Text)} {fieldOrder}")', { required: true, maxlength: 128 });
+                    expenseForm.validateControl($('@($"{selectorPrefix}value")'), '@($"{Html.DisplayNameForJava(x => x.Form.Expenses[0].Value)} {fieldOrder}")', { required: false, number: true, min: 0, max: 1000000 });
+                </text>
+            }
+
+            @if (ViewBag.TriggerValidation != null)
+            {
+                @:expenseForm.valid();
+            }
+
+        }
+
+    </script>
+
+}

@@ -1,0 +1,651 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root namespace="AutomationSystem.CommonTypes">
+  <enum name="ApprovementTypeEnum" description="Determines type of approvement">
+    <item id="1" name="None">No approvement needed</item>
+    <item id="2" name="InvitationApprovement">Invitation approvement</item>
+    <item id="3" name="ManualApprovement">Manual creation approvement</item>
+    <item id="4" name="ManualReview">Review of student approvement</item>
+  </enum>
+  <enum name="AsyncRequestTypeEnum" description="Type async request">
+    <item id="1" name="SendEmail">Sending of email</item>
+    <item id="2" name="ReportIncident">Reporting of incident</item>
+    <item id="2001" name="AddToOuterSystem">Adding attendee to outer system</item>
+    <item id="2002" name="RemoveFromOuterSystem">Removing attendee from outer system</item>
+    <item id="2003" name="UpdateOuterSystemState">Updating outer system state of attendee</item>
+    <item id="2004" name="SyncOuterSystemState">Synchronizing outer system state of attendee</item>
+    <item id="2005" name="SendFinalReports">Sending of final reports</item>
+    <item id="2006" name="CreateDeposit">Creating of deposit</item>
+    <item id="2007" name="SendOuterSystemInvitation">Sending invitation from outer system</item>
+    <item id="2008" name="GenerateCertificates">Generating of certificates</item>
+    <item id="2009" name="GenerateFinancialForms">Generating of finacial forms</item>
+    <item id="2010" name="CompleteDistanceClassesForTemplate">Complete distance classes for template</item>
+  </enum>
+  <enum name="BatchUploadOperationTypeEnum" description="Type of batch upload operation">
+    <item id="1" name="New">Create new record</item>
+    <item id="2" name="Update">Update existing record</item>
+    <item id="3" name="Ignore">Ignore record</item>
+  </enum>
+  <enum name="BatchUploadStateEnum" description="State of batch upload workflow">
+    <item id="1" name="InUploading">In uploading process</item>
+    <item id="2" name="InValidation">In validation process</item>
+    <item id="3" name="InMerging">In merging process</item>
+    <item id="4" name="Complete">Complete</item>
+    <item id="5" name="Discarded">Discarded</item>
+  </enum>
+  <enum name="BatchUploadTypeEnum" description="Type of Batch upload">
+    <item id="2001" name="FormerStudentExcel">Former student upload sheet</item>
+    <item id="2002" name="FormerStudentCSV">Former student CVS</item>
+    <item id="2010" name="StudentRegistrationExcel">Student registration upload sheet</item>
+  </enum>
+  <enum name="ClassActionTypeEnum" description="Determines type of class action">
+    <item id="1" name="Completion">Completion of Class/Lecture</item>
+    <item id="2" name="Cancelation">Cancelation of Class/Lecture</item>
+    <item id="3" name="Change">Change notification</item>
+    <item id="4" name="WwaChange">WWA change notification</item>
+  </enum>
+  <enum name="ClassCategoryEnum" description="Category of class">
+    <item id="1" name="Class">Class</item>
+    <item id="2" name="Lecture">Lecture</item>
+    <item id="3" name="DistanceClass">Distance class</item>
+    <item id="4" name="PrivateMaterialClass">Private material class</item>
+  </enum>
+  <enum name="ClassExpenseTypeEnum" description="Determines type of expenses computed for class">
+    <item id="1" name="Custom">Custom expense</item>
+    <item id="2" name="PayPalFeeClass">PayPal Processing Fee</item>
+    <item id="3" name="PayPalFeeWwaLecture">PayPal Processing Fee for WWA and Lecture</item>
+    <item id="4" name="FoiRoyaltyFee">FOI Royalty Fee</item>
+  </enum>
+  <enum name="ClassTypeEnum" description="Determines coordinated class type">
+    <item id="1" name="BasicOnline">SITH® Basic I Ho’oponopono ONLINE class</item>
+    <item id="2" name="BusinessOnline">SITH® Business Ho’oponopono ONLINE class</item>
+    <item id="3" name="HealthOnline">SITH® Health Ho’oponopono ONLINE class</item>
+    <item id="4" name="Basic2Online">SITH® Basic II Ho’oponopono ONLINE class</item>
+    <item id="5" name="LectureBusinessOnline">SITH® Business Ho’oponopono ONLINE lecture</item>
+    <item id="6" name="LectureBasicOnline">SITH® Basic I Ho’oponopono ONLINE lecture</item>
+    <item id="7" name="LectureBasic2Online">SITH® Basic II Ho’oponopono ONLINE lecture</item>
+    <item id="8" name="LectureHealthOnline">SITH® Health Ho’oponopono ONLINE lecture</item>
+    <item id="9" name="Basic">SITH® Basic I Ho’oponopono IN PERSON class</item>
+    <item id="10" name="Business">SITH® Business Ho’oponopono IN PERSON class</item>
+    <item id="11" name="Health">SITH® Health Ho’oponopono IN PERSON class</item>
+    <item id="12" name="Basic2">SITH® Basic II Ho’oponopono IN PERSON class</item>
+    <item id="13" name="LectureBusiness">SITH® Business Ho’oponopono IN PERSON lecture</item>
+    <item id="14" name="LectureBasic">SITH® Basic I Ho’oponopono IN PERSON lecture</item>
+    <item id="15" name="LectureBasic2">SITH® Basic II Ho’oponopono IN PERSON lecture</item>
+    <item id="16" name="LectureHealth">SITH® Health Ho’oponopono IN PERSON lecture</item>
+  </enum>
+  <enum name="ConferenceAccountTypeEnum" description="Type of conference account">
+    <item id="1" name="WebEx">WebEx account</item>
+  </enum>
+  <enum name="CountryEnum" description="Countries">
+    <item id="1" name="AF">Afghanistan</item>
+    <item id="2" name="AL">Albania</item>
+    <item id="3" name="DZ">Algeria</item>
+    <item id="4" name="AS">American Samoa</item>
+    <item id="5" name="AD">Andorra</item>
+    <item id="6" name="AO">Angola</item>
+    <item id="7" name="AI">Anguilla</item>
+    <item id="8" name="AQ">Antarctica</item>
+    <item id="9" name="AG">Antigua And Barbuda</item>
+    <item id="10" name="AR">Argentina</item>
+    <item id="11" name="AM">Armenia</item>
+    <item id="12" name="AW">Aruba</item>
+    <item id="13" name="AU">Australia</item>
+    <item id="14" name="AT">Austria</item>
+    <item id="15" name="AZ">Azerbaijan</item>
+    <item id="16" name="BS">Bahamas</item>
+    <item id="17" name="BH">Bahrain</item>
+    <item id="18" name="BD">Bangladesh</item>
+    <item id="19" name="BB">Barbados</item>
+    <item id="20" name="BY">Belarus</item>
+    <item id="21" name="BE">Belgium</item>
+    <item id="22" name="BZ">Belize</item>
+    <item id="23" name="BJ">Benin</item>
+    <item id="24" name="BM">Bermuda</item>
+    <item id="25" name="BT">Bhutan</item>
+    <item id="26" name="BO">Bolivia</item>
+    <item id="27" name="BA">Bosnia And Herzegovina</item>
+    <item id="28" name="BW">Botswana</item>
+    <item id="29" name="BV">Bouvet Island</item>
+    <item id="30" name="BR">Brazil</item>
+    <item id="31" name="IO">British Indian Ocean Territory</item>
+    <item id="32" name="BN">Brunei Darussalam</item>
+    <item id="33" name="BG">Bulgaria</item>
+    <item id="34" name="BF">Burkina Faso</item>
+    <item id="35" name="BI">Burundi</item>
+    <item id="36" name="KH">Cambodia</item>
+    <item id="37" name="CM">Cameroon</item>
+    <item id="38" name="CA">Canada</item>
+    <item id="39" name="CV">Cape Verde</item>
+    <item id="40" name="KY">Cayman Islands</item>
+    <item id="41" name="CF">Central African Republic</item>
+    <item id="42" name="TD">Chad</item>
+    <item id="43" name="CL">Chile</item>
+    <item id="44" name="CN">China</item>
+    <item id="45" name="CX">Christmas Island</item>
+    <item id="46" name="CC">Cocos (keeling) Islands</item>
+    <item id="47" name="CO">Colombia</item>
+    <item id="48" name="KM">Comoros</item>
+    <item id="49" name="CG">Congo</item>
+    <item id="50" name="CD">Congo, The Democratic Republic Of The</item>
+    <item id="51" name="CK">Cook Islands</item>
+    <item id="52" name="CR">Costa Rica</item>
+    <item id="53" name="CI">Cote D''ivoire</item>
+    <item id="54" name="HR">Croatia</item>
+    <item id="55" name="CU">Cuba</item>
+    <item id="56" name="CY">Cyprus</item>
+    <item id="57" name="CZ">Czech Republic</item>
+    <item id="58" name="DK">Denmark</item>
+    <item id="59" name="DJ">Djibouti</item>
+    <item id="60" name="DM">Dominica</item>
+    <item id="61" name="DO">Dominican Republic</item>
+    <item id="62" name="TP">East Timor</item>
+    <item id="63" name="EC">Ecuador</item>
+    <item id="64" name="EG">Egypt</item>
+    <item id="65" name="SV">El Salvador</item>
+    <item id="66" name="GQ">Equatorial Guinea</item>
+    <item id="67" name="ER">Eritrea</item>
+    <item id="68" name="EE">Estonia</item>
+    <item id="69" name="ET">Ethiopia</item>
+    <item id="70" name="FK">Falkland Islands (malvinas)</item>
+    <item id="71" name="FO">Faroe Islands</item>
+    <item id="72" name="FJ">Fiji</item>
+    <item id="73" name="FI">Finland</item>
+    <item id="74" name="FR">France</item>
+    <item id="75" name="GF">French Guiana</item>
+    <item id="76" name="PF">French Polynesia</item>
+    <item id="77" name="TF">French Southern Territories</item>
+    <item id="78" name="GA">Gabon</item>
+    <item id="79" name="GM">Gambia</item>
+    <item id="80" name="GE">Georgia</item>
+    <item id="81" name="DE">Germany</item>
+    <item id="82" name="GH">Ghana</item>
+    <item id="83" name="GI">Gibraltar</item>
+    <item id="84" name="GR">Greece</item>
+    <item id="85" name="GL">Greenland</item>
+    <item id="86" name="GD">Grenada</item>
+    <item id="87" name="GP">Guadeloupe</item>
+    <item id="88" name="GU">Guam</item>
+    <item id="89" name="GT">Guatemala</item>
+    <item id="90" name="GN">Guinea</item>
+    <item id="91" name="GW">Guinea-bissau</item>
+    <item id="92" name="GY">Guyana</item>
+    <item id="93" name="HT">Haiti</item>
+    <item id="94" name="HM">Heard Island And Mcdonald Islands</item>
+    <item id="95" name="VA">Holy See (vatican City State)</item>
+    <item id="96" name="HN">Honduras</item>
+    <item id="97" name="HK">Hong Kong</item>
+    <item id="98" name="HU">Hungary</item>
+    <item id="99" name="IS">Iceland</item>
+    <item id="100" name="IN">India</item>
+    <item id="101" name="ID">Indonesia</item>
+    <item id="102" name="IR">Iran, Islamic Republic Of</item>
+    <item id="103" name="IQ">Iraq</item>
+    <item id="104" name="IE">Ireland</item>
+    <item id="105" name="IL">Israel</item>
+    <item id="106" name="IT">Italy</item>
+    <item id="107" name="JM">Jamaica</item>
+    <item id="108" name="JP">Japan</item>
+    <item id="109" name="JO">Jordan</item>
+    <item id="110" name="KZ">Kazakstan</item>
+    <item id="111" name="KE">Kenya</item>
+    <item id="112" name="KI">Kiribati</item>
+    <item id="113" name="KP">Korea, Democratic People''s Republic Of</item>
+    <item id="114" name="KR">Korea, Republic Of</item>
+    <item id="115" name="KV">Kosovo</item>
+    <item id="116" name="KW">Kuwait</item>
+    <item id="117" name="KG">Kyrgyzstan</item>
+    <item id="118" name="LA">Lao People''s Democratic Republic</item>
+    <item id="119" name="LV">Latvia</item>
+    <item id="120" name="LB">Lebanon</item>
+    <item id="121" name="LS">Lesotho</item>
+    <item id="122" name="LR">Liberia</item>
+    <item id="123" name="LY">Libyan Arab Jamahiriya</item>
+    <item id="124" name="LI">Liechtenstein</item>
+    <item id="125" name="LT">Lithuania</item>
+    <item id="126" name="LU">Luxembourg</item>
+    <item id="127" name="MO">Macau</item>
+    <item id="128" name="MK">Macedonia, The Former Yugoslav Republic Of</item>
+    <item id="129" name="MG">Madagascar</item>
+    <item id="130" name="MW">Malawi</item>
+    <item id="131" name="MY">Malaysia</item>
+    <item id="132" name="MV">Maldives</item>
+    <item id="133" name="ML">Mali</item>
+    <item id="134" name="MT">Malta</item>
+    <item id="135" name="MH">Marshall Islands</item>
+    <item id="136" name="MQ">Martinique</item>
+    <item id="137" name="MR">Mauritania</item>
+    <item id="138" name="MU">Mauritius</item>
+    <item id="139" name="YT">Mayotte</item>
+    <item id="140" name="MX">Mexico</item>
+    <item id="141" name="FM">Micronesia, Federated States Of</item>
+    <item id="142" name="MD">Moldova, Republic Of</item>
+    <item id="143" name="MC">Monaco</item>
+    <item id="144" name="MN">Mongolia</item>
+    <item id="145" name="MS">Montserrat</item>
+    <item id="146" name="ME">Montenegro</item>
+    <item id="147" name="MA">Morocco</item>
+    <item id="148" name="MZ">Mozambique</item>
+    <item id="149" name="MM">Myanmar</item>
+    <item id="150" name="NA">Namibia</item>
+    <item id="151" name="NR">Nauru</item>
+    <item id="152" name="NP">Nepal</item>
+    <item id="153" name="NL">Netherlands</item>
+    <item id="154" name="AN">Netherlands Antilles</item>
+    <item id="155" name="NC">New Caledonia</item>
+    <item id="156" name="NZ">New Zealand</item>
+    <item id="157" name="NI">Nicaragua</item>
+    <item id="158" name="NE">Niger</item>
+    <item id="159" name="NG">Nigeria</item>
+    <item id="160" name="NU">Niue</item>
+    <item id="161" name="NF">Norfolk Island</item>
+    <item id="162" name="MP">Northern Mariana Islands</item>
+    <item id="163" name="NO">Norway</item>
+    <item id="164" name="OM">Oman</item>
+    <item id="165" name="PK">Pakistan</item>
+    <item id="166" name="PW">Palau</item>
+    <item id="167" name="PS">Palestinian Territory, Occupied</item>
+    <item id="168" name="PA">Panama</item>
+    <item id="169" name="PG">Papua New Guinea</item>
+    <item id="170" name="PY">Paraguay</item>
+    <item id="171" name="PE">Peru</item>
+    <item id="172" name="PH">Philippines</item>
+    <item id="173" name="PN">Pitcairn</item>
+    <item id="174" name="PL">Poland</item>
+    <item id="175" name="PT">Portugal</item>
+    <item id="176" name="PR">Puerto Rico</item>
+    <item id="177" name="QA">Qatar</item>
+    <item id="178" name="RE">Reunion</item>
+    <item id="179" name="RO">Romania</item>
+    <item id="180" name="RU">Russian Federation</item>
+    <item id="181" name="RW">Rwanda</item>
+    <item id="182" name="SH">Saint Helena</item>
+    <item id="183" name="KN">Saint Kitts And Nevis</item>
+    <item id="184" name="LC">Saint Lucia</item>
+    <item id="185" name="PM">Saint Pierre And Miquelon</item>
+    <item id="186" name="VC">Saint Vincent And The Grenadines</item>
+    <item id="187" name="WS">Samoa</item>
+    <item id="188" name="SM">San Marino</item>
+    <item id="189" name="ST">Sao Tome And Principe</item>
+    <item id="190" name="SA">Saudi Arabia</item>
+    <item id="191" name="SN">Senegal</item>
+    <item id="192" name="RS">Serbia</item>
+    <item id="193" name="SC">Seychelles</item>
+    <item id="194" name="SL">Sierra Leone</item>
+    <item id="195" name="SG">Singapore</item>
+    <item id="196" name="SK">Slovakia</item>
+    <item id="197" name="SI">Slovenia</item>
+    <item id="198" name="SB">Solomon Islands</item>
+    <item id="199" name="SO">Somalia</item>
+    <item id="200" name="ZA">South Africa</item>
+    <item id="201" name="GS">South Georgia And The South Sandwich Islands</item>
+    <item id="202" name="ES">Spain</item>
+    <item id="203" name="LK">Sri Lanka</item>
+    <item id="204" name="SD">Sudan</item>
+    <item id="205" name="SR">Suriname</item>
+    <item id="206" name="SJ">Svalbard And Jan Mayen</item>
+    <item id="207" name="SZ">Swaziland</item>
+    <item id="208" name="SE">Sweden</item>
+    <item id="209" name="CH">Switzerland</item>
+    <item id="210" name="SY">Syrian Arab Republic</item>
+    <item id="211" name="TW">Taiwan, Province Of China</item>
+    <item id="212" name="TJ">Tajikistan</item>
+    <item id="213" name="TZ">Tanzania, United Republic Of</item>
+    <item id="214" name="TH">Thailand</item>
+    <item id="215" name="TG">Togo</item>
+    <item id="216" name="TK">Tokelau</item>
+    <item id="217" name="TO">Tonga</item>
+    <item id="218" name="TT">Trinidad And Tobago</item>
+    <item id="219" name="TN">Tunisia</item>
+    <item id="220" name="TR">Turkey</item>
+    <item id="221" name="TM">Turkmenistan</item>
+    <item id="222" name="TC">Turks And Caicos Islands</item>
+    <item id="223" name="TV">Tuvalu</item>
+    <item id="224" name="UG">Uganda</item>
+    <item id="225" name="UA">Ukraine</item>
+    <item id="226" name="AE">United Arab Emirates</item>
+    <item id="227" name="GB">United Kingdom</item>
+    <item id="228" name="US">USA</item>
+    <item id="229" name="UM">United States Minor Outlying Islands</item>
+    <item id="230" name="UY">Uruguay</item>
+    <item id="231" name="UZ">Uzbekistan</item>
+    <item id="232" name="VU">Vanuatu</item>
+    <item id="233" name="VE">Venezuela</item>
+    <item id="234" name="VN">Viet Nam</item>
+    <item id="235" name="VG">Virgin Islands, British</item>
+    <item id="236" name="VI">Virgin Islands, U.s.</item>
+    <item id="237" name="WF">Wallis And Futuna</item>
+    <item id="238" name="EH">Western Sahara</item>
+    <item id="239" name="YE">Yemen</item>
+    <item id="240" name="ZM">Zambia</item>
+    <item id="241" name="ZW">Zimbabwe</item>
+  </enum>
+  <enum name="CurrencyEnum" description="Currencies">
+    <item id="1" name="USD">US Dollar</item>
+    <item id="2" name="MXN">Mexican peso</item>
+    <item id="3" name="RON">Romanian leu</item>
+  </enum>
+  <enum name="EmailParameterTypeEnum" description="Type of email parameter">
+    <item id="1" name="Text">Text</item>
+    <item id="2" name="Multiline">Multiline text</item>
+    <item id="3" name="DateTime">Globalized date and time</item>
+    <item id="4" name="URL">URL link to the system</item>
+    <item id="5" name="HTML">HTML block</item>
+  </enum>
+  <enum name="EmailTypeEnum" description="Email type">
+    <item id="1" name="CoreIncidentWarning">Incident warning</item>
+    <item id="2001" name="RegistrationConfirmation">Confirmation of registration</item>
+    <item id="2002" name="RegistrationInvitation">Invitation to registration</item>
+    <item id="2003" name="ManualVerificationNotification">Manual verification notification</item>
+    <item id="2004" name="ConversationChanged">Class change notification</item>
+    <item id="2005" name="ConversationCanceled">Class cancelation notification</item>
+    <item id="2006" name="ConversationCompleted">Class completion notification</item>
+    <item id="2007" name="RegistrationCanceled">Cancelation of registration</item>
+    <item id="2008" name="PaymentRequest">Payment request</item>
+    <item id="2009" name="MaterialsNotification">Materials notification</item>
+    <item id="2021" name="WwaRegistrationConfirmation">WWA confirmation of registration</item>
+    <item id="2022" name="WwaRegistrationInvitation">WWA invitation to registration</item>
+    <item id="2023" name="WwaConversationChanged">WWA class change notification</item>
+    <item id="2024" name="WwaConversationCanceled">WWA class cancelation notification</item>
+    <item id="2025" name="WwaConversationCompleted">WWA class completion notification</item>
+    <item id="2026" name="WwaRegistrationCanceled">WWA cancelation of registration</item>
+    <item id="2041" name="InvitationFilledIn">Invitation filled in notification</item>
+    <item id="2042" name="WwaInvitationFilledIn">WWA invitation filled in notification</item>
+    <item id="2043" name="ManualVerificationRequest">Request for manual verification</item>
+    <item id="2044" name="OuterSystemSyncJobReport">Outer system synchronisation report</item>
+    <item id="2045" name="WwaStudentRegistrationNotification">WWA student registration notification</item>
+    <item id="2046" name="DatabaseClearingJobReport">Database clearing job report</item>
+    <item id="2047" name="DistanceClassCompletionJobReport">Distance class completion job report</item>
+    <item id="2061" name="RegistrationList">Registration list</item>
+    <item id="2062" name="RegistrationListMaster">Registration list for master coordinator</item>
+    <item id="2063" name="NewDepositRequest">Request for new deposit</item>
+    <item id="2064" name="ClassDailyReports">Class daily reports</item>
+    <item id="2065" name="ClassFinalReports">Class final reports</item>
+    <item id="2080" name="ContactNotification">Contacts notification</item>
+  </enum>
+  <enum name="EntityTypeEnum" description="Type of entity">
+    <item id="1" name="CoreEmail">Email</item>
+    <item id="2" name="CoreJobRun">Task run</item>
+    <item id="3" name="CoreAsyncRequest">Asynchronous request</item>
+    <item id="4" name="CoreIncident">Incident</item>
+    <item id="2001" name="MainClass">Coordinated class</item>
+    <item id="2002" name="MainClassAction">Coordinated class action</item>
+    <item id="2005" name="MainClassRegistration">Registration</item>
+    <item id="2006" name="MainClassRegistrationInvitation">Invitation</item>
+    <item id="2009" name="MainFormerClass">Former class</item>
+    <item id="2010" name="MainFormerStudent">Former student</item>
+    <item id="2011" name="MainPerson">Person</item>
+    <item id="2012" name="MainProfile">Coordinator's profile</item>
+    <item id="2022" name="MainDistanceClassTemplate">Distance class template</item>
+    <item id="2023" name="MainDistanceProfile">Distance profile</item>
+    <item id="2024" name="MainContactList">Contact list</item>
+  </enum>
+  <enum name="EnumTypeEnum" description="Type of enumeration">
+    <item id="1" name="Language">Supported languages</item>
+    <item id="2" name="Currency">Currencies</item>
+    <item id="3" name="Country">Countries</item>
+    <item id="4" name="TimeZone">Time zones</item>
+    <item id="2001" name="MainClassType">Class type</item>
+    <item id="2002" name="MainRegistrationType">Registration type</item>
+  </enum>
+  <enum name="EnvironmentTypeEnum" description="Encapsulates types of environments and purposes">
+    <item id="1" name="Production">Production environment</item>
+    <item id="2" name="Test">Test environment</item>
+  </enum>
+  <enum name="FileTypeEnum" description="Type of stored file">
+    <item id="1" name="Generic">Generic file</item>
+    <item id="2" name="Excel">Excel file</item>
+    <item id="3" name="Word">Word file</item>
+    <item id="4" name="Csv">CSV file</item>
+    <item id="5" name="Jpg">Jpg image</item>
+    <item id="6" name="Png">Png image</item>
+    <item id="7" name="Gif">Gif image</item>
+    <item id="8" name="Pdf">PDF file</item>
+  </enum>
+  <enum name="IncidentTypeEnum" description="Type of incident">
+    <item id="1" name="UnknownType">Unknown error type</item>
+    <item id="2" name="OuterSystemError">Unsuccessful interaction with outer system</item>
+    <item id="3" name="PayPalError">Unsuccessful PayPal operation</item>
+    <item id="4" name="EmailError">Email sending error</item>
+    <item id="5" name="ReportError">Report creating error</item>
+    <item id="6" name="AsyncRequestError">AsyncRequest execution error</item>
+    <item id="7" name="WebRenderingError">Web rendering error</item>
+    <item id="8" name="ZendeskError">Zendesk integration error</item>
+    <item id="9" name="JobRunError">JobRun execution error</item>
+    <item id="10" name="MaintenanceError">Maintenance error</item>
+    <item id="2001" name="MaterialError">Materials distribution error</item>
+  </enum>
+  <enum name="IntegrationStateTypeEnum" description="Type of WebEx integration state">
+    <item id="1" name="Error">Error occured when attempting to get WebEx data</item>
+    <item id="2" name="NotInWebEx">The person with attendee Id is not in the WebEx</item>
+    <item id="3" name="InWebEx">The person is in the WebEx</item>
+  </enum>
+  <enum name="IntegrationTypeEnum" description="Determines conference integration type">
+    <item id="1" name="NoIntegration">No integration</item>
+    <item id="2001" name="WebExProgram">WebEx program</item>
+  </enum>
+  <enum name="JobTypeEnum" description="Type of job">
+    <item id="1" name="ZendeskSyncJob">Synchronisation unpropagated incidents</item>
+    <item id="2" name="EmailSendJob">Job that sends emails with low priority</item>
+    <item id="3" name="OuterSystemSyncJob">Synchronisation data with outer system</item>
+    <item id="4" name="TestJob">Test job serves for testing JobRunsEnvelope</item>
+    <item id="5" name="ReportSendJob">Job that sends periodical reports</item>
+    <item id="2001" name="MainActiveClassReportJob">Job that processes reports for active classes</item>
+    <item id="2002" name="MainDatabaseClearingJob">Job that clears deleted or obsoleted records in database</item>
+    <item id="2003" name="MainDistanceClassCompletionJob">Job that completes distance classes</item>
+  </enum>
+  <enum name="LanguageEnum" description="Supported languages">
+    <item id="1" name="En">English</item>
+    <item id="2" name="Cs">Čeština</item>
+    <item id="3" name="Es">Español</item>
+    <item id="4" name="Fr">Français</item>
+    <item id="5" name="Ro">Română</item>
+    <item id="6" name="Pt">Português</item>
+  </enum>
+  <enum name="PersonRoleTypeEnum" description="Determines possible person type of roles">
+    <item id="1" name="Coordinator">Coordinator</item>
+    <item id="2" name="DistanceDoordinator">Distance coordinator</item>
+    <item id="3" name="Instructor">Instructor</item>
+    <item id="4" name="ApprovedStaff">Approved staff</item>
+    <item id="5" name="Contact">Contact person</item>
+    <item id="6" name="GuestInstructor">Guest instructor</item>
+  </enum>
+  <enum name="PriceListTypeEnum" description="Determines pricelist type">
+    <item id="1" name="Class">Class price list</item>
+    <item id="2" name="Lecture">Lecture price list</item>
+    <item id="3" name="WwaClass">WWA class price list</item>
+    <item id="4" name="MaterialClass">Material class price list</item>
+  </enum>
+  <enum name="ProcessingStateEnum" description="State of processing e.g. job">
+    <item id="1" name="New">New</item>
+    <item id="2" name="Skipped">Skipped</item>
+    <item id="3" name="InProcess">In process</item>
+    <item id="4" name="Finished">Finished</item>
+    <item id="5" name="Error">Error</item>
+  </enum>
+  <enum name="RegistrationColorSchemeEnum" description="Determines color and style scheme for public registration pages">
+    <item id="1" name="Limet">Default limet-green scheme</item>
+    <item id="2" name="Ocean">Ocean-blue scheme</item>
+  </enum>
+  <enum name="RegistrationFormTypeEnum" description="Determines type of registration form and filled parameters">
+    <item id="1" name="Adult">Only student's fields required</item>
+    <item id="2" name="Child">Both fields required, registrant email optional</item>
+    <item id="3" name="WWA">Both fields required, Student LN, Student address optional, student Country required</item>
+  </enum>
+  <enum name="RegistrationTypeEnum" description="Determines student status and registration type">
+    <item id="1" name="NewAdult">New Student – Adult (14 yrs. &amp; older) Pre-Registration</item>
+    <item id="2" name="NewAdultWeekOfClass">New Student – Adult (14 yrs. &amp; older) Registration Week of Class</item>
+    <item id="3" name="NewChild">New Student – Child (birth – 13 yrs.)</item>
+    <item id="4" name="ReviewAdult">Review Student – Adult (14 yrs. &amp; older)</item>
+    <item id="5" name="ReviewChild">Review Student – Child (birth – 13 yrs.)</item>
+    <item id="6" name="WWA">World Wide Absentee – Any I-Dentity</item>
+    <item id="7" name="ApprovedGuest">Approved Guest</item>
+    <item id="8" name="LectureRegistration">Online Lecture Registration</item>
+    <item id="9" name="MaterialRegistration">Material registration</item>
+  </enum>
+  <enum name="RoyaltyFeeRateTypeEnum" description="Royalty FeeRate Type">
+    <item id="1" name="NewStudent">New Student</item>
+    <item id="2" name="NewChild">New Child</item>
+    <item id="3" name="ReviewStudent">Review Student (excluding Absentee)</item>
+    <item id="4" name="ReviewChild">Review Child (excluding Absentee)</item>
+  </enum>
+  <enum name="SeverityEnum" description="Severity of item, e.g. email">
+    <item id="10" name="Fatal">Fatal severity</item>
+    <item id="20" name="High">High severity</item>
+    <item id="30" name="Normal">Normal severity</item>
+    <item id="40" name="Low">Low severity</item>
+    <item id="50" name="Trivial">Trivial severity</item>
+  </enum>
+  <enum name="TimeZoneEnum" description="TimeZones">
+    <item id="1" name="DatelineStandardTime">(UTC-12:00) International Date Line West</item>
+    <item id="2" name="UTC11">(UTC-11:00) Coordinated Universal Time-11</item>
+    <item id="3" name="AleutianStandardTime">(UTC-10:00) Aleutian Islands</item>
+    <item id="4" name="HawaiianStandardTime">(UTC-10:00) Hawaii</item>
+    <item id="5" name="MarquesasStandardTime">(UTC-09:30) Marquesas Islands</item>
+    <item id="6" name="AlaskanStandardTime">(UTC-09:00) Alaska</item>
+    <item id="7" name="UTC09">(UTC-09:00) Coordinated Universal Time-09</item>
+    <item id="8" name="PacificStandardTimeMexico">(UTC-08:00) Baja California</item>
+    <item id="9" name="UTC08">(UTC-08:00) Coordinated Universal Time-08</item>
+    <item id="10" name="PacificStandardTime">(UTC-08:00) Pacific Time (US &amp; Canada)</item>
+    <item id="11" name="USMountainStandardTime">(UTC-07:00) Arizona</item>
+    <item id="12" name="MountainStandardTimeMexico">(UTC-07:00) Chihuahua, La Paz, Mazatlan</item>
+    <item id="13" name="MountainStandardTime">(UTC-07:00) Mountain Time (US &amp; Canada)</item>
+    <item id="14" name="YukonStandardTime">(UTC-07:00) Yukon</item>
+    <item id="15" name="CentralAmericaStandardTime">(UTC-06:00) Central America</item>
+    <item id="16" name="CentralStandardTime">(UTC-06:00) Central Time (US &amp; Canada)</item>
+    <item id="17" name="EasterIslandStandardTime">(UTC-06:00) Easter Island</item>
+    <item id="18" name="CentralStandardTimeMexico">(UTC-06:00) Guadalajara, Mexico City, Monterrey</item>
+    <item id="19" name="CanadaCentralStandardTime">(UTC-06:00) Saskatchewan</item>
+    <item id="20" name="SAPacificStandardTime">(UTC-05:00) Bogota, Lima, Quito, Rio Branco</item>
+    <item id="21" name="EasternStandardTimeMexico">(UTC-05:00) Chetumal</item>
+    <item id="22" name="EasternStandardTime">(UTC-05:00) Eastern Time (US &amp; Canada)</item>
+    <item id="23" name="HaitiStandardTime">(UTC-05:00) Haiti</item>
+    <item id="24" name="CubaStandardTime">(UTC-05:00) Havana</item>
+    <item id="25" name="USEasternStandardTime">(UTC-05:00) Indiana (East)</item>
+    <item id="26" name="TurksAndCaicosStandardTime">(UTC-05:00) Turks and Caicos</item>
+    <item id="27" name="ParaguayStandardTime">(UTC-04:00) Asuncion</item>
+    <item id="28" name="AtlanticStandardTime">(UTC-04:00) Atlantic Time (Canada)</item>
+    <item id="29" name="VenezuelaStandardTime">(UTC-04:00) Caracas</item>
+    <item id="30" name="CentralBrazilianStandardTime">(UTC-04:00) Cuiaba</item>
+    <item id="31" name="SAWesternStandardTime">(UTC-04:00) Georgetown, La Paz, Manaus, San Juan</item>
+    <item id="32" name="PacificSAStandardTime">(UTC-04:00) Santiago</item>
+    <item id="33" name="NewfoundlandStandardTime">(UTC-03:30) Newfoundland</item>
+    <item id="34" name="TocantinsStandardTime">(UTC-03:00) Araguaina</item>
+    <item id="35" name="ESouthAmericaStandardTime">(UTC-03:00) Brasilia</item>
+    <item id="36" name="SAEasternStandardTime">(UTC-03:00) Cayenne, Fortaleza</item>
+    <item id="37" name="ArgentinaStandardTime">(UTC-03:00) City of Buenos Aires</item>
+    <item id="38" name="GreenlandStandardTime">(UTC-03:00) Greenland</item>
+    <item id="39" name="MontevideoStandardTime">(UTC-03:00) Montevideo</item>
+    <item id="40" name="MagallanesStandardTime">(UTC-03:00) Punta Arenas</item>
+    <item id="41" name="SaintPierreStandardTime">(UTC-03:00) Saint Pierre and Miquelon</item>
+    <item id="42" name="BahiaStandardTime">(UTC-03:00) Salvador</item>
+    <item id="43" name="UTC02">(UTC-02:00) Coordinated Universal Time-02</item>
+    <item id="44" name="MidAtlanticStandardTime">(UTC-02:00) Mid-Atlantic - Old</item>
+    <item id="45" name="AzoresStandardTime">(UTC-01:00) Azores</item>
+    <item id="46" name="CapeVerdeStandardTime">(UTC-01:00) Cabo Verde Is.</item>
+    <item id="47" name="UTC">(UTC) Coordinated Universal Time</item>
+    <item id="48" name="GMTStandardTime">(UTC+00:00) Dublin, Edinburgh, Lisbon, London</item>
+    <item id="49" name="GreenwichStandardTime">(UTC+00:00) Monrovia, Reykjavik</item>
+    <item id="50" name="SaoTomeStandardTime">(UTC+00:00) Sao Tome</item>
+    <item id="51" name="MoroccoStandardTime">(UTC+01:00) Casablanca</item>
+    <item id="52" name="WEuropeStandardTime">(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna</item>
+    <item id="53" name="CentralEuropeStandardTime">(UTC+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague</item>
+    <item id="54" name="RomanceStandardTime">(UTC+01:00) Brussels, Copenhagen, Madrid, Paris</item>
+    <item id="55" name="CentralEuropeanStandardTime">(UTC+01:00) Sarajevo, Skopje, Warsaw, Zagreb</item>
+    <item id="56" name="WCentralAfricaStandardTime">(UTC+01:00) West Central Africa</item>
+    <item id="57" name="JordanStandardTime">(UTC+02:00) Amman</item>
+    <item id="58" name="GTBStandardTime">(UTC+02:00) Athens, Bucharest</item>
+    <item id="59" name="MiddleEastStandardTime">(UTC+02:00) Beirut</item>
+    <item id="60" name="EgyptStandardTime">(UTC+02:00) Cairo</item>
+    <item id="61" name="EEuropeStandardTime">(UTC+02:00) Chisinau</item>
+    <item id="62" name="SyriaStandardTime">(UTC+02:00) Damascus</item>
+    <item id="63" name="WestBankStandardTime">(UTC+02:00) Gaza, Hebron</item>
+    <item id="64" name="SouthAfricaStandardTime">(UTC+02:00) Harare, Pretoria</item>
+    <item id="65" name="FLEStandardTime">(UTC+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius</item>
+    <item id="66" name="IsraelStandardTime">(UTC+02:00) Jerusalem</item>
+    <item id="67" name="SouthSudanStandardTime">(UTC+02:00) Juba</item>
+    <item id="68" name="KaliningradStandardTime">(UTC+02:00) Kaliningrad</item>
+    <item id="69" name="SudanStandardTime">(UTC+02:00) Khartoum</item>
+    <item id="70" name="LibyaStandardTime">(UTC+02:00) Tripoli</item>
+    <item id="71" name="NamibiaStandardTime">(UTC+02:00) Windhoek</item>
+    <item id="72" name="ArabicStandardTime">(UTC+03:00) Baghdad</item>
+    <item id="73" name="TurkeyStandardTime">(UTC+03:00) Istanbul</item>
+    <item id="74" name="ArabStandardTime">(UTC+03:00) Kuwait, Riyadh</item>
+    <item id="75" name="BelarusStandardTime">(UTC+03:00) Minsk</item>
+    <item id="76" name="RussianStandardTime">(UTC+03:00) Moscow, St. Petersburg</item>
+    <item id="77" name="EAfricaStandardTime">(UTC+03:00) Nairobi</item>
+    <item id="78" name="VolgogradStandardTime">(UTC+03:00) Volgograd</item>
+    <item id="79" name="IranStandardTime">(UTC+03:30) Tehran</item>
+    <item id="80" name="ArabianStandardTime">(UTC+04:00) Abu Dhabi, Muscat</item>
+    <item id="81" name="AstrakhanStandardTime">(UTC+04:00) Astrakhan, Ulyanovsk</item>
+    <item id="82" name="AzerbaijanStandardTime">(UTC+04:00) Baku</item>
+    <item id="83" name="RussiaTimeZone3">(UTC+04:00) Izhevsk, Samara</item>
+    <item id="84" name="MauritiusStandardTime">(UTC+04:00) Port Louis</item>
+    <item id="85" name="SaratovStandardTime">(UTC+04:00) Saratov</item>
+    <item id="86" name="GeorgianStandardTime">(UTC+04:00) Tbilisi</item>
+    <item id="87" name="CaucasusStandardTime">(UTC+04:00) Yerevan</item>
+    <item id="88" name="AfghanistanStandardTime">(UTC+04:30) Kabul</item>
+    <item id="89" name="WestAsiaStandardTime">(UTC+05:00) Ashgabat, Tashkent</item>
+    <item id="90" name="EkaterinburgStandardTime">(UTC+05:00) Ekaterinburg</item>
+    <item id="91" name="PakistanStandardTime">(UTC+05:00) Islamabad, Karachi</item>
+    <item id="92" name="QyzylordaStandardTime">(UTC+05:00) Qyzylorda</item>
+    <item id="93" name="IndiaStandardTime">(UTC+05:30) Chennai, Kolkata, Mumbai, New Delhi</item>
+    <item id="94" name="SriLankaStandardTime">(UTC+05:30) Sri Jayawardenepura</item>
+    <item id="95" name="NepalStandardTime">(UTC+05:45) Kathmandu</item>
+    <item id="96" name="CentralAsiaStandardTime">(UTC+06:00) Astana</item>
+    <item id="97" name="BangladeshStandardTime">(UTC+06:00) Dhaka</item>
+    <item id="98" name="OmskStandardTime">(UTC+06:00) Omsk</item>
+    <item id="99" name="MyanmarStandardTime">(UTC+06:30) Yangon (Rangoon)</item>
+    <item id="100" name="SEAsiaStandardTime">(UTC+07:00) Bangkok, Hanoi, Jakarta</item>
+    <item id="101" name="AltaiStandardTime">(UTC+07:00) Barnaul, Gorno-Altaysk</item>
+    <item id="102" name="WMongoliaStandardTime">(UTC+07:00) Hovd</item>
+    <item id="103" name="NorthAsiaStandardTime">(UTC+07:00) Krasnoyarsk</item>
+    <item id="104" name="NCentralAsiaStandardTime">(UTC+07:00) Novosibirsk</item>
+    <item id="105" name="TomskStandardTime">(UTC+07:00) Tomsk</item>
+    <item id="106" name="ChinaStandardTime">(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi</item>
+    <item id="107" name="NorthAsiaEastStandardTime">(UTC+08:00) Irkutsk</item>
+    <item id="108" name="SingaporeStandardTime">(UTC+08:00) Kuala Lumpur, Singapore</item>
+    <item id="109" name="WAustraliaStandardTime">(UTC+08:00) Perth</item>
+    <item id="110" name="TaipeiStandardTime">(UTC+08:00) Taipei</item>
+    <item id="111" name="UlaanbaatarStandardTime">(UTC+08:00) Ulaanbaatar</item>
+    <item id="112" name="AusCentralWStandardTime">(UTC+08:45) Eucla</item>
+    <item id="113" name="TransbaikalStandardTime">(UTC+09:00) Chita</item>
+    <item id="114" name="TokyoStandardTime">(UTC+09:00) Osaka, Sapporo, Tokyo</item>
+    <item id="115" name="NorthKoreaStandardTime">(UTC+09:00) Pyongyang</item>
+    <item id="116" name="KoreaStandardTime">(UTC+09:00) Seoul</item>
+    <item id="117" name="YakutskStandardTime">(UTC+09:00) Yakutsk</item>
+    <item id="118" name="CenAustraliaStandardTime">(UTC+09:30) Adelaide</item>
+    <item id="119" name="AUSCentralStandardTime">(UTC+09:30) Darwin</item>
+    <item id="120" name="EAustraliaStandardTime">(UTC+10:00) Brisbane</item>
+    <item id="121" name="AUSEasternStandardTime">(UTC+10:00) Canberra, Melbourne, Sydney</item>
+    <item id="122" name="WestPacificStandardTime">(UTC+10:00) Guam, Port Moresby</item>
+    <item id="123" name="TasmaniaStandardTime">(UTC+10:00) Hobart</item>
+    <item id="124" name="VladivostokStandardTime">(UTC+10:00) Vladivostok</item>
+    <item id="125" name="LordHoweStandardTime">(UTC+10:30) Lord Howe Island</item>
+    <item id="126" name="BougainvilleStandardTime">(UTC+11:00) Bougainville Island</item>
+    <item id="127" name="RussiaTimeZone10">(UTC+11:00) Chokurdakh</item>
+    <item id="128" name="MagadanStandardTime">(UTC+11:00) Magadan</item>
+    <item id="129" name="NorfolkStandardTime">(UTC+11:00) Norfolk Island</item>
+    <item id="130" name="SakhalinStandardTime">(UTC+11:00) Sakhalin</item>
+    <item id="131" name="CentralPacificStandardTime">(UTC+11:00) Solomon Is., New Caledonia</item>
+    <item id="132" name="RussiaTimeZone11">(UTC+12:00) Anadyr, Petropavlovsk-Kamchatsky</item>
+    <item id="133" name="NewZealandStandardTime">(UTC+12:00) Auckland, Wellington</item>
+    <item id="134" name="UTC12">(UTC+12:00) Coordinated Universal Time+12</item>
+    <item id="135" name="FijiStandardTime">(UTC+12:00) Fiji</item>
+    <item id="136" name="KamchatkaStandardTime">(UTC+12:00) Petropavlovsk-Kamchatsky - Old</item>
+    <item id="137" name="ChathamIslandsStandardTime">(UTC+12:45) Chatham Islands</item>
+    <item id="138" name="UTC13">(UTC+13:00) Coordinated Universal Time+13</item>
+    <item id="139" name="TongaStandardTime">(UTC+13:00) Nuku''alofa</item>
+    <item id="140" name="SamoaStandardTime">(UTC+13:00) Samoa</item>
+    <item id="141" name="LineIslandsStandardTime">(UTC+14:00) Kiritimati Island</item>
+  </enum>
+  <enum name="UserGroupTypeEnum" description="Defines type of user group where an entity can be incorporated">
+    <item id="2001" name="MainProfile">Coordinator's profile</item>
+  </enum>
+  <enum name="UserRoleTypeEnum" description="Type of identity role">
+    <item id="1" name="Administrator">Administrator</item>
+    <item id="2" name="Coordinator">Coordinator</item>
+    <item id="3" name="SuperCoordinator">Super Coordinator</item>
+    <item id="4" name="DistanceCoordinator">Distance coordinator</item>
+    <item id="5" name="Translator">Translator</item>
+  </enum>
+</root>

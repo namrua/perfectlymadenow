@@ -1,0 +1,146 @@
+﻿@model RegistrationManualReviewPageModel
+@{
+    ViewBag.Title = CommonResources.TitleCoordinatedRegistrations;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.Registration, TabItemId.RegistrationManualReview, new { id = Model.ClassRegistrationId });
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+
+    IContextManager cm = ContextHelper.GetContextManager(ViewBag);
+    cm.SetCustomContext(new FormerContext(FormerBasePages.Registrations, Model.ClassRegistrationId));
+    var pushContext = cm.UpdateBacks().Get();
+}
+
+@if (!Model.NeedsReview)
+{
+    <p>
+        <em>This registration does not require reviewing.</em>
+    </p>
+}
+else
+{
+
+    using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+    {
+        if (Model.CanPick)
+        {
+            @bg.DropdownLink("Pick former student", ButtonStyle.Primary, "select-button", !Model.CanPickOperation, new[]
+            {
+                PickerItem.Item(Url.Action(
+                    "Index",
+                    "Former",
+                    new
+                    {
+                        classTypeId = Model.ReviewFormerClassFilter.ClassTypeId,
+                        fromDate = Model.ReviewFormerClassFilter.FromDate,
+                        context = pushContext
+                    }),
+                    "Search former student across former classes"),
+                PickerItem.Item(Url.Action(
+                    "Student",
+                    "Former",
+                    new RouteValueDictionary
+                    {
+                        { "Class.ClassTypeId", Model.ReviewFormerClassFilter.ClassTypeId },
+                        { "Class.FromDate", Model.ReviewFormerClassFilter.FromDate },
+                        { "context", pushContext }
+                    }),
+                    "Search former student by former student filter")
+            })
+        }
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Students", "Class", new { id = Model.ClassId }))
+    }
+
+    if (Model.FormerStudentDetail == null)
+    {
+        <p>
+            @if (!Model.IsReviewed)
+            {
+                <span class="warning-text"><em>Registration is not reviewed.</em></span>
+            }
+            else
+            {
+                @:<em>Registration is reviewed.</em>
+            }
+        </p>
+    }
+
+    else
+    {
+        <div class="row">
+
+            <div class="col-xl-6 align-content-start">
+
+                <h5>Former student</h5>
+                <dl class="row dl-compact">
+                    <dt class="col-sm-4">@Html.DisplayNameFor(x => x.FormerStudentDetail.Address.FullName)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(x => x.FormerStudentDetail.Address.FullName)</dd>
+
+                </dl>
+                <dl class="row dl-compact">
+
+                    <dt class="col-sm-4">@CommonResources.Address</dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(x => x.FormerStudentDetail.Address.FullStreet)<br />
+                        @Html.DisplayFor(x => x.FormerStudentDetail.Address.FullCity)<br />
+                        @Html.DisplayFor(x => x.FormerStudentDetail.Address.Country)
+                    </dd>
+
+                </dl>
+                <dl class="row dl-compact">
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(x => x.FormerStudentDetail.Email)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(x => x.FormerStudentDetail.Email)</dd>
+                    @if (!string.IsNullOrEmpty(Model.FormerStudentDetail.Phone))
+                    {
+                        <dt class="col-sm-4">@Html.DisplayNameFor(x => x.FormerStudentDetail.Phone)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(x => x.FormerStudentDetail.Phone)</dd>
+                    }
+                </dl>
+
+            </div>
+
+            <div class="col-xl-6 align-content-start">
+
+                <h5>Former class</h5>
+
+                <dl class="row dl-compact">
+                    <dt class="col-sm-4">@Html.DisplayNameFor(x => x.FormerStudentDetail.Class.FullClassDate)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(x => x.FormerStudentDetail.Class.FullClassDate)</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(x => x.FormerStudentDetail.Class.Location)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(x => x.FormerStudentDetail.Class.Location)</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(x => x.FormerStudentDetail.Class.ClassType)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(x => x.FormerStudentDetail.Class.ClassType) </dd>
+                </dl>
+
+            </div>
+
+        </div>
+
+    }
+
+    if (Model.LastClassDetail != null)
+    {
+        <div class="row">
+                      
+            <div class="col-xl-6 align-content-start">
+                    
+                <h5>Last attended class</h5>           
+
+                <dl class="row dl-compact">
+                    <dt class="col-sm-4">@Html.DisplayNameFor(x => x.LastClassDetail.Location)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(x => x.LastClassDetail.Location)</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(x => x.LastClassDetail.Month)</dt>
+                    <dd class="col-sm-8">@MainTextHelper.GetMonthName(Model.LastClassDetail.Month)</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(x => x.LastClassDetail.Year)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(x => x.LastClassDetail.Year)</dd>
+                </dl>
+
+            </div>
+            
+        </div>
+    }
+
+}
+
+

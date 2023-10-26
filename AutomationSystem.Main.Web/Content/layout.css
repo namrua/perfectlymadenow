@@ -1,0 +1,66 @@
+﻿
+/* MISC CONTENTS */
+
+.main-content {
+    margin-top: 20px;
+}
+
+.message-content {
+    margin-top: 8px;
+}
+
+
+/* MAIN LAYOUT AND FOOTER LOGIC */
+/* page elements must fill whole page. html, body and optionally other tags in hierarchy should be decorated with this class */
+.full-height {
+    height: 100%;
+}
+
+/* expand-placeholder (usualy body element) defines padding where expand-height element not fits*/
+.expand-placeholder {
+    padding-top: 16px
+}
+
+/* some element on the footer level must swallow whole space*/
+.expand-height {
+    min-height: 100%;
+    margin-top: -16px;
+}
+
+/* footer-placeholder (usualy body element) defines padding where footer will be shown */
+.footer-placeholder {
+    padding-bottom: 50px;    
+}
+
+
+/* footer has negative margin to fit in the bottom without scrolling */
+footer {
+    font-size: .8em;
+    margin-bottom: -50px;
+    min-height: 50px;  
+}
+
+
+@media (max-width: 767px) {
+
+    /* footer-placeholder (usualy body element) defines padding where footer will be shown */
+    .footer-placeholder {
+        padding-bottom: 75px;
+    }
+
+
+    /* footer has negative margin to fit in the bottom without scrolling */
+    footer {
+        font-size: .8em;
+        margin-bottom: -75px;
+        min-height: 75px;
+    }
+}
+
+.table-form-width-4 {
+    min-width: 300px;
+}
+
+.table-form-width-3 {
+    min-width: 225px;
+}

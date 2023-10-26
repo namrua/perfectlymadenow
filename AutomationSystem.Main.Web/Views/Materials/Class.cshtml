@@ -1,0 +1,187 @@
+﻿@model ClassMaterialsPageModel
+@{
+    ViewBag.Title = CommonResources.MenuCoordinatorClasses;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.Class, TabItemId.ClassMaterials, new { id = Model.Class.ClassId });
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Command("Unlock materials", ButtonStyle.Primary, !Model.CanUnlockMaterials, new { id = "unlock-button" })
+    @bg.Command("Send notification", ButtonStyle.Primary, !Model.CanSendNotification, new { id = "notification-button" })
+    @bg.Command("Lock materials", ButtonStyle.Primary, !Model.CanLockMaterials, new { id = "lock-button" })
+
+    @bg.Link("Students' materials", ButtonStyle.Normal, Url.Action("RecipientMonitoring", new { id = Model.Class.ClassId, recipientTypeId = EntityTypeEnum.MainClassRegistration }))
+    @bg.Link("Instructors' materials", ButtonStyle.Normal, Url.Action("RecipientMonitoring", new { id = Model.Class.ClassId, recipientTypeId = EntityTypeEnum.MainPerson }))
+    @bg.Link("Material settings", ButtonStyle.Normal, Url.Action("ClassEdit", new { id = Model.Class.ClassId }))
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Index", "Class"))
+}
+
+<div class="badge-title">
+    <h4>@Model.Class.ClassTitle</h4>
+    @Html.ClassCategoryBadge(Model.Class.ClassCategoryId)
+    @Html.ClassStateBadge(Model.Class.ClassState)
+</div>
+
+<p>
+    @if (Model.ClassMaterialState == ClassMaterialState.PreparingStage)
+    {
+        @:Materials were not unlocked yet.
+    }
+    else if (Model.ClassMaterialState == ClassMaterialState.Unlocked)
+    {
+        @:Materials are available for approved students (<em>@TextHelper.GetStringDateTime(Model.Detail.Unlocked)</em>).
+    }
+    else if (Model.ClassMaterialState == ClassMaterialState.Locked)
+    {
+        @:Materials are locked (<em>@TextHelper.GetStringDateTime(Model.Detail.Locked)</em>).
+    }
+    else if (Model.ClassMaterialState == ClassMaterialState.LockedByAutolock)
+    {
+        @:Materials are locked by automation lock (<em>@TextHelper.GetStringDateTime(Model.Detail.AutomationLockTime)</em>).
+    }
+    else if (Model.ClassMaterialState == ClassMaterialState.LockedByEndOfClass)
+    {
+        @:Materials are locked due to end of class.
+    }
+</p>
+
+<div class="row">
+
+    <div class="col-xl-6 align-content-start">
+
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Detail.CoordinatorPassword)</dt>
+            <dd class="col-sm-8"><a href="#" id="show-pwd">???</a></dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Detail.AutomationLockTime)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Detail.AutomationLockTime)</dd>
+        </dl>
+
+    </div>
+
+</div>
+
+
+<h4>PDF Materials</h4>
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Link("Upload new", ButtonStyle.Primary, Url.Action("FileNew", new { id = Model.Class.ClassId }))
+}
+
+@*List of materials*@
+@if (Model.Materials.Count == 0)
+{
+    <p>
+        <em>@CommonResources.NoRecords</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.Materials[0].DisplayName)</th>
+                <th>@Html.DisplayNameFor(x => x.Materials[0].Language)</th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Materials)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(x => item.DisplayName)</td>
+                    <td>@Html.DisplayFor(x => item.Language)</td>
+
+                    <td>
+                        @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                        {
+                            @bg.Link(CommonResources.Edit, ButtonStyle.Primary, Url.Action("FileEdit", new { id = item.ClassMaterialFileId }))
+                            @bg.Command(CommonResources.Delete, "materials", ButtonStyle.Primary, false, "delete",
+                                item.ClassMaterialFileId, new Dictionary<string, object> { { "data-filename", item.DisplayName } })
+                            @bg.Link("Download unprotected", ButtonStyle.Normal, Url.Action("Download", "File", new { id = item.FileId }))
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // DETAIL
+
+            $("#show-pwd").click(function() {
+                alert("@Html.Raw(HttpUtility.JavaScriptStringEncode(Model.Detail.CoordinatorPassword))");
+            });
+
+
+            // CLASS MATERIAL COMMANDS
+
+            // class material requests
+            var  requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("unlock", "@Url.Action("UnlockClass", new { id = Model.Class.ClassId })");
+            requestHelper.addAction("notification", "@Url.Action("SendNotification", new { id = Model.Class.ClassId })");
+            requestHelper.addAction("lock", "@Url.Action("LockClass", new { id = Model.Class.ClassId })");
+
+            // connect unlock-button
+            $("#unlock-button").click(function () {
+                var confirmed = confirm("Are you sure to unlock materials and notify approved students?");
+                if (!confirmed) return;
+                requestHelper.executePost("unlock");
+            });
+
+            // connect notification-button
+            $("#notification-button").click(function () {
+                var confirmed = confirm("Are you sure to notify approved students?");
+                if (!confirmed) return;
+                requestHelper.executePost("notification");
+            });
+
+            // connect lock-button
+            $("#lock-button").click(function () {
+                var confirmed = confirm("Are you sure to lock materials? Materials won't be available for students.");
+                if (!confirmed) return;
+                requestHelper.executePost("lock");
+            });
+
+
+            // MATERIAL FILE COMMANDS
+
+            // file material requests
+            var fileRequestHelper = new CorabeuControl.RequestHelper();
+            fileRequestHelper.addAction("delete", "@Url.Action("FileDelete")");
+
+            // connects command-materials
+            $(".command-materials").click(function() {
+                var sender = $(this);
+                var id = sender.attr("data-id");
+                var command = sender.attr("data-command");
+
+                // delete check
+                if (command == 'delete') {
+                    var name = sender.attr("data-filename");
+                    var confirmed = confirm("Are you sure to delete '" + name + "'?");
+                    if (!confirmed)
+                        return;
+                }
+
+                // runs action
+                if (fileRequestHelper.hasAction(command))
+                    fileRequestHelper.executePost(command, { id: id });
+                else
+                    alert("Unknown action " + command);
+            });
+        }
+
+    </script>
+
+}

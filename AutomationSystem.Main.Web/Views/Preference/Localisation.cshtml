@@ -1,0 +1,44 @@
+﻿@model LanguagePreferencesForEdit
+
+@{
+    ViewBag.Title = CommonResources.MenuCorePreferences;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CorePreferences;
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.Preferences, TabItemId.PreferencesLocalisation);
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+
+    var selectedItems = new HashSet<string>(Model.Form.SupportedLanguages);
+}
+
+<form id="languagePreferencesForm" method="post" action="@Url.Action("Localisation", "Preference")">
+    
+    <h5>Supported languages</h5>
+    
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>Language</th>
+                <th>Language code</th>
+                <th>@Html.DisplayNameFor(x => x.Form.SupportedLanguages)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.AllLanguages)
+            {
+                <tr>
+                    <td>@item.Description</td>
+                    <td>@item.Name</td>
+                    <td>
+                        @Html.TableCheckBoxFor(x => x.Form.SupportedLanguages, item.Name, selectedItems.Contains(item.Name), Model.DefaultLanguage == item.Name)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save)
+    }
+
+</form>

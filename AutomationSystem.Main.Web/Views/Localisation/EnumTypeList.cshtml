@@ -1,0 +1,48 @@
+﻿@model EnumTypeList
+@{
+    ViewBag.Title = CommonResources.MenuCoreLocalisation;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoreLocalisation;
+}
+
+<h4>@MainTextHelper.GetLanguageTitle("Code lists", Model.Language)</h4>
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Index"))
+}
+
+@*List of enum types*@
+@if (Model.Items.Count == 0)
+{
+    <p>
+        <em>No records</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.Items[0].EnumTypeCode)</th>
+                <th>@Html.DisplayNameFor(x => x.Items[0].EnumType)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>@Html.DisplayFor(x => item.EnumTypeCode)</td>
+                <td>@Html.DisplayFor(x => item.EnumType)</td>
+
+                <td>
+                    @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                    {
+                        @bg.Link(CommonResources.Detail, ButtonStyle.Primary, Url.Action("EnumList", new { langId = Model.LanguageId, typeId = item.EnumTypeId}))
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

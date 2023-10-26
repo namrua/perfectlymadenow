@@ -1,0 +1,68 @@
+﻿@model ProfileDetail
+@{
+    ViewBag.Title = CommonResources.MenuCommonProfiles;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CommonProfiles;
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.Profile, TabItemId.ProfileDetail, new { id = Model.ProfileId });
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Link(CommonResources.Edit, ButtonStyle.Primary, Url.Action("Edit", new { id = Model.ProfileId }))
+    @bg.Command(CommonResources.Delete, ButtonStyle.Primary, !Model.CanDelete, new { id = "delete-button" })
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Index"))
+}
+
+<div class="row">
+
+    <div class="col-xl-6 align-content-start">
+
+        <h5>Profile</h5>
+
+        <dl class="row dl-compact">
+
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Name)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Name)</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Moniker)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Moniker)</dd>
+            <dt class="col-sm-4">Homepage</dt>
+            <dd class="col-sm-8">
+                <a href="@Url.Action("Index", "Home", new {id = Model.Moniker})" target="_blank">
+                    @Url.Action("Index", "Home", new {id = Model.Moniker }, Request.Url.Scheme)
+                </a>
+            </dd>
+
+        </dl>
+
+    </div>
+
+</div>
+
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function() {
+
+            // DELETE FUNCTIONALITY
+
+            // registration helper
+            var requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("delete", "@Url.Action("Delete")");
+
+            // connect delete-button
+            $("#delete-button").click(function() {
+                var confirmed = confirm(
+                    "@TextHelper.ToHtmlString($"Are you sure to delete profile {Model.Name}?")");
+                if (!confirmed) return;
+                requestHelper.executePost("delete", { id: @Model.ProfileId });
+            });
+
+        }
+
+    </script>
+
+}

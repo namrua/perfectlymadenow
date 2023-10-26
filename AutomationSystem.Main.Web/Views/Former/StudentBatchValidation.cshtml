@@ -1,0 +1,111 @@
+﻿@model BatchUploadDetail<FormerStudentDetail>
+@{
+    IContextManager cm = ContextHelper.GetContextManager(ViewBag);
+    var pushContext = cm.UpdateBacks().Get();
+    var currentContext = cm.Get();
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Command("Complete validation", ButtonStyle.Primary, false, new { id = "complete-button" })
+    @bg.Command("Discard batch upload", ButtonStyle.Primary, false, new { id = "discard-button" })
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, cm.GetBackUrl(Url.Action("StudentUpload", new { id = Model.BatchUpload.ParentEntityId })))
+}
+
+<h4>Validation of batch upload</h4>
+@{
+    Html.RenderPartial("~/Views/Shared/BatchUploads/_BatchUploadDetail.cshtml", Model.BatchUpload);
+}
+
+
+@*List of updated former students*@
+@if (Model.Items.Count == 0)
+{
+    <p>
+        <em>@CommonResources.NoRecords</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.Items[0].Entity.Address.FullName)</th>
+                <th>@Html.DisplayNameFor(x => x.Items[0].Entity.Address)</th>
+                <th>@CommonResources.Contact</th>
+                <th>@Html.DisplayNameFor(x => x.Items[0].ValidationMessages)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items.OrderBy(x => x.IsValid))
+            {
+                <tr class="@CssClassHelper.New().AddIf(!item.IsValid, "table-warning").Render()">
+                    <td>@Html.DisplayFor(x => item.Entity.Address.FullName)</td>
+                    <td>
+                        @Html.DisplayFor(x => item.Entity.Address.FullStreet)<br />
+                        @Html.DisplayFor(x => item.Entity.Address.FullCity)<br />
+                        @Html.DisplayFor(x => item.Entity.Address.Country)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(x => item.Entity.Email)
+                        @if (!string.IsNullOrEmpty(item.Entity.Phone))
+                        {
+                            <br />
+                            @Html.DisplayFor(x => item.Entity.Phone)
+                        }
+                    </td>
+                    <td>
+                        <em>                                                       
+                            @TextHelper.GetValidationMessage(item.ValidationMessages)                            
+                        </em>
+                    </td>
+                    <td>
+                        @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                        {
+                            @bg.Link(CommonResources.Edit, ButtonStyle.Primary, Url.Action("StudentBatchItemEdit", new { id = item.BatchUploadItemId, context = pushContext }))
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // registration helper
+            var requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("complete", "@Url.Action("StudentBatchCompleteValidation", new { id = Model.BatchUpload.BatchUploadId, context = currentContext })");
+            requestHelper.addAction("discard", "@Url.Action("StudentBatchDiscard", new { id = Model.BatchUpload.BatchUploadId, context = currentContext })");
+
+            var confirmationText = "@(Model.Items.Any(x => !x.IsValid)
+                                         ? "Are you sure to complete validation (all invalid students will be removed)?"
+                                         : "Are you sure to complete validation?")";
+
+            // connect complete-button
+            $("#complete-button").click(function () {
+
+                var confirmed = confirm(confirmationText);
+                if (!confirmed) return;
+                requestHelper.executePost("complete");
+            });
+
+            // connect discard-button
+            $("#discard-button").click(function () {
+                var confirmed = confirm("@Html.Raw($"Are you sure to discard former student batch {Model.BatchUpload.Name}?")");
+                if (!confirmed) return;
+                requestHelper.executePost("discard");
+            });
+
+        }
+
+    </script>
+
+}

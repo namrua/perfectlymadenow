@@ -1,0 +1,189 @@
+﻿@model FormerStudentsForList
+@{
+    IContextManager cm = ContextHelper.GetContextManager(ViewBag);
+    var pushContext = cm.UpdateBacks().Get();
+    var currentContext = cm.Get();
+
+    var countryId = Model.Filter.Address.CountryId ?? 0;
+    var selectedCountry = Model.Countries.FirstOrDefault(x => x.Id == (int)countryId)?.Description;
+    var formerContext = cm.GetCustomContext<FormerContext>();
+}
+
+
+@if (formerContext.Base != FormerBasePages.Students)
+{
+    using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+    {
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, cm.GetBackUrl(Url.Action("Student")))
+    }
+}
+
+
+<form id="filterForm" class="alert alert-info" method="get" action="@Url.Action("Student")">
+
+    <div class="row">
+
+        <div class="form-group col-md-6 col-lg-4">
+            @Html.LabelFor(x => x.Filter.Class.FromDate)
+            @Html.EditorFor(x => x.Filter.Class.FromDate)
+        </div>
+
+        <div class="form-group col-md-6 col-lg-4">
+            @Html.LabelFor(x => x.Filter.Class.ToDate)
+            @Html.EditorFor(x => x.Filter.Class.ToDate)
+        </div>
+
+        <div class="form-group col-md-6 col-lg-4">
+            @Html.LabelFor(x => x.Filter.Class.Location)
+            @Html.EditorFor(x => x.Filter.Class.Location)
+        </div>
+
+        <div class="form-group col-md-6 col-lg-4">
+            @Html.LabelFor(x => x.Filter.Class.ClassTypeId)
+            @Html.EditorFor(x => x.Filter.Class.ClassTypeId, new { Items = Model.ClassTypes.Select(x => DropDownItem.Item((ClassTypeEnum)x.Id, x.Description)) })
+        </div>
+
+    </div>
+
+    <hr />
+
+    <div class="row">
+
+        <div class="form-group col-md-6 col-lg-4">
+            @Html.LabelFor(x => x.Filter.Address.FirstName)
+            @Html.EditorFor(x => x.Filter.Address.FirstName)
+        </div>
+
+        <div class="form-group col-md-6 col-lg-4">
+            @Html.LabelFor(x => x.Filter.Address.LastName)
+            @Html.EditorFor(x => x.Filter.Address.LastName)
+        </div>
+
+        <div class="form-group col-md-6 col-lg-4">
+            @Html.LabelFor(x => x.Filter.Contact)
+            @Html.EditorFor(x => x.Filter.Contact)
+        </div>
+
+        <div class="form-group col-md-6 col-lg-4">
+            @Html.LabelFor(x => x.Filter.Address.Street)
+            @Html.EditorFor(x => x.Filter.Address.Street)
+        </div>
+
+        <div class="form-group col-md-6 col-lg-4">
+            @Html.LabelFor(x => x.Filter.Address.CityState)
+            @Html.EditorFor(x => x.Filter.Address.CityState)
+        </div>
+
+        <div class="form-group col-md-6 col-lg-4">
+            @Html.LabelFor(x => x.Filter.Address.CountryId)
+            @Html.EditorFor(x => x.Filter.Address.CountryId, new { Text = selectedCountry })
+        </div>
+
+    </div>
+
+    @Html.HiddenConstant("search", true)
+    @Html.HiddenConstant("context", currentContext)
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.FilterGroup))
+    {
+        @bg.Submit(CommonResources.Search, ButtonStyle.FilterPrimary)
+        @bg.Command(CommonResources.Clear, ButtonStyle.FilterNormal, false, new { id = "clear-button" })
+    }
+
+</form>
+
+@*List of former students*@
+@if (Model.Items.Count == 0)
+{
+    if (Model.WasSearched)
+    {
+        <p>
+            <em>@CommonResources.NoRecords</em>
+        </p>
+    }
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.Items[0].Address.FullName)</th>
+                <th>@Html.DisplayNameFor(x => x.Items[0].Address)</th>
+                <th>@CommonResources.Contact</th>
+                <th>@Html.DisplayNameFor(x => x.Items[0].Class)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(x => item.Address.FullName)</td>
+                    <td>
+                        @Html.DisplayFor(x => item.Address.FullStreet)<br />
+                        @Html.DisplayFor(x => item.Address.FullCity)<br />
+                        @Html.DisplayFor(x => item.Address.Country)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(x => item.Email)
+                        @if (!string.IsNullOrEmpty(item.Phone))
+                        {
+                            <br />
+                            @Html.DisplayFor(x => item.Phone)
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(x => item.Class.ClassDate)<br />
+                        @Html.DisplayFor(x => item.Class.Location)<br />
+                        @Html.DisplayFor(x => item.Class.ClassType)<br />
+                    </td>
+                    <td>
+                        @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                        {
+                            @bg.Link(CommonResources.Detail, ButtonStyle.Primary, Url.Action("StudentDetail", new { id = item.FormerStudentId, context = pushContext }))
+                            @bg.Link("Class detail", ButtonStyle.Normal, Url.Action("ClassDetail", new { id = item.Class.FormerClassId, context = pushContext }))
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // INITIALIZE CONTROLS
+
+            @Html.TypeaheadDropDownSource("countriesSource", Model.Countries.Select(x => PickerItem.Item((CountryEnum)x.Id, x.Description)))
+
+            var fromDate = new CorabeuControl.DateTimePicker("class-fromDate", "Class.FromDate", { format: "MMMM DD, YYYY" });
+            var toDate = new CorabeuControl.DateTimePicker("class-toDate", "Class.ToDate", { format: "MMMM DD, YYYY" });
+            var location = new CorabeuControl.TextBox("class-location", "Class.Location");
+            var classTypeId = new CorabeuControl.DropDownList("class-classTypeId", "Class.ClassTypeId");
+
+            var contact = new CorabeuControl.TextBox("contact", "Contact");
+            var firstName = new CorabeuControl.TextBox("address-firstName", "Address.FirstName");
+            var lastName = new CorabeuControl.TextBox("address-lastName", "Address.LastName");
+            var street = new CorabeuControl.TextBox("address-street", "Address.Street");
+            var cityState = new CorabeuControl.TextBox("address-cityState", "Address.CityState");
+            var countryId = new CorabeuControl.TypeaheadDropDownInput("address-countryId", "Address.CountryId", countriesSource);
+
+            var filterControls = [fromDate, toDate, location, classTypeId, contact, firstName, lastName, street, cityState, countryId];
+
+            // connect delete-button
+            $("#clear-button").click(function () {
+                $.each(filterControls, function(index, control) {
+                    control.setDefaultValue();
+                });
+            });
+
+        }
+
+    </script>
+
+}

@@ -1,0 +1,216 @@
+﻿@model RegistrationDetailPageModel
+@{
+    ViewBag.Title = CommonResources.TitleCoordinatedRegistrations;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.Registration, TabItemId.RegistrationDetail,
+        new { id = Model.Registration.ClassRegistrationId });
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+
+    IContextRenderer cm = ContextHelper.GetContextManager(ViewBag);
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    if (Model.FullState.IsReviewed.HasValue && Model.FullState.ApprovementTypeId == ApprovementTypeEnum.ManualReview)
+    {
+        @bg.Command("Send payment request", ButtonStyle.Primary, !Model.CanApprove, new { id = "payment-button" })
+        @bg.Command("Approve without payment", ButtonStyle.Primary, !Model.CanApprove, new { id = "approve-without-button" })
+    }
+    else
+    {
+        @bg.Command(CommonResources.Approve, ButtonStyle.Primary, !Model.CanApprove, new { id = "approve-button" })
+    }
+    @bg.Command(CommonResources.Cancel, ButtonStyle.Primary, !Model.CanCancel, new { id = "cancel-button" })
+    @bg.Command(CommonResources.Delete, ButtonStyle.Primary, !Model.CanDelete, new { id = "delete-button" })
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Students", "Class", new { id = Model.Class.ClassId }))
+}
+
+@if (Model.RegistrationCancelTemplate != null)
+{
+    var template = Model.RegistrationCancelTemplate;
+    var emailContext = EmailTemplateTextContext.New()
+        .AddTitleAndMenuItem(ViewBag.Title, ViewBag.ActiveMainMenuItemId)
+        .AddParameterEntity(EntityTypeEnum.MainClassRegistration, Model.Registration.ClassRegistrationId)
+        .AddTestEmailEnity(EntityTypeEnum.MainClassRegistration, Model.Registration.ClassRegistrationId);
+
+
+    <div class="row">
+
+        <div class="col-xl-6">
+
+            <h5>Cancelation of registration</h5>
+
+            <p>
+                Registration is ready for cancelation. Edit and send cancelation email, please.
+            </p>
+
+
+            <dl class="align-content-start row dl-compact">
+                <dt class="col-sm-4">@Html.DisplayNameFor(x => x.RegistrationCancelTemplate.Language)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(x => x.RegistrationCancelTemplate.Language)</dd>
+                <dt class="col-sm-4">@Html.DisplayNameFor(x => x.RegistrationCancelTemplate.Subject)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(x => x.RegistrationCancelTemplate.Subject)</dd>
+            </dl>
+
+        </div>
+
+    </div>
+
+    using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Command("Send and cancel", ButtonStyle.Primary, false, new { id = "send-button" })
+        @bg.Command("Cancel without notification", ButtonStyle.Primary, false, new { id = "cancel-without-notification-button" })
+        @bg.Command("Discard", ButtonStyle.Primary, false, new { id = "discard-button" })
+        @bg.Link("Edit email", ButtonStyle.Normal, Url.Action("EditText", "Email",
+                                     new { id = template.EmailTemplateId, context = cm.UpdateCustomContext(emailContext).UpdateBacks().Get() }))
+    }
+
+    <hr />
+}
+
+<div class="badge-title">
+    <h4>@Model.Registration.Name</h4>
+    @Html.RegistrationStateBadge(Model.Registration.RegistrationState)
+</div>
+
+
+<div class="row">
+
+    <dl class="col-12 row dl-single-column-xl dl-compact">
+        <dt class="col-sm-4 col-xl-2">@Html.DisplayNameFor(x => x.Class.ClassTitle)</dt>
+        <dd class="col-sm-8 col-xl-10">@Html.DisplayFor(x => x.Class.ClassTitle)</dd>
+        <dt class="col-sm-4 col-xl-2">@Html.DisplayNameFor(x => x.Registration.RegistrationType)</dt>
+        <dd class="col-sm-8 col-xl-10">@Html.DisplayFor(x => x.Registration.RegistrationType)</dd>
+        <dt class="col-sm-4 col-xl-2">@Html.DisplayNameFor(x => x.Registration.ApprovementType)</dt>
+        <dd class="col-sm-8 col-xl-10">@Html.DisplayFor(x => x.Registration.ApprovementType)</dd>
+
+        @if (Model.Registration.IsReviewed.HasValue)
+        {
+            <dt class="col-sm-4 col-lg-2">@Html.DisplayNameFor(x => x.Registration.IsReviewed)</dt>
+            <dd class="col-sm-8 col-lg-10">
+                @if (!Model.Registration.IsReviewed.Value)
+                {
+                    <span class="warning-text"><em>Registration is not reviewed.</em></span>
+                }
+                else
+                {
+                    @:<em>Registration is reviewed.</em>
+                }
+            </dd>
+        }
+    </dl>
+
+    <dl class="col-xl-6 align-content-start row dl-compact">
+
+        <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Registration.Email)</dt>
+        <dd class="col-sm-8">@Html.DisplayFor(x => x.Registration.Email)</dd>
+        <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Registration.Country)</dt>
+        <dd class="col-sm-8">@Html.DisplayFor(x => x.Registration.Country)</dd>
+        <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Registration.Language)</dt>
+        <dd class="col-sm-8">@Html.DisplayFor(x => x.Registration.Language)</dd>
+
+    </dl>
+
+    <dl class="col-xl-6 align-content-start row dl-compact">
+
+        <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Registration.Created)</dt>
+        <dd class="col-sm-8">@Html.DisplayFor(x => x.Registration.Created)</dd>
+        <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Registration.Approved)</dt>
+        <dd class="col-sm-8">@Html.DisplayFor(x => x.Registration.Approved)</dd>
+        <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Registration.Canceled)</dt>
+        <dd class="col-sm-8">@Html.DisplayFor(x => x.Registration.Canceled)</dd>
+
+    </dl>
+
+</div>
+
+
+
+@section scripts
+{
+
+<script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // DELETE FUNCTIONALITY
+
+            // registration helper
+            var requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("approve", "@Url.Action("Approve", new { id = Model.Registration.ClassRegistrationId })");
+            requestHelper.addAction("payment", "@Url.Action("SendPayment", new { id = Model.Registration.ClassRegistrationId })");
+            requestHelper.addAction("approve", "@Url.Action("Approve", new { id = Model.Registration.ClassRegistrationId })");
+            requestHelper.addAction("cancel", "@Url.Action("PrepareCancel", new { id = Model.Registration.ClassRegistrationId })");
+            requestHelper.addAction("delete", "@Url.Action("Delete", new { id = Model.Registration.ClassRegistrationId })");
+            requestHelper.addAction("send", "@Url.Action("Cancel", new { id = Model.Registration.ClassRegistrationId })");
+            requestHelper.addAction("discard", "@Url.Action("DiscardCancelation", new { id = Model.Registration.ClassRegistrationId })");
+            requestHelper.addAction("cancelWithoutNotif", "@Url.Action("CancelWithoutNotification", new { id = Model.Registration.ClassRegistrationId })");
+
+
+
+
+            // connect approve-button
+            $("#approve-button").click(function () {
+                var confirmed = confirm("@Html.Raw($"Are you sure to approve registration {Model.Registration.Name}?")");
+                if (!confirmed) return;
+                requestHelper.executePost("approve");
+            });
+
+            // connect discard-button
+            $("#approve-without-button").click(function () {
+                var confirmed = confirm("@Html.Raw($"Are you sure to approve registration {Model.Registration.Name} WITHOUT PAYMENT?")");
+                if (!confirmed) return;
+                requestHelper.executePost("approve");
+            });
+
+            // connect discard-button
+            $("#payment-button").click(function () {
+                var confirmed = confirm("@Html.Raw($"Are you sure to send payment request to the {Model.Registration.Name}?")");
+                if (!confirmed) return;
+                requestHelper.executePost("payment");
+            });
+
+            // connect delete-button
+            $("#cancel-button").click(function () {
+                var confirmed = confirm("@Html.Raw($"Are you sure to cancel registration {Model.Registration.Name}?")");
+                if (!confirmed) return;
+                requestHelper.executePost("cancel");
+            });
+
+            // connect cancelWithoutNotif-button
+            $("#cancel-without-notification-button").click(function () {
+                var confirmed = confirm("@Html.Raw($"Are you sure to cancel registration without sending email to {Model.Registration.Name}?")");
+                if (!confirmed) return;
+                requestHelper.executePost("cancelWithoutNotif");
+            });
+
+            // connect delete-button
+            $("#delete-button").click(function () {
+                var confirmed = confirm("@Html.Raw($"Are you sure to delete registration {Model.Registration.Name}?")");
+                if (!confirmed) return;
+                requestHelper.executePost("delete");
+            });
+
+            // connect send-button
+            $("#send-button").click(function () {
+                var confirmed = confirm("@Html.Raw($"Are you sure to send cancelation email and cancel registration {Model.Registration.Name}?")");
+                if (!confirmed) return;
+                requestHelper.executePost("send");
+            });
+
+            // connect discard-button
+            $("#discard-button").click(function () {
+                var confirmed = confirm("@Html.Raw($"Are you sure to discard cancelation email?")");
+                if (!confirmed) return;
+                requestHelper.executePost("discard");
+            });
+
+
+
+
+        }
+
+</script>
+
+}

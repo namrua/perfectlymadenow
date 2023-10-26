@@ -1,0 +1,229 @@
+﻿@model ContactListPageModel
+@{
+    ViewBag.Title = CommonResources.MenuCoordinatorContacts;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorContacts;
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Command(CommonResources.NotifyStudents, ButtonStyle.Primary, false, new { id = "notify-button" });
+}
+
+<form id="contactFilterForm" class="alert alert-info" method="get" action="@Url.Action("Index")">
+
+    @Html.HiddenConstant("search", true)
+
+    <div class="row">
+
+        <div class="form-group col-md-6 col-lg-4">
+            @Html.LabelFor(x => x.Filter.ProfileId)
+            @Html.EditorFor(x => x.Filter.ProfileId, new { Items = Model.Profiles })
+        </div>
+
+        <div class="form-group col-md-6 col-lg-4 padded-checkbox">
+            @Html.EditorFor(x => x.Filter.IncludeDisabledContacts)
+        </div>
+
+    </div>
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.FilterGroup))
+    {
+        @bg.Submit(CommonResources.Search, ButtonStyle.FilterPrimary)
+        @bg.Command(CommonResources.Clear, ButtonStyle.FilterNormal, false, new { id = "clear-button" });
+    }
+
+</form>
+
+@if (Model.Items.Count == 0)
+{
+    if (Model.WasSearched)
+    {
+        <p>
+            <em>@CommonResources.NoRecords</em>
+        </p>
+    }
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th><input id="select-all" type="checkbox" /> Select all</th>
+                <th>@Html.DisplayNameFor(x => x.Items[0].Email)</th>
+                <th>@Html.DisplayNameFor(x => x.Items[0].Name)</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @{
+            var rowIndex = 0;
+        }
+        @foreach (var item in Model.Items.OrderBy(x => x.Email))
+        {
+            <tr id="@TextHelper.DecorateName("row", index: rowIndex)" class="@CssClassHelper.New().AddIf(item.IsDisabled, "table-secondary").Render()">
+
+                <td>
+                    @Html.TableCheckBox("SelectedEmails", item.Email, item.IsSelected, item.IsDisabled,
+                        new RouteValueDictionary {{"class", "selectable-contact"}, {"data-formerStudentId", item.FormerStudentId}})
+                </td>
+                <td>@Html.DisplayFor(x => item.Email)</td>
+                <td><a href="@Url.Action("StudentDetail", "Former", new {id = item.FormerStudentId})" target="_blank">@Html.DisplayFor(x => item.Name)</a></td>
+                <td>
+                    @Html.LoaderSmall(TextHelper.DecorateName("loader-small", index: rowIndex), "spinner-small")
+                </td>
+                <td>
+                    @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                    {
+                        @bg.Command(
+                            item.IsDisabled ? CommonResources.EnableContact : CommonResources.DisableContact,
+                            "contact-enabling",
+                            ButtonStyle.Primary,
+                            false,
+                            item.IsDisabled ? "enable" : "disable",
+                            rowIndex,
+                            new RouteValueDictionary {{"data-email", item.Email}})
+                    }
+                </td>
+
+            </tr>
+            rowIndex++;
+        }
+        </tbody>
+
+    </table>
+}
+
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function() {
+
+            function contactResolver(_email, _rowIndex, _isEnable) {
+                var url = _isEnable ? "@Url.Action("EnableContact")" : "@Url.Action("DisableContact")";
+                var loaderSmall = $("#loader-small-" + _rowIndex);
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: { Email: _email },
+                    beforeSend: function() {
+                        loaderSmall.show();
+                    },
+                    complete: function() {
+                        loaderSmall.hide();
+                    },
+                    error: function(_response) {
+                        AutomationSystem.createAdminMessage("alert-warning", _response.status + " " + _response.statusText);
+                    },
+                    success: function() {
+                        if (_isEnable) {
+                            enableContact(_rowIndex);
+                        } else {
+                            disableContact(_rowIndex);
+                        }
+                    }
+                });
+            };
+
+            function enableContact(_rowIndex) {
+                var row = $("#row-" + _rowIndex);
+                row.removeClass("table-secondary");
+
+                var button = row.find(".command-contact-enabling");
+                button.html("@CommonResources.DisableContact");
+                button.attr('data-command', 'disable');
+
+                var checkbox = row.find('.selectable-contact');
+                checkbox.prop('disabled', false);
+            }
+
+            function disableContact(_rowIndex) {
+                var row = $("#row-" + _rowIndex);
+                row.addClass("table-secondary");
+
+                var button = row.find(".command-contact-enabling");
+                button.html("@CommonResources.EnableContact");
+                button.attr('data-command', 'enable');
+
+                var checkbox = row.find('.selectable-contact');
+                checkbox.prop('disabled', true);
+                checkbox.prop('checked', false);
+            }
+
+            $(".command-contact-enabling").click(function(_event) {
+                _event.preventDefault();
+                var sender = $(this);
+                var id = sender.attr('data-id');
+                var email = sender.attr('data-email');
+                var command = sender.attr('data-command');
+                switch (command) {
+                case "enable":
+                    contactResolver(email, id, true);
+                    break;
+                case "disable":
+                    contactResolver(email, id, false);
+                    break;
+                default:
+                }
+
+            });
+
+            var profileId = new CorabeuControl.DropDownList("profileId", "ProfileId");
+            var filterControls = [new CorabeuControl.CheckBox("includeDisabledContacts", "includeDisabledContacts")];
+
+            var requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("notify", "@Url.Action("CreateContactList")");
+
+            $("#clear-button").click(function() {
+                $.each(filterControls,
+                    function(index, control) {
+                        control.setDefaultValue();
+                    });
+            });
+
+            $("#select-all").click(function() {
+
+                var checked = this.checked;
+                $(':checkbox.selectable-contact').each(function() {
+                    if (!$(this).prop('disabled')) {
+                        this.checked = checked;
+                    }
+                });
+            });
+
+            $("#notify-button").click(function() {
+                var body = {
+                    profileId: @Model.Filter.ProfileId
+                }
+                var index = 0;
+                var anyChecked = false;
+                $(':checkbox.selectable-contact').each(function() {
+                    var checkbox = $(this);
+                    if (!checkbox.prop('checked')) {
+                        return;
+                    }
+
+                    anyChecked = true;
+                    var id = checkbox.attr('data-formerStudentId');
+                    var email = checkbox.val();
+                    body["contactListItems[" + index + "].FormerStudentId"] = id;
+                    body["contactListItems[" + index + "].Email"] = email;
+                    
+                    index ++;
+                });
+
+                if (!anyChecked) {
+                    alert("No contact is selected.");
+                    return;
+                }
+
+                requestHelper.executePost("notify", body);
+            });
+
+        }
+
+    </script>
+}

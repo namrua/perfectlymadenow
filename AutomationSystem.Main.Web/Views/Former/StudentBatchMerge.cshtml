@@ -1,0 +1,122 @@
+﻿@model BatchUploadDetail<FormerStudentDetail>
+@{
+    IContextManager cm = ContextHelper.GetContextManager(ViewBag);   
+    var currentContext = cm.Get();
+
+    var isDiscardingDisabled = Model.BatchUpload.IsProcessed || Model.BatchUpload.BatchUploadStateId == BatchUploadStateEnum.Discarded;
+
+    // determines whether operation is disabled for given item (cannot update when there is no pair entity)
+    bool IsOperationDisabled(BatchUploadItemListItem<FormerStudentDetail> item, BatchUploadOperationTypeEnum operation) 
+        => !item.PairEntityId.HasValue && operation == BatchUploadOperationTypeEnum.Update;
+}
+
+
+<form id="mergeForm" method="post" action="@Url.Action("StudentBatchCompleteMerge", new { id = Model.BatchUpload.BatchUploadId, context = currentContext })">
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+    {
+        @bg.Command("Complete merging", ButtonStyle.Primary, false, new { id = "complete-button" })
+        @bg.Command("Discard batch upload", ButtonStyle.Primary, isDiscardingDisabled, new { id = "discard-button" })
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, cm.GetBackUrl(Url.Action("StudentUpload", new { id = Model.BatchUpload.ParentEntityId })))
+    }
+
+    <h4>Merging of batch with former class</h4>
+    @{
+        Html.RenderPartial("~/Views/Shared/BatchUploads/_BatchUploadDetail.cshtml", Model.BatchUpload);
+    }
+
+    @*List of updated former students*@
+    @if (Model.Items.Count == 0)
+    {
+        <p>
+            <em>@CommonResources.NoRecords</em>
+        </p>
+    }
+    else
+    {
+        <table class="table table-hover table-sm">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(x => x.Items[0].Entity.Address.FullName)</th>
+                    <th>@Html.DisplayNameFor(x => x.Items[0].Entity.Address)</th>
+                    <th>@CommonResources.Contact</th>
+                    <th>@Html.DisplayNameFor(x => x.Items[0].BatchUploadOperationType)</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items.OrderBy(x => !x.PairEntityId.HasValue))
+                {
+                    <tr class="@CssClassHelper.New().AddIf(item.PairEntityId.HasValue, "table-warning").Render()">
+                        <td>@Html.DisplayFor(x => item.Entity.Address.FullName)</td>
+                        <td>
+                            @Html.DisplayFor(x => item.Entity.Address.FullStreet)<br />
+                            @Html.DisplayFor(x => item.Entity.Address.FullCity)<br />
+                            @Html.DisplayFor(x => item.Entity.Address.Country)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(x => item.Entity.Email)
+                            @if (!string.IsNullOrEmpty(item.Entity.Phone))
+                            {
+                                <br />
+                                @Html.DisplayFor(x => item.Entity.Phone)
+                            }
+                        </td>
+                        <td>
+                            @{
+                                var operationName = TextHelper.DecorateName(BatchUploadHelper.batchItemOperationTypePrefix, null, item.BatchUploadItemId);
+                                foreach (var operation in Model.BatchUploadOperationTypes)
+                                {
+                                    <input type="radio" name="@operationName" value="@operation.BatchUploadOperationTypeId"
+                                           @HtmlPropertyHelper.New().AddIf(operation.BatchUploadOperationTypeId == item.BatchUploadOperationTypeId, "checked").Render()
+                                           @HtmlPropertyHelper.New().AddIf(IsOperationDisabled(item, operation.BatchUploadOperationTypeId), "disabled").Render()> @operation.Name<br/>
+                                }
+                            }                            
+                        </td>
+                        <td>
+                            @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                            {
+
+                                @bg.Link("Matched student", ButtonStyle.Primary, Url.Action("StudentDetail", new { id = item.PairEntityId }),
+                                              !item.PairEntityId.HasValue, new { target = "_blank" })
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+</form>
+
+
+@section scripts
+{
+
+<script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // registration helper
+            var requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("discard", "@Url.Action("StudentBatchDiscard", new { id = Model.BatchUpload.BatchUploadId, context = currentContext })");
+
+            // connects complete-button
+            $("#complete-button").click(function () {
+                var confirmed = confirm("@Html.Raw($"Are you sure to complete merging and process student batch {Model.BatchUpload.Name}?")");
+                if (!confirmed) return;
+                $("#mergeForm").submit();
+            });
+
+            // connects discard-button
+            $("#discard-button").click(function () {
+                var confirmed = confirm("@Html.Raw($"Are you sure to discard former student batch {Model.BatchUpload.Name}?")");
+                if (!confirmed) return;
+                requestHelper.executePost("discard");
+            });
+
+        }
+
+</script>
+
+}

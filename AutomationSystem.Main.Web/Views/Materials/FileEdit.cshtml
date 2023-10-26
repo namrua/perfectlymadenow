@@ -1,0 +1,74 @@
+﻿@model ClassMaterialFileForEdit
+@{
+    ViewBag.Title = CommonResources.MenuCoordinatorClasses;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+
+    var isNew = Model.Form.ClassMaterialFileId == 0;
+}
+
+<form id="fileForm" method="post" enctype="multipart/form-data" action="@Url.Action("FileEdit")">
+
+    @Html.EditorFor(x => x.Form.ClassId)
+    @Html.EditorFor(x => x.Form.ClassMaterialFileId)
+
+    <div class="row">
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.DisplayName)
+            @Html.EditorFor(x => x.Form.DisplayName)
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.LanguageId)
+            @Html.EditorFor(x => x.Form.LanguageId, new { Items = Model.Languages.Select(x => DropDownItem.Item((LanguageEnum)x.Id, x.Description)) })
+        </div>
+
+        <div class="form-group col-md-6">
+            <label for="pdfMaterial">PDF material</label><br />
+            <input type="file" class="form-control-file" name="PdfMaterial" id="pdfMaterial" aria-describedby="pdfMaterialHelp" />
+            <div id="@TextHelper.DecorateName("pdfMaterial", "error-placeholder")"></div>
+            <small id="pdfMaterialHelp" class="form-text text-muted">Only valid and unprotected .pdf files are accepted (up to 0.5GB).</small>
+        </div>
+
+    </div>
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save)
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Class", new { id = Model.Form.ClassId }))
+    }
+
+</form>
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function() {
+
+            // INITIALIZATION AND VALIDATION
+
+            var fileForm = new CorabeuControl.Form("fileForm");
+
+            var languageId = new CorabeuControl.DropDownList("languageId", "LanguageId");
+            var pdfMaterial = $("#pdfMaterial");
+
+            fileForm.validateControl($('#displayName'), "@Html.DisplayNameForJava(x => x.Form.DisplayName)", { required: true, maxlength: 128 });
+            fileForm.validateControl(languageId.element, "@Html.DisplayNameForJava(x => x.Form.LanguageId)", { notSelected: true });
+            fileForm.validateControl(pdfMaterial, "PDF material", { required: @(isNew ? "true" : "false") });
+
+            pdfMaterial.change(function () {
+                pdfMaterial.valid();
+            });
+
+            @if (ViewBag.TriggerValidation != null)
+            {
+                @:fileForm.valid();
+            }
+
+        }
+
+    </script>
+
+}

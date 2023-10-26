@@ -1,0 +1,113 @@
+﻿@model EmailTemplateDetail
+@{
+    ViewBag.Title = CommonResources.MenuCoreEmailTemplates;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoreEmailTemplates;
+}
+
+<h4>@MainTextHelper.GetEmailTemplateTitle(Model.Type, Model.Language)</h4>
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Link("Edit texts", ButtonStyle.Primary, Url.Action("EditText", new { id = Model.EmailTemplateId }))
+    @bg.Link("Edit metadata", ButtonStyle.Primary, Url.Action("EditMetadata", new { id = Model.EmailTemplateId }))
+    @bg.Command("Reset to default values", ButtonStyle.Primary, false, new { id = "reset-command" })
+    @bg.Command("Send test email", ButtonStyle.Normal, !Model.ValidationResult.IsValid, new { id = "send-command" })
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("List",
+        new { id = Model.Type.EmailTypeId, entityTypeId = Model.EmailTemplateEntityId.TypeId, entityId = Model.EmailTemplateEntityId.Id }))
+}
+
+<h5>Email text</h5>
+
+@if (!Model.ValidationResult.IsValid)
+{
+    <p class="alert alert-warning">
+        @TextHelper.GetValidationMessage(Model.ValidationResult.ValidationMessages)
+    </p>
+}
+
+<p>
+    <strong>@Html.DisplayNameFor(x => x.Subject)</strong><br />
+    @Html.DisplayFor(x => x.Subject)
+</p>
+
+<div class="paragraph">
+    <strong>@Html.DisplayNameFor(x => x.Body)</strong>
+    @Html.EditorFor(x => x.Body, new { NoErrorPlaceholder = true })
+</div>
+
+<h5>Email metadata</h5>
+
+<p>
+    <strong>@Html.DisplayNameFor(x => x.FillingNote)</strong><br />
+    @Html.DisplayFor(x => x.FillingNote)
+</p>
+
+<strong>@Html.DisplayNameFor(x => x.Parameters)</strong>
+@*List of parameters*@
+@if (Model.Parameters.Count == 0)
+{
+    <p>
+        <em>No records</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.Parameters[0].Name)</th>
+                <th>@Html.DisplayNameFor(x => x.Parameters[0].Description)</th>
+                <th>@Html.DisplayNameFor(x => x.Parameters[0].IsRequired)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Parameters)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(x => item.Name)</td>
+                    <td>@Html.DisplayFor(x => item.Description)</td>
+                    <td>@Html.DisplayFor(x => item.IsRequired)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // INITIALIZES COMPONENTS
+
+            // inits components
+            var textEditor = new CorabeuControl.AceTextInput("body", "Body", { mode: "ace/mode/html", theme: "ace/theme/crimson_editor" });
+            textEditor.disable();
+
+            // COMMANDS
+
+            // request helper
+            var requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("send", "@Url.Action("SendTestEmail")");
+            requestHelper.addAction("reset", "@Url.Action("ResetEmailTemplate")");
+
+
+            // handles sending of test email
+            $("#send-command").click(function () {
+                requestHelper.executePost("send", { id: @Model.EmailTemplateId });
+            });
+
+            // handles reset of email text
+            $("#reset-command").click(function () {
+                var confirmed = confirm("Reset discards curreant values. Do you really want to reset the email template to default values?");
+                if (!confirmed) return;
+                requestHelper.executePost("reset", { id: @Model.EmailTemplateId });
+            });
+
+        }
+
+    </script>
+
+}

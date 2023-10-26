@@ -1,0 +1,83 @@
+﻿@model ClassActionPageModel
+@{
+    ViewBag.Title = CommonResources.MenuCoordinatorClasses;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.Class, TabItemId.ClassActions, new { id = Model.Class.ClassId });
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.DropdownCommand(CommonResources.AddNew, ButtonStyle.Primary, "new-button", "new", !Model.ClassActionTypes.Any(), Model.ClassActionTypes)    
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Index"))
+}
+
+<div class="badge-title">
+    <h4>@Model.Class.ClassTitle</h4>
+    @Html.ClassCategoryBadge(Model.Class.ClassCategoryId)
+    @Html.ClassStateBadge(Model.Class.ClassState)
+</div>
+
+@*List of invitations*@
+@if (Model.ClassActions.Count == 0)
+{
+    <p>
+        <em>@CommonResources.NoRecords</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.ClassActions[0].ClassActionType)</th>
+                <th>@Html.DisplayNameFor(x => x.ClassActions[0].Processed)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ClassActions.OrderBy(x => x.IsProcessed).ThenBy(x => x.Processed))
+            {
+                <tr class="@CssClassHelper.New().AddIf(!item.IsProcessed, "table-warning").Render()">
+                    <td>@Html.DisplayFor(x => item.ClassActionType)</td>
+                    <td>@Html.DisplayFor(x => item.Processed)</td>
+                    <td>
+                        @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                        {
+                            @bg.Link(CommonResources.Detail, ButtonStyle.Primary, Url.Action("ActionDetail", "Class", new { id = item.ClassActionId }))
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // COMMAND FUNCTIONALITY
+
+            // registration helper
+            var requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("new", "@Url.Action("CreateAction", new { classId = Model.Class.ClassId })");
+
+            $(".command-new").click(function () {              
+                var sender = $(this);
+                var id = sender.attr("data-id");
+                requestHelper.executePost("new", { id: id });
+            });
+        }
+
+    </script>
+
+}
+
+
+

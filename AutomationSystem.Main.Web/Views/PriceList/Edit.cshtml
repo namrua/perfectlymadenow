@@ -1,0 +1,129 @@
+﻿@model PriceListForEdit
+
+@{
+    ViewBag.Title = CommonResources.MenuCommonPriceLists;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CommonPriceLists;
+
+    var currencyCode = Model.Currencies.First(x => x.Id == (int)Model.Form.CurrencyId).Name;
+}
+
+<form id="priceListForm" method="post" action="@Url.Action("Edit", "PriceList")">
+        
+    @Html.EditorFor(x => x.Form.PriceListId)
+    @Html.EditorFor(x => x.Form.PriceListTypeId)
+       
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.Name)
+            @Html.EditorFor(x => x.Form.Name)
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.CurrencyId)
+            @Html.EditorFor(x => x.Form.CurrencyId, new { Items = Model.Currencies.Select(x => DropDownItem.Item((CurrencyEnum)x.Id, MainTextHelper.GetCurrencyFullName(x.Description, x.Name))) })
+        </div>
+    </div>
+    
+    <h5>Items</h5>
+    
+    
+    @foreach (var item in Model.RegistrationTypeDescriptions)
+    {
+
+        <div class="row">
+            <div class="form-group col-md-6 changeable-right-addons">
+                <label>@item.Value</label>
+                
+                @switch (item.Key)
+                {
+                    case RegistrationTypeEnum.NewAdult:                        
+                        @Html.EditorFor(x => x.Form.NewAdult, new { RightAddonText = currencyCode })
+                        break;
+                    case RegistrationTypeEnum.NewAdultWeekOfClass:
+                        @Html.EditorFor(x => x.Form.NewAdultWeekOfClass, new { RightAddonText = currencyCode })
+                        break;
+                    case RegistrationTypeEnum.NewChild:
+                        @Html.EditorFor(x => x.Form.NewChild, new { RightAddonText = currencyCode })
+                        break;
+                    case RegistrationTypeEnum.ReviewAdult:
+                        @Html.EditorFor(x => x.Form.ReviewAdult, new { RightAddonText = currencyCode })
+                        break;
+                    case RegistrationTypeEnum.ReviewChild:
+                        @Html.EditorFor(x => x.Form.ReviewChild, new { RightAddonText = currencyCode })
+                        break;
+                    case RegistrationTypeEnum.WWA:
+                        @Html.EditorFor(x => x.Form.WWA, new { RightAddonText = currencyCode })
+                        break;                    
+                    case RegistrationTypeEnum.LectureRegistration:
+                        @Html.EditorFor(x => x.Form.LectureRegistration, new { RightAddonText = currencyCode })
+                        break;
+                    case RegistrationTypeEnum.MaterialRegistration:
+                        @Html.EditorFor(x => x.Form.MaterialRegistration, new { RightAddonText = currencyCode })
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException($"Unsupported registration type {item.Key}.");
+                }
+                
+            </div>
+        </div>
+
+    }   
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save)
+        if (Model.Form.PriceListId == 0)
+        {
+            @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Index", "PriceList"))
+        }
+        else
+        {
+            @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Detail", "PriceList", new { id = Model.Form.PriceListId }))
+        }
+    }
+</form>
+
+
+@section scripts
+{
+
+<script type="text/javascript">
+
+        var runPageScript = function() {
+
+            // VALIDATION AND INITIALIZATION
+
+            var priceListForm = new CorabeuControl.Form("priceListForm");
+
+            priceListForm.validateControl($("#name"), "@Html.DisplayNameFor(x => x.Form.Name)", { required: true, maxlength: 128 });
+
+
+            var currencyMap = { };
+            @foreach (var currency in Model.Currencies)
+            {
+                @:currencyMap['@((CurrencyEnum)currency.Id)'] = '@(currency.Name)';
+            }
+
+            var currencyId = new CorabeuControl.DropDownList("currencyId", "CurrencyId");
+            currencyId.onChange.subscribe(this, function () {
+
+                var currencyCode = currencyMap[currencyId.getValue()];
+                $('.changeable-right-addons').find('span.input-group-text').html(currencyCode);
+            });
+
+            @foreach (var item in Model.RegistrationTypeDescriptions)
+            {
+                @:priceListForm.validateControl($("#@TextHelper.GetIdFromName(item.Key.ToString())"), "@Html.Raw(item.Value)", { required: true, number: true, min: 0, max: 1000000 });
+            }
+
+            @if (ViewBag.TriggerValidation != null)
+            {
+                <text>priceListForm.valid();</text>
+            }
+        }
+
+</script>
+
+}

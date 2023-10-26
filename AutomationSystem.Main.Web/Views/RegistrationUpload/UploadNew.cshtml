@@ -1,0 +1,78 @@
+﻿@model RegistrationBatchUploadForEdit
+@{
+    ViewBag.Title = CommonResources.TitleCoordinatedRegistrations;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+}
+
+<form id="batchUploadForm" method="post" enctype="multipart/form-data" action="@Url.Action("UploadNew")">
+
+    @Html.EditorFor(x => x.Form.ParentEntityId)
+
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.Name)
+            @Html.EditorFor(x => x.Form.Name)
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.BatchUploadTypeId)
+            @Html.EditorFor(x => x.Form.BatchUploadTypeId, new { Items = Model.FileTypes.Select(x => DropDownItem.Item(x.BatchUploadTypeId, x.Description)) })
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="form-group col-md-6">
+            <label for="batchFile">Batch file</label><br />
+            <input type="file" name="BatchFile" id="batchFile" />
+            <div id="@TextHelper.DecorateName("batchFile", "error-placeholder")"></div>
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.RegistrationTypeId)
+            @Html.EditorFor(x => x.Form.RegistrationTypeId, new { Items = Model.RegistrationTypes.Select(x => DropDownItem.Item(x.Id, x.Description)) })
+        </div>
+    </div>
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save)
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Registrations", "Class", new { id = Model.Form.ParentEntityId }))
+    }
+
+</form>
+
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // INITIALIZATION AND VALIDATION
+
+            var batchUploadForm = new CorabeuControl.Form("batchUploadForm");
+
+            var batchUploadTypeId = new CorabeuControl.DropDownList("batchUploadTypeId", "BatchUploadTypeId");
+            var registrationTypeId = new CorabeuControl.DropDownList("registrationTypeId", "RegistrationTypeId");
+            var batchFile = $("#batchFile");
+
+            batchUploadForm.validateControl($("#name"), "@Html.DisplayNameForJava(x => x.Form.Name)", { required: true, maxlength: 64 });
+            batchUploadForm.validateControl(batchUploadTypeId.element, "@Html.DisplayNameForJava(x => x.Form.BatchUploadTypeId)", { notSelected: true });
+            batchUploadForm.validateControl(registrationTypeId.element, "@Html.DisplayNameForJava(x => x.Form.RegistrationTypeId)", { notSelected: true });
+            batchUploadForm.validateControl(batchFile, "Batch file", { required: true });
+
+            batchFile.change(function() {
+                batchFile.valid();
+            });
+
+            @if (ViewBag.TriggerValidation != null)
+            {
+                @:batchUploadForm.valid();
+            }
+
+        }
+
+    </script>
+
+}

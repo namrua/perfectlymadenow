@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Registrations\System\EmailPermissionResolvers\**" />
+    <EmbeddedResource Remove="Registrations\System\EmailPermissionResolvers\**" />
+    <None Remove="Registrations\System\EmailPermissionResolvers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.0" />
+    <PackageReference Include="Moq" Version="4.15.2" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AutomationSystem.Base.Contract\AutomationSystem.Base.Contract.csproj" />
+    <ProjectReference Include="..\AutomationSystem.Main.Core\AutomationSystem.Main.Core.csproj" />
+    <ProjectReference Include="..\AutomationSystem.Main.Model\AutomationSystem.Main.Model.csproj" />
+    <ProjectReference Include="..\AutomationSystem.Shared.Contract\AutomationSystem.Shared.Contract.csproj" />
+    <ProjectReference Include="..\PerfectlyMadeInc.DesignTools.Contract\PerfectlyMadeInc.DesignTools.Contract.csproj" />
+    <ProjectReference Include="..\PerfectlyMadeInc.Helpers\PerfectlyMadeInc.Helpers.csproj" />
+    <ProjectReference Include="..\PerfectlyMadeInc.WebEx.Contract\PerfectlyMadeInc.WebEx.Contract.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="CorabeuControl">
+      <HintPath>..\packages\CorabeuControl\CorabeuControl.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Registrations\System\EmailPermissionResolvers\" />
+  </ItemGroup>
+
+</Project>

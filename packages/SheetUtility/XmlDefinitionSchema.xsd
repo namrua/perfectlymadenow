@@ -1,0 +1,347 @@
+﻿<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!-- definition of attributes -->
+  <xs:attribute name="id" type="xs:string" />
+  <xs:attribute name="bind" type="xs:string" />
+  <xs:attribute name="positionX" type="xs:int"/>
+  <xs:attribute name="positionY" type="xs:int"/>
+  <xs:attribute name="verticalSpace" type="xs:int"/>
+  <xs:attribute name="templatePath" type="xs:string"/>
+  <xs:attribute name="fillingMethod" type="xs:string"/>
+  <xs:attribute name="rowCount" type="xs:int"/>
+  <xs:attribute name="columnCount" type="xs:int"/>
+  <xs:attribute name="blockId" type="xs:string"/>
+  <xs:attribute name="addLine" type="xs:boolean"/>
+  <xs:attribute name="type" type="xs:string"/>
+  <xs:attribute name="forceNewRows" type="xs:string" />
+  <xs:attribute name="left" type="xs:int"/>
+  <xs:attribute name="right" type="xs:int"/>
+  <xs:attribute name="top" type="xs:int"/>
+  <xs:attribute name="bottom" type="xs:int"/>
+  <xs:attribute name="merge" type="xs:boolean"/>
+  <xs:attribute name="backgroundColor" type="xs:string"/>
+  <xs:attribute name="textColor" type="xs:string"/>
+  <xs:attribute name="fontName" type="xs:string"/>
+  <xs:attribute name="size" type="xs:double"/>
+  <xs:attribute name="color" type="xs:string"/>
+  
+  <!-- complex types -->
+  <xs:complexType name="solidAlone">
+    <xs:sequence>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element ref="block" maxOccurs="unbounded" minOccurs="0"/>
+        <xs:element ref="condition" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:choice>
+    </xs:sequence>
+    <xs:attribute ref="id" use="required"/>
+    <xs:attribute ref="positionX" use="required"/>
+    <xs:attribute ref="positionY" use="required"/>
+    <xs:attribute ref="rowCount" use="optional" />
+    <xs:attribute ref="bind" use="optional"/>
+    <xs:attribute ref="forceNewRows" use="optional" />
+  </xs:complexType>
+
+  <xs:complexType name="solidGroup">
+    <xs:sequence>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element ref="block" maxOccurs="unbounded" minOccurs="0"/>
+        <xs:element ref="condition" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:choice>
+    </xs:sequence>
+    <xs:attribute ref="id" use="required"/>
+    <xs:attribute ref="positionX" use="optional"/>
+    <xs:attribute ref="positionY" use="optional"/>
+    <xs:attribute ref="rowCount" use="optional" />
+    <xs:attribute ref="bind" use="optional"/>
+    <xs:attribute ref="forceNewRows" use="optional" />
+  </xs:complexType>
+
+  <xs:complexType name="tableAlone">
+    <xs:sequence>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element ref="block" maxOccurs="unbounded" minOccurs="0"/>
+        <xs:element ref="condition" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:choice>
+    </xs:sequence>
+    <xs:attribute ref="id" use="required"/>
+    <xs:attribute ref="bind" use="required"/>
+    <xs:attribute ref="positionX" use="required"/>
+    <xs:attribute ref="positionY" use="required"/>
+    <xs:attribute ref="rowCount" use="required"/>
+    <xs:attribute ref="verticalSpace" use="optional"/>
+  </xs:complexType>
+
+  <xs:complexType name="tableGroup">
+    <xs:sequence>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element ref="block" maxOccurs="unbounded" minOccurs="0"/>
+        <xs:element ref="condition" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:choice>
+    </xs:sequence>
+    <xs:attribute ref="id" use="required"/>
+    <xs:attribute ref="bind" use="required"/>
+    <xs:attribute ref="positionX" use="optional"/>
+    <xs:attribute ref="positionY" use="optional"/>
+    <xs:attribute ref="rowCount" use="required"/>
+    <xs:attribute ref="verticalSpace" use="optional"/>
+  </xs:complexType>
+  
+  <!-- simple types -->
+  <xs:simpleType name="conditionType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ListNotEmpty" />
+      <xs:enumeration value="NeedNewRows" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="formatType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Number" />
+      <xs:enumeration value="Date" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="horizontalAlignType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Center" />
+      <xs:enumeration value="Left" />
+      <xs:enumeration value="Right" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="verticalAlignType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Bottom" />
+      <xs:enumeration value="Center" />
+      <xs:enumeration value="Top" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="fontType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Bold" />
+      <xs:enumeration value="Italic" />
+      <xs:enumeration value="Underline" />
+      <xs:enumeration value="Shadow" />
+      <xs:enumeration value="Strikethrough" />
+    </xs:restriction>
+  </xs:simpleType>
+  
+  <xs:simpleType name="borderType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None" />
+      <xs:enumeration value="Thick" />
+      <xs:enumeration value="Thin" />
+      <xs:enumeration value="Medium" />
+      <xs:enumeration value="Dotted" />
+      <xs:enumeration value="Hair" />
+      <xs:enumeration value="Dashed" />
+      <xs:enumeration value="Double" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="borderPositionType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Left" />
+      <xs:enumeration value="Right" />
+      <xs:enumeration value="Top" />
+      <xs:enumeration value="Bottom" />
+      <xs:enumeration value="Outside"/>
+      <xs:enumeration value="Inside"/>
+      <xs:enumeration value="InsideColumns"/>
+      <xs:enumeration value="InsideRows"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+
+  <!-- definition blocks -->
+  <xs:element name="blocks">
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element ref="textBlock" maxOccurs="unbounded" minOccurs="0"/>
+        <xs:element ref="cellFormatBlock" maxOccurs="unbounded" minOccurs="0"/>
+        <xs:element ref="formatBlock" maxOccurs="unbounded" minOccurs="0"/>
+        <xs:element ref="dataBlock" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="textBlock">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="textCell" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute ref="id" use="required"/>
+      <xs:attribute ref="rowCount" use="optional"/>
+      <xs:attribute ref="columnCount" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="cellFormatBlock">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="selection" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute ref="id" use="required"/>
+      <xs:attribute ref="rowCount" use="optional"/>
+      <xs:attribute ref="columnCount" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="formatBlock">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="formatCell" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute ref="id" use="required"/>
+      <xs:attribute ref="rowCount" use="optional"/>
+      <xs:attribute ref="columnCount" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="dataBlock">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="dataCell" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute ref="id" use="required"/>
+      <xs:attribute ref="rowCount" use="optional"/>
+      <xs:attribute ref="columnCount" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="dataCell">
+    <xs:complexType>
+      <xs:attribute ref="bind" use="required"/>
+      <xs:attribute ref="positionX" use="optional"/>
+      <xs:attribute ref="positionY" use="optional"/>
+      <xs:attribute ref="fillingMethod" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="selection">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="colors" maxOccurs="unbounded" minOccurs="0"/>
+        <xs:element ref="text" maxOccurs="unbounded" minOccurs="0"/>
+        <xs:element ref="borders" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute ref="left" use="required"/>
+      <xs:attribute ref="right" use="optional"/>
+      <xs:attribute ref="top" use="required"/>
+      <xs:attribute ref="bottom" use="optional"/>
+      <xs:attribute ref="merge" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="formatCell">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute ref="positionX" use="optional"/>
+          <xs:attribute ref="positionY" use="optional"/>
+          <xs:attribute name="type" type="formatType" use="required"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="textCell">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute ref="positionX" use="optional"/>
+          <xs:attribute ref="positionY" use="optional"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="condition">
+    <xs:complexType>
+      <xs:attribute name="type" type="conditionType" use="required"/>
+      <xs:attribute ref="bind" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="colors">
+    <xs:complexType>
+      <xs:attribute ref="backgroundColor" use="optional"/>
+      <xs:attribute ref="textColor" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="text">
+    <xs:complexType>
+      <xs:attribute ref="fontName" use="optional"/>
+      <xs:attribute ref="size" use="optional"/>
+      <xs:attribute name="type" type="fontType" use="optional"/>
+      <xs:attribute name="horizontalAlign" type="horizontalAlignType" use="optional"/>
+      <xs:attribute name="verticalAlign" type="verticalAlignType" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="borders">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="border" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="style" type="borderType" use="required"/>
+      <xs:attribute ref="color" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="border">
+    <xs:complexType>
+      <xs:attribute name="type" type="borderPositionType" use="required"/>
+      <xs:attribute name="style" type="borderType" use="optional"/>
+      <xs:attribute ref="color" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+  
+    
+  <!-- definition layout -->
+  <xs:element name="layout">
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element name="solid" type="solidAlone" maxOccurs="unbounded" minOccurs="0"/>
+        <xs:element name="table" type="tableAlone" maxOccurs="unbounded" minOccurs="0"/>
+        <xs:element ref="group" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="group">
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element name="solid" type="solidGroup" maxOccurs="unbounded" minOccurs="0"/>
+        <xs:element name="table" type="tableGroup" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:choice>
+      <xs:attribute ref="id" use="required"/>
+      <xs:attribute ref="positionX" use="required"/>
+      <xs:attribute ref="positionY" use="required"/>
+      <xs:attribute ref="verticalSpace" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="block">
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element ref="condition" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:choice>
+      <xs:attribute ref="blockId" use="required"/>
+      <xs:attribute ref="bind" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- definition -->
+  <xs:element name="definition">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="blocks"/>
+        <xs:element ref="layout"/>
+      </xs:sequence>
+      <xs:attribute ref="templatePath" use="required"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

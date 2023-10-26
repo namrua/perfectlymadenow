@@ -1,0 +1,56 @@
+﻿@model ClassMaterialForm
+@{
+    ViewBag.Title = CommonResources.MenuCoordinatorClasses;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+}
+
+<form id="materialForm" method="post" action="@Url.Action("ClassEdit")">
+    
+    @Html.EditorFor(x => x.ClassId)
+    
+    <div class="row">
+        
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.CoordinatorPassword)
+            @Html.EditorFor(x => x.CoordinatorPassword)
+        </div>
+        
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.AutomationLockTime)
+            @Html.EditorFor(x => x.AutomationLockTime)
+        </div>
+
+    </div>
+    
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save)
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Class", new { id = Model.ClassId }))
+    }
+
+</form>
+
+@section scripts
+{
+    
+    <script type="text/javascript">
+
+        var runPageScript = function() {
+
+            // INITIALIZATION AND VALIDATION
+
+            var materialForm = new CorabeuControl.Form("materialForm");
+            var automationLockTime = new CorabeuControl.DateTimePicker("automationLockTime", "AutomationLockTime");
+
+            materialForm.validateControl($("#coordinatorPassword"), "@Html.DisplayNameForJava(x => x.CoordinatorPassword)", { required: true, maxlength: 32 });
+
+            @if (ViewBag.TriggerValidation != null)
+            {
+                @:materialForm.valid();
+            }
+
+        }
+
+    </script>
+    
+}

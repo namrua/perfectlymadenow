@@ -1,0 +1,104 @@
+﻿@model NewProgramModel
+@{
+    ViewBag.Title = CommonResources.MenuCoordinatorPrograms;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorPrograms;   
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.DropdownCommand("Load programs", ButtonStyle.Primary, "load-button", "load", false, Model.Accounts)
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Index", "Program"))
+}
+
+@Html.LoaderLarge("loader-large", "spinner-large")
+
+<div id="list-placeholder"></div>
+
+@section scripts
+{
+
+  <script type="text/javascript">
+
+    var runPageScript = function() {
+
+      // AJAX CALLS
+
+      // executes loading of programs
+      function loadPrograms(_accountId) {
+        var url = "@Url.Action("LoadList")";
+        $.ajax({
+          url: url,
+          type: "POST",
+          data: { accountId: _accountId },
+          beforeSend: function() {
+            $("#list-placeholder").empty();
+            $("#loader-large").show();
+          },
+          complete: function() {
+            $("#loader-large").hide();
+          },
+          error: function(_response) {
+            $("#loader-large").hide();
+            AutomationSystem.createAdminMessage("alert-warning", _response.status + " " + _response.statusText);
+          },
+          success: function(_data) {
+            $("#list-placeholder").empty().append(_data);
+            initAddButtons(_accountId);
+          }
+        });
+      }
+
+      // executes loading of program
+      function loadProgram(_sender, _programOuterId, _accountId) {
+        var addUrl = "@Url.Action("Add", "Program")?programOuterId=" + _programOuterId + "&accountId=" + _accountId;
+        var loaderSelector = "#loader-small-" + _programOuterId;
+        $.ajax({
+          url: addUrl,
+          type: "POST",
+          beforeSend: function() {
+            $(loaderSelector).show();
+          },
+          complete: function() {
+            $(loaderSelector).hide();
+          },
+          error: function(_response) {
+            $(loaderSelector).hide();
+            AutomationSystem.createAdminMessage("alert-warning", _response.status + " " + _response.statusText);
+          },
+          success: function(data) {
+            AutomationSystem.createAdminMessage("alert-primary",
+              "Program " + _programOuterId + " was added to the system.");
+            var detailButton = $("#detail-" + _programOuterId);
+            detailButton.attr('href', '@Url.Action("Detail", "Program")?id=' + data);
+            detailButton.removeClass("disabled");
+            _sender.prop("disabled", true);
+          }
+        });
+      };
+
+
+      // EVENT HANDLING AND SUBSCRIPTION
+
+      $(".command-load").click(function(_event) {
+        _event.preventDefault();
+        var sender = $(this);
+        var id = sender.attr("data-id");
+        loadPrograms(id);
+      });
+
+
+      // initialize buttons
+      function initAddButtons(_accountId) {
+        $(".command-add").click(function(_event) {
+          _event.preventDefault();
+          var sender = $(this);
+          var programOuterId = sender.attr("data-id");
+          loadProgram(sender, programOuterId, _accountId);
+        });
+      }
+
+    }
+
+  </script>
+
+}

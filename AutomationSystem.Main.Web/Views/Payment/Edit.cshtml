@@ -1,0 +1,94 @@
+﻿@model MainPayPalKeyForEdit
+@{
+    ViewBag.Title = CommonResources.MenuCommonPayPalKeys;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CommonPayPalKeys;    
+}
+
+<form id="paypalForm" method="post" action="@Url.Action("Edit", "Payment")">
+
+    @Html.EditorFor(x => x.Form.PayPalKeyId)
+    @Html.EditorFor(x => x.Form.ProfileId)
+
+
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.Name)
+            @Html.EditorFor(x => x.Form.Name)
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.CurrencyId)
+            @Html.EditorFor(x => x.Form.CurrencyId, new { Items = Model.Currencies.Select(x => DropDownItem.Item((CurrencyEnum)x.Id, MainTextHelper.GetCurrencyFullName(x.Description, x.Name))) })
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.Environment)
+            @Html.EditorFor(x => x.Form.Environment, new
+            {
+                Items = new[] {DropDownItem.Item("production", "Production"), DropDownItem.Item("sandbox", "Sandbox")}
+            })
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.BraintreeToken)
+            @Html.EditorFor(x => x.Form.BraintreeToken)
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.EditorFor(x => x.Form.Active)
+        </div>
+    </div>
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save)
+        @bg.Command(CommonResources.Delete, ButtonStyle.Primary, !Model.CanDelete, new {id = "delete-button"})
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Index", "Payment"))
+    }
+</form>
+
+
+@section scripts
+{
+
+<script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // DELETE FUNCTIONALITY
+
+            var requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("delete", "@Url.Action("Delete", "Payment")");
+
+            $("#delete-button").click(function () {
+                var confirmed = confirm("@TextHelper.ToHtmlString($"Are you sure to delete PayPal account {Model.Form.Name}?")");
+                if (!confirmed) return;
+                requestHelper.executePost("delete", { id: @Model.Form.PayPalKeyId });
+            });
+
+            // INITIALIZATION AND VALIDATION
+
+            var paypalForm = new CorabeuControl.Form("paypalForm");
+            var environment = new CorabeuControl.DropDownList("environment", "Environment");
+            var currencyId = new CorabeuControl.DropDownList("currencyId", "CurrencyId");
+
+
+            paypalForm.validateControl($("#name"), "@Html.DisplayNameFor(x => x.Form.Name)", { required: true, maxlength: 128 });
+            paypalForm.validateControl($("#braintreeToken"), "@Html.DisplayNameFor(x => x.Form.BraintreeToken)", { required: true, maxlength: 128 });
+
+            @if (ViewBag.TriggerValidation != null)
+            {
+                <text>paypalForm.valid();</text>
+            }
+
+        }
+
+</script>
+
+}

@@ -1,0 +1,53 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Linq" #>
+<#@ assembly name="System.Xml.Linq" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="EnvDTE" #>  
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Xml.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#
+	// USER INPUT	
+	var modelFile = "TableModel.xml";			// model file
+
+	// PARSING PART 
+	// read the model file
+	EnvDTE.DTE dte = (EnvDTE.DTE) ((IServiceProvider) this.Host).GetService(typeof(EnvDTE.DTE));  		
+	XElement rootElem = XElement.Load(System.IO.Path.Combine(dte.ActiveDocument.Path, modelFile));
+	XElement tables = null;
+	foreach(var schemaElem in rootElem.Elements("schema")) 
+	{
+		var schemaName = schemaElem.Attribute("name").Value;
+		if (schemaName == "main")
+			tables = schemaElem.Element("tables");			
+	}
+	// WRITING PART  
+#>
+using System.Linq;
+
+namespace AutomationSystem.Main.Model.Queries
+{
+    public static class ActiveExtensions
+    {
+<#
+	string className;
+	foreach(var tableElem in tables.Elements("table"))
+	{
+		className = tableElem.Attribute("name").Value;
+#>
+
+		// selects active <#= className #> entities 
+		public static IQueryable<<#= className #>> Active(this IQueryable<<#= className #>> query) 
+		{
+			return query.Where(x => !x.Deleted);
+		}
+
+<#
+	}
+
+#>
+	}
+}

@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.7.2" />
+    <PackageReference Include="Microsoft.AspNet.Identity.EntityFramework" Version="2.2.1" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AutomationSystem.Base.Contract\AutomationSystem.Base.Contract.csproj" />
+    <ProjectReference Include="..\AutomationSystem.Shared.Model\AutomationSystem.Shared.Model.csproj" />
+    <ProjectReference Include="..\PerfectlyMadeInc.DesignTools.Contract\PerfectlyMadeInc.DesignTools.Contract.csproj" />
+    <ProjectReference Include="..\PerfectlyMadeInc.Helpers.Contract\PerfectlyMadeInc.Helpers.Contract.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="CorabeuControl">
+      <HintPath>..\packages\CorabeuControl\CorabeuControl.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+
+</Project>

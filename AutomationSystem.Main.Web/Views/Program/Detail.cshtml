@@ -1,0 +1,95 @@
+﻿@model MainProgramDetail
+@{
+    ViewBag.Title = CommonResources.MenuCoordinatorPrograms;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorPrograms;
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Command(CommonResources.Delete, ButtonStyle.Primary, Model.IsUsed, new { id = "delete-button" })
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Index", "Program"))
+}
+
+<h5>Program</h5>
+
+
+<dl class="row dl-compact">
+
+    <dt class="col-sm-4 col-lg-2">@Html.DisplayNameFor(x => x.Name)</dt>
+    <dd class="col-sm-8 col-lg-10">@Html.DisplayFor(x => x.Name)</dd>
+
+    <dt class="col-sm-4 col-lg-2">@Html.DisplayNameFor(x => x.ProgramOuterId)</dt>
+    <dd class="col-sm-8 col-lg-10">@Html.DisplayFor(x => x.ProgramOuterId)</dd>
+
+    <dt class="col-sm-4 col-lg-2">@Html.DisplayNameFor(x => x.ProgramUrl)</dt>
+    <dd class="col-sm-8 col-lg-10"><a target="_blank" href="@Html.DisplayFor(x => x.ProgramUrl)">@Html.DisplayFor(x => x.ProgramUrl)</a></dd>
+
+    <dt class="col-sm-4 col-lg-2">@Html.DisplayNameFor(x => x.IsUsed)</dt>
+    <dd class="col-sm-8 col-lg-10">@Html.DisplayFor(x => x.IsUsed)</dd>
+
+</dl>
+
+<dl class="row dl-compact">
+
+    <dt class="col-sm-4 col-lg-2">@Html.DisplayNameFor(x => x.AccountName)</dt>
+    <dd class="col-sm-8 col-lg-10">@Html.DisplayFor(x => x.AccountName)</dd>
+
+    <dt class="col-sm-4 col-lg-2">@Html.DisplayNameFor(x => x.Profile)</dt>
+    <dd class="col-sm-8 col-lg-10">@Html.DisplayFor(x => x.Profile)</dd>
+
+</dl>
+
+
+<h5>Events</h5>
+
+@*List of programs*@
+@if (Model.Events.Count == 0)
+{
+        <p>
+            <em>@CommonResources.NoRecords</em>
+        </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.Events[0].Name)</th>
+                <th>@Html.DisplayNameFor(x => x.Events[0].SessionId)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Events)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(x => item.Name)</td>
+                    <td>@Html.DisplayFor(x => item.SessionId)</td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+    var runPageScript = function () {
+
+        var requestHelper = new CorabeuControl.RequestHelper();
+        requestHelper.addAction("delete", "@Url.Action("Delete", "Program")");
+
+        $("#delete-button").click(function () {
+            var confirmed = confirm("@TextHelper.ToHtmlString($"Are you sure to delete program {Model.Name}?")");
+            if (!confirmed) return;
+            requestHelper.executePost("delete", { id: @Model.Id });
+        });
+
+    }
+
+    </script>
+
+}

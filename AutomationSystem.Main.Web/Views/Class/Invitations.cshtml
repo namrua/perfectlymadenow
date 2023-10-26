@@ -1,0 +1,91 @@
+﻿@model ClassInvitationPageModel
+@{
+    ViewBag.Title = CommonResources.MenuCoordinatorClasses;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.Class, TabItemId.ClassInvitations, new { id = Model.Class.ClassId });
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.DropdownLink(CommonResources.AddNew, ButtonStyle.Primary, "new-button", !Model.CanInvite, 
+        Model.RegistrationTypes.Select(x => PickerItem.Item(Url.Action("InvitationNew", "Class", new { classId = Model.Class.ClassId, id = x.Id }), x.Description)))
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Index"))
+}
+
+<div class="badge-title">
+    <h4>@Model.Class.ClassTitle</h4>
+    @Html.ClassCategoryBadge(Model.Class.ClassCategoryId)
+    @Html.ClassStateBadge(Model.Class.ClassState)
+</div>
+
+@*List of invitations*@
+@if (Model.Invitations.Count == 0)
+{
+    <p>
+        <em>@CommonResources.NoRecords</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.Invitations[0].Email)</th>
+                <th>@Html.DisplayNameFor(x => x.Invitations[0].Language)</th>
+                <th>@Html.DisplayNameFor(x => x.Invitations[0].State)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Invitations.OrderBy(x => x.State))
+            {
+                <tr class=@CssClassHelper.New().AddIf(item.State == ClassInvitationState.Filed, "table-warning").AddIf(item.State == ClassInvitationState.Canceled, "table-secondary").Render()>
+                    <td>@Html.DisplayFor(x => item.Email)</td>
+                    <td>@Html.DisplayFor(x => item.Language)</td>
+                    <td>@Html.DisplayFor(x => item.State)</td>
+
+                    <td>
+                        @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                        {
+                            @bg.Link("Registration detail", ButtonStyle.Primary, Url.Action("Detail", "Registration", new { id = item.ClassRegistrationId }), !item.ClassRegistrationId.HasValue)
+                            @bg.Command(CommonResources.Delete, "delete", ButtonStyle.Primary, item.State != ClassInvitationState.New, "delete", item.ClassRegistrationInvitationId)
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // DELETE FUNCTIONALITY
+
+            // registration helper
+            var requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("delete", "@Url.Action("InvitationDelete", "Class")");         
+
+            // initialize buttons
+            $(".command-delete").click(function () {   
+                var sender = $(this);
+                var _invitationId = sender.attr("data-id");
+                var confirmed = confirm("@Html.Raw($"Are you sure to delete the invitation?")");
+                if (!confirmed) return;               
+                requestHelper.executePost("delete", { id: _invitationId });
+            });
+
+        }
+
+    </script>
+}
+
+
+

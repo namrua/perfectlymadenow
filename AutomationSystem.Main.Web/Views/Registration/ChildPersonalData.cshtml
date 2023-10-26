@@ -1,0 +1,87 @@
+﻿@model RegistrationChildDetail
+@{
+    ViewBag.Title = CommonResources.TitleCoordinatedRegistrations;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.Registration, TabItemId.RegistrationPersonalData,
+        new { id = Model.ClassRegistrationId });
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+
+}
+
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Link(CommonResources.Edit, ButtonStyle.Primary, Url.Action("Edit", new { id = Model.ClassRegistrationId }), !Model.CanEdit)  
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Students", "Class", new { id = Model.ClassId }))
+}
+
+<div class="row">    
+    
+    <div class="col-xl-6 align-content-start">
+
+        <h5>@Html.DisplayNameFor(x => x.ParentAddress)</h5>
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.ParentAddress.FullName)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.ParentAddress.FullName)</dd>
+
+        </dl>
+        <dl class="row dl-compact">
+
+            <dt class="col-sm-4">@CommonResources.Address</dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(x => x.ParentAddress.FullStreet)<br />
+                @Html.DisplayFor(x => x.ParentAddress.FullCity)<br />
+                @Html.DisplayFor(x => x.ParentAddress.Country)
+            </dd>
+
+        </dl>
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.ParentEmail)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.ParentEmail)</dd>
+            @if (!string.IsNullOrEmpty(Model.ParentPhone))
+            {
+                <dt class="col-sm-4">@Html.DisplayNameFor(x => x.ParentPhone)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(x => x.ParentPhone)</dd>
+            }
+        </dl>
+
+    </div>
+
+    <div class="col-xl-6 align-content-start">
+
+        <h5>@Html.DisplayNameFor(x => x.ChildAddress)</h5>
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.ChildAddress.FullName)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.ChildAddress.FullName)</dd>
+
+        </dl>
+        <dl class="row dl-compact">
+
+            <dt class="col-sm-4">@CommonResources.Address</dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(x => x.ChildAddress.FullStreet)<br />
+                @Html.DisplayFor(x => x.ChildAddress.FullCity)<br />
+                @Html.DisplayFor(x => x.ChildAddress.Country)
+            </dd>
+
+        </dl>
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.ChildEmail)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.ChildEmail)</dd>
+        </dl>
+
+    </div>
+   
+    <div class="w-100"></div>
+
+    <div class="col-xl-6 align-content-start">
+
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Language)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Language)</dd>
+        </dl>
+
+    </div>
+
+</div>

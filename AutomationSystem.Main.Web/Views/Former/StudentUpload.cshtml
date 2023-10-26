@@ -1,0 +1,58 @@
+﻿@model FormerStudentUploadPageModel
+@{
+    IContextManager cm = ContextHelper.GetContextManager(ViewBag);
+    var pushContext = cm.UpdateBacks().Get();
+    var currentContext = cm.Get();
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.FormerClass, TabItemId.FormerClassBatchUpload, 
+        new { id = Model.FormerClassId, context = currentContext });
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{   
+    @bg.Link("Upload batch", ButtonStyle.Primary, Url.Action("StudentUploadNew", new { id = Model.FormerClassId, context = pushContext }))
+    @bg.Link("Download excel template", ButtonStyle.Normal, Url.Action("DownloadMainStored", "File", new { id = MainStoredFile.FormerStudentUploadSheet }))
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, cm.GetBackUrl(Url.Action("Index")))
+}
+
+@*List of former student batch uploads *@
+@if (Model.Items.Count == 0)
+{
+    <p>
+        <em>@CommonResources.NoRecords</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.Items[0].Name)</th>
+                <th>@Html.DisplayNameFor(x => x.Items[0].BatchUploadType)</th>
+                <th>@Html.DisplayNameFor(x => x.Items[0].BatchUploadState)</th>
+                <th>@Html.DisplayNameFor(x => x.Items[0].Uploaded)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.Items.OrderBy(x => x.BatchUploadStateId).ThenByDescending(x => x.Uploaded))
+        {
+            var unprocessed = item.BatchUploadStateId != BatchUploadStateEnum.Complete && item.BatchUploadStateId != BatchUploadStateEnum.Discarded;
+            <tr class="@CssClassHelper.New().AddIf(unprocessed, "table-warning").AddIf(item.BatchUploadStateId == BatchUploadStateEnum.Discarded, "table-secondary").Render()">
+                <td>@Html.DisplayFor(x => item.Name)</td>
+                <td>@Html.DisplayFor(x => item.BatchUploadType)</td>
+                <td>@Html.DisplayFor(x => item.BatchUploadState)</td>
+                <td>@Html.DisplayFor(x => item.Uploaded)</td>
+
+                <td>
+                    @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                    {
+                        @bg.Link(CommonResources.Detail, ButtonStyle.Primary, Url.Action("StudentBatchDetail", new {id = item.BatchUploadId, context = pushContext}))
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

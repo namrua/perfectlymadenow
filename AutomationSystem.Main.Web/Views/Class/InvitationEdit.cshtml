@@ -1,0 +1,59 @@
+﻿@model ClassInvitationForEdit
+@{
+    ViewBag.Title = CommonResources.MenuCoordinatorClasses;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+}
+
+<form id="invitationForm" method="post" action="@Url.Action("InvitationEdit")">
+
+    @Html.EditorFor(x => x.Form.ClassRegistrationInvitationId) 
+    @Html.EditorFor(x => x.Form.RegistrationTypeId)  
+    @Html.EditorFor(x => x.Form.ClassId)
+   
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.Email)
+            @Html.EditorFor(x => x.Form.Email)
+        </div>
+    
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.LanguageId)
+            @Html.EditorFor(x => x.Form.LanguageId, new { Items = Model.Languages.Select(x => DropDownItem.Item((LanguageEnum)x.Id, x.Description)) })
+        </div>
+    </div>
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save)
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Invitations", "Class", new { id = Model.Form.ClassId }))
+    }
+
+</form>
+
+
+@section scripts
+{
+
+<script type="text/javascript">
+
+        var runPageScript = function() {
+
+            // INITIALIZATION AND VALIDATION
+
+            var invitationForm = new CorabeuControl.Form("invitationForm");
+
+            var languageId = new CorabeuControl.DropDownList("languageId", "LanguageId");
+
+            invitationForm.validateControl($("#email"), "@Html.DisplayNameFor(x => x.Form.Email)", { required: true, maxlength: 128, email: true });
+            invitationForm.validateControl(languageId.element, "@Html.DisplayNameFor(x => x.Form.LanguageId)", { notSelected: true });
+
+            @if (ViewBag.TriggerValidation != null)
+            {
+                @:invitationForm.valid();
+            }
+
+        }
+
+</script>
+
+}

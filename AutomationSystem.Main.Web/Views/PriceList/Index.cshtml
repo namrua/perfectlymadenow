@@ -1,0 +1,55 @@
+﻿@model PriceListMainPageModel
+@{
+    ViewBag.Title = CommonResources.MenuCommonPriceLists;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CommonPriceLists;
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{    
+    @bg.DropdownLink(CommonResources.AddNew, ButtonStyle.Primary, "new-button", false,
+        Model.PriceListTypes.Select(x => PickerItem.Item(Url.Action("New", "PriceList", new { id = x.PriceListTypeId }), x.Description)))  
+}
+
+@if (Model.Items.Count == 0)
+{
+    <p>
+        <em>@CommonResources.NoRecords</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(x => x.Items[0].Name)</th>
+            <th>@Html.DisplayNameFor(x => x.Items[0].PriceListType)</th>
+            <th>@Html.DisplayNameFor(x => x.Items[0].CurrencyCode)</th>
+            <th>@Html.DisplayNameFor(x => x.Items[0].State)</th>
+            <th></th>
+        </tr>
+
+        </thead>
+
+        <tbody>
+        @foreach (var item in Model.Items.OrderBy(x => x.State).ThenBy(x => x.Name))
+        {
+            <tr class="@CssClassHelper.New().AddIf(item.State == PriceListState.Approved, "table-primary").AddIf(item.State == PriceListState.Discard, "table-secondary").Render()">
+                <td>@Html.DisplayFor(x => item.Name)</td>
+                <td>@Html.DisplayFor(x => item.PriceListType)</td>
+                <td>@Html.DisplayFor(x => item.CurrencyCode)</td>
+                <td>@Html.DisplayFor(x => item.State)</td>
+
+                <td>
+                    @using (var buttonGroup = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                    {
+                        @buttonGroup.Link(CommonResources.Detail, ButtonStyle.Primary, Url.Action("Detail", "PriceList", new {id = item.PriceListId}))
+                    }
+                </td>
+            </tr>
+        }
+
+        </tbody>
+    </table>
+}
+
+

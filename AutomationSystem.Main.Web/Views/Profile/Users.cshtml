@@ -1,0 +1,126 @@
+﻿@model ProfileUsersPageModel
+@{
+    ViewBag.Title = CommonResources.MenuCommonProfiles;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CommonProfiles;
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.Profile, TabItemId.ProfileUsers, new { id = Model.ProfileId });
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Index"))
+}
+
+<div class="alert alert-primary" role="alert">
+    Adding or removing a user to/from the profile can influence user access to the profile related functionality. The settings will take effect after 
+    <strong>logging out and logging in</strong> the user!
+</div>
+
+
+<form class="row" method="post" action="">
+    <div class="form-group col-10 col-md-6">
+        @Html.EditorFor(x => x.UserId)
+        <small id="userIdHelp" class="form-text text-muted">Write email address or login name to searched the user.</small>
+    </div>
+    <div class="col-2 col-md-6">
+        <button id="add-button" class="btn btn-sm btn-primary">Add user</button>
+    </div>
+</form>
+
+
+<h5>Assigned users</h5>
+
+@*List of assigned users*@
+@if (Model.AssignedUsers.Count == 0)
+{
+    <p>
+        <em>@CommonResources.NoRecords</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.AssignedUsers[0].Name)</th>
+                <th>@Html.DisplayNameFor(x => x.AssignedUsers[0].Email)</th>
+                <th>@Html.DisplayNameFor(x => x.AssignedUsers[0].Active)</th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.AssignedUsers)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(x => item.Name)</td>
+                    <td>@Html.DisplayFor(x => item.Email)</td>
+                    <td>@Html.DisplayFor(x => item.Active)</td>
+
+                    <td>
+                        @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                        {
+                            @bg.Command("Remove", "users", ButtonStyle.Primary, false, "remove",
+                                item.UserId, new Dictionary<string, object> { { "data-name", item.Name } })
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            @Html.TypeaheadDropDownSource("users", Model.UnassignedUsers.Select(x => PickerItem.Item(x.UserId, $"{x.Name} - {x.Email}")))
+
+            var userId = new CorabeuControl.TypeaheadDropDownInput("userId", "UserId", users);
+
+            // USERS COMMANDS
+
+            // user requests
+            var userRequestHelper = new CorabeuControl.RequestHelper();
+            userRequestHelper.addAction("remove", "@Url.Action("RemoveUser")");
+            userRequestHelper.addAction("add", "@Url.Action("AddUser")");
+
+            // connects add-button
+            $("#add-button").click(function(event) {
+                event.preventDefault();
+                var id = userId.getValue();
+                if (isNaN(id) || id === "")
+                    return;
+                userRequestHelper.executePost("add", { userId: id, profileId: @Model.ProfileId });
+            });
+
+            // connects command-users
+            $(".command-users").click(function() {
+                var sender = $(this);
+                var id = sender.attr("data-id");
+                var command = sender.attr("data-command");
+
+                // remove checking
+                if (command === 'remove') {
+                    var name = sender.attr("data-name");
+                    var confirmed = confirm("Are you sure to remove user '" + name + "' from profile?");
+                    if (!confirmed)
+                        return;
+                }
+
+                // runs action
+                if (userRequestHelper.hasAction(command))
+                    userRequestHelper.executePost(command, { userId: id, profileId: @Model.ProfileId });
+                else
+                    alert("Unknown action " + command);
+            });
+        }
+
+    </script>
+
+}

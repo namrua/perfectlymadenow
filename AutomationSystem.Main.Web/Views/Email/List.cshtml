@@ -1,0 +1,61 @@
+﻿@model EmailTemplateList
+@{
+    ViewBag.Title = CommonResources.MenuCoreEmailTemplates;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoreEmailTemplates;
+}
+
+<h4>@MainTextHelper.GetEmailTemplateTitle(Model.Type)</h4>
+
+@if (Model.LanguagesWithoutTemplate.Count > 0)
+{
+    <p class="horizontal-link-list">
+        Add missing language:
+        @foreach (var language in Model.LanguagesWithoutTemplate)
+        {
+            @Html.ActionLink(language.Description, "New",
+                new {emailTypeId = Model.Type.EmailTypeId, langId = (LanguageEnum) language.Id, entityTypeId = Model.EmailTemplateEntityId.TypeId, entityId = Model.EmailTemplateEntityId.Id })
+        }
+    </p>
+}
+
+@*List of email templates*@
+@if (Model.Items.Count == 0)
+{
+    <p>
+        <em>No records</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(x => x.Items[0].Subject)</th>
+            <th>@Html.DisplayNameFor(x => x.Items[0].Language)</th>
+
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr class="@CssClassHelper.New().AddIf(!item.IsValid, "table-warning").Render()">
+                <td>@Html.DisplayFor(x => item.Subject)</td>
+                <td>@Html.DisplayFor(x => item.Language)</td>
+                <td>
+                    @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                    {
+                        @bg.Link(CommonResources.Detail, ButtonStyle.Primary, Url.Action("Detail",
+                            new {id = item.EmailTemplateId}))
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+{
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.EmailTemplateUrl(Model.EmailTemplateEntityId))
+}

@@ -1,0 +1,155 @@
+﻿@model ContactListDetail
+@{
+    ViewBag.Title = CommonResources.MenuCoordinatorContacts;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorContacts;
+
+    IContextRenderer cm = ContextHelper.GetContextManager(ViewBag);
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Command(CommonResources.NotifyStudents, ButtonStyle.Primary, Model.IsNotified, new { id = "notify-button" });
+}
+
+<div class="row">
+
+    @if (Model.Notified.HasValue)
+    {
+        <dl class="col-lg-6 align-content-start row">
+
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Notified)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Notified)</dd>
+
+        </dl>
+    }
+
+    <dl class="col-12 row dl-single-column">
+
+        <dt class="col-sm-4 col-lg-2">@Html.DisplayNameFor(x => x.Emails)</dt>
+        <dd class="col-sm-8 col-lg-10">@Html.DisplayFor(x => x.Emails, new { Separator = ", " })</dd>
+
+    </dl>
+
+</div>
+
+<form class="row" method="post" action="">
+    <div class="form-group col-10 col-md-6">
+        @Html.LabelFor(x => x.Form.SenderId)
+        @Html.EditorFor(x => x.Form.SenderId, new { Text = Model.SenderName })
+        <small id="senderIdHelp" class="form-text text-muted">Write email address or name to search for sender.</small>
+        @Html.LoaderSmall("loader-small-sender", "spinner-small")
+    </div>
+</form>
+
+@if (Model.EmailTemplates.Count == 0)
+{
+    <p>
+        <em>@CommonResources.NoRecords</em>
+    </p>
+}
+else
+{
+    var emailContext = EmailTemplateTextContext.New()
+        .AddTitleAndMenuItem(ViewBag.Title, ViewBag.ActiveMainMenuItemId)
+        .AddTestEmailEnity(EntityTypeEnum.MainContactList, Model.ContactListId);
+
+    <table class="table table-hover table-sm">
+        <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(x => x.EmailTemplates[0].Subject)</th>
+            <th>@Html.DisplayNameFor(x => x.EmailTemplates[0].Language)</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.EmailTemplates)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(x => item.Subject)</td>
+                    <td>@Html.DisplayFor(x => item.Language)</td>
+                    <td>
+                        @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                        {
+                            @bg.Link(CommonResources.Detail, "template-detail-buttons", ButtonStyle.Primary, Url.Action("EditText", "Email", new
+                            {
+                                id = item.EmailTemplateId,
+                                context = cm.UpdateCustomContext(emailContext).UpdateBacks().Get()
+                            }))
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@section scripts
+{
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // initialization of sender form
+            @Html.TypeaheadDropDownSource("senders", Model.Senders)
+
+            var senderId = new CorabeuControl.TypeaheadDropDownInput("senderId", "SenderId", senders);
+
+            @if (Model.IsNotified)
+            {
+                @:senderId.disable();
+            }
+
+            function updateSenderId(contactListSenderForm) {
+                var url = "@Url.Action("UpdateSenderId")";
+                var loaderSmall = $("#loader-small-sender");
+                var notifyButton = $("#notify-button");
+                var templateButtons = $(".link-template-detail-buttons");
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: contactListSenderForm,
+                    beforeSend: function() {
+                        loaderSmall.show();
+                        notifyButton.prop("disabled", true);
+                        templateButtons.addClass("disabled");
+                    },
+                    complete: function() {
+                        loaderSmall.hide();
+                        notifyButton.prop("disabled", false);
+                        templateButtons.removeClass("disabled");
+                    },
+                    error: function(_response) {
+                        AutomationSystem.createAdminMessage("alert-warning", _response.status + " " + _response.statusText);
+                    }
+                });
+            }
+
+            senderId.onChange.subscribe(this, function () {
+                var contactListSenderForm = {
+                    contactListId: @Model.ContactListId,
+                    senderId: senderId.getValue()
+                }
+                updateSenderId(contactListSenderForm);
+            });
+
+            // initialization of notification button scripts
+            var requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("notify", "@Url.Action("NotifyContacts", new { id = Model.ContactListId })");
+
+            $("#notify-button").click(function () {
+                if (senderId.getValue() === "") {
+                    alert("Sender is not selected, user account will be used as sender.");
+                }
+
+                var confirmed = confirm("Are you sure to notify selected contacts?");
+                if (!confirmed) {
+                    return;
+                }
+
+                requestHelper.executePost("notify");
+            });
+        }
+
+    </script>
+
+}

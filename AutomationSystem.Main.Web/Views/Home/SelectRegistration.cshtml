@@ -1,0 +1,57 @@
+﻿@model ClassRegistrationSelectionPageModel
+
+@{
+    ViewBag.Title = LayoutTexts.PageTitleRegistrationString;
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+
+    var style = RegistrationPageStyleHelper.GetStyle(ViewBag);
+}
+
+
+<content>
+
+    <h2>@TitleTexts.RegistrationInfo</h2>
+    <hr class="headline-hr" />
+
+    @ContentTexts.RegistrationInfo1
+    @ContentTexts.RegistrationInfo2
+
+</content>
+
+
+<content>
+
+    <h2>@Model.Class.Title</h2>
+      
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.RegistrationTypes[0].RegistrationType)</th>
+                <th>@Html.DisplayNameFor(x => x.RegistrationTypes[0].Price)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.RegistrationTypes)
+        {
+            <tr>
+                <td>@Html.DisplayFor(x => item.RegistrationType)</td>
+                <td>@Html.DisplayFor(x => item.Price, new {Currency = Model.CurrencyCode})</td>
+
+                <td>
+                    @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                    {
+                        @bg.Link(ButtonTexts.SelectString, ButtonStyle.PublicPrimary, Url.Action("New", new {classId = Model.Class.ClassId, id = item.RegistrationTypeId}))
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+       
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Link(ButtonTexts.BackToHomeString, ButtonStyle.PublicPrimary, style.HomepageUrl ?? Url.Action("Index"))
+    }
+
+</content>

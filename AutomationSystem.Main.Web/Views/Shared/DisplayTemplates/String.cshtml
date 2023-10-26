@@ -1,0 +1,32 @@
+﻿@model object
+@{
+
+    // loads options
+    var value = Model == null ? "" : Model.ToString();
+    var isMultiline = (bool?)ViewData[DisplayOptions.IsMultiline] ?? false;
+    var isHtml = (bool?)ViewData[DisplayOptions.IsHtml] ?? false;
+    var leadingZeros = (int?)ViewData[DisplayOptions.LeadingZeros];
+
+    if (leadingZeros.HasValue)
+    {
+        value = TextHelper.AddLeadingZeros((int?)Model, leadingZeros.Value);
+    }
+
+}
+
+@if (isHtml && isMultiline)
+{
+    @TextHelper.ReplaceNewLines(value);
+}
+else if (isHtml)
+{
+    @TextHelper.ToHtmlString(value);
+}
+else if (isMultiline)
+{
+    @TextHelper.ReplaceNewLines(HttpUtility.HtmlEncode(value))
+}
+else
+{
+    @value
+}

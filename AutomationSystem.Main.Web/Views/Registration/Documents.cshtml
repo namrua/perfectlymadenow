@@ -1,0 +1,74 @@
+﻿@model RegistrationDocumentsPageModel
+@{
+    ViewBag.Title = CommonResources.TitleCoordinatedRegistrations;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.Registration, TabItemId.RegistrationDocuments, new { id = Model.ClassRegistrationId });
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Command("Generate certificate", ButtonStyle.Primary, !Model.AreCertificatesAllowed, new { id = "generate-button" })
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Students", "Class", new { id = Model.ClassId }))
+}
+
+
+@*List of documents*@
+@if (Model.Files.Count == 0)
+{
+    <p>
+        <em>@CommonResources.NoRecords</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.Files[0].DisplayedName)</th>
+                <th>@Html.DisplayNameFor(x => x.Files[0].Assigned)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Files)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(x => item.DisplayedName)</td>
+                    <td>@Html.DisplayFor(x => item.Assigned)</td>
+                    <td>
+                        @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                        {
+                            @bg.Link(CommonResources.Download, ButtonStyle.Primary, Url.Action("Download", "File", new { id = item.FileId }))
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // DELETE FUNCTIONALITY
+
+            // registration helper
+            var requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("generate", "@Url.Action("GenerateCertificate", "Registration", new { id = Model.ClassRegistrationId })");
+
+            // connect pick-button
+            $("#generate-button").click(function () {
+                requestHelper.executePost("generate");
+            });
+
+        }
+
+    </script>
+
+}

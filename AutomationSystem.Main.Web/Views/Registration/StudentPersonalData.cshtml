@@ -1,0 +1,62 @@
+﻿@model RegistrationStudentDetail
+@{
+    ViewBag.Title = CommonResources.TitleCoordinatedRegistrations;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.Registration, TabItemId.RegistrationPersonalData,
+        new { id = Model.ClassRegistrationId });
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+
+}
+
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Link(CommonResources.Edit, ButtonStyle.Primary, Url.Action("Edit", new { id = Model.ClassRegistrationId }), !Model.CanEdit)  
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Students", "Class", new { id = Model.ClassId }))
+}
+
+<div class="row">
+
+    <div class="col-xl-6 align-content-start">
+
+        <h5>@Html.DisplayNameFor(x => x.Address)</h5>
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Address.FullName)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Address.FullName)</dd>
+
+        </dl>
+        <dl class="row dl-compact">
+
+            <dt class="col-sm-4">@CommonResources.Address</dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(x => x.Address.FullStreet)<br />
+                @Html.DisplayFor(x => x.Address.FullCity)<br />
+                @Html.DisplayFor(x => x.Address.Country)
+            </dd>
+
+        </dl>
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Email)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Email)</dd>
+            @if (!string.IsNullOrEmpty(Model.Phone))
+            {
+                <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Phone)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(x => x.Phone)</dd>
+            }
+        </dl>
+
+    </div>
+    
+    <div class="w-100"></div>
+
+    <div class="col-xl-6 align-content-start">
+        
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Language)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Language)</dd>
+        </dl>
+
+    </div>
+
+</div>

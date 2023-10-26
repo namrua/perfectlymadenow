@@ -1,0 +1,80 @@
+﻿@model PublicDownloadPageModel
+@{
+    ViewBag.Title = LayoutTexts.PageTitleRegistrationString;
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+
+<content>
+
+    <h2>@TitleTexts.ClassMaterials</h2>
+    <hr class="headline-hr" />
+
+    @ContentTexts.MaterialInstruction
+
+</content>
+
+<content>
+
+    <table class="table table-hover table-sm">
+        <tbody>
+            @foreach (var item in Model.Materials)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(x => item.Name)</td>
+                    <td>
+                        @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                        {
+                            @bg.Command(ButtonTexts.DownloadString, "download", ButtonStyle.PublicPrimary, !item.IsMaterialAvailable, "download", item.ClassMaterialFileId)
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</content>
+
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function() {
+
+            var reloading = false;
+
+            // DETAIL
+            $(".command-download").click(function () {
+                var sender = $(this);
+                var id = sender.attr("data-id");
+                var url = "@Url.Action("Download", "Materials", new { request = Model.RequestCode}, Request.Url.Scheme)&id=" + id;
+
+                // disables buttons
+                $(".command-download").attr("disabled", true);
+
+                // creates iframe
+                var iframe = document.createElement('iframe');
+                iframe.onload = function() {
+                    if (reloading)
+                        return;
+                    reloading = true;
+                    document.location.reload(true);
+                }; 
+                iframe.src = url;
+                iframe.style = "display:none;";
+                document.body.appendChild(iframe);
+
+                // fuse for reload - used for Chrome
+                setTimeout(function () {
+                    if (reloading)
+                        return;
+                    reloading = true;
+                    document.location.reload(true);
+                }, 3000);
+            });
+        }
+
+    </script>
+
+}

@@ -1,0 +1,76 @@
+﻿@model EnumLocalisationForEdit
+@{
+    ViewBag.Title = CommonResources.MenuCoreLocalisation;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoreLocalisation;
+}
+
+<h4>@MainTextHelper.GetEnumItemTitle(Model.EnumType.Description, Model.Form.ItemId, Model.Language)</h4>
+
+<form id="enumLocalisationForm" method="post" action="@Url.Action("EnumEdit")">
+
+    @Html.EditorFor(x => x.Form.LanguageId)
+    @Html.EditorFor(x => x.Form.EnumTypeId)
+    @Html.EditorFor(x => x.Form.ItemId)
+    
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.SystemName)
+            <div class="disabled-text">
+                @Html.DisplayFor(x => x.SystemName)
+            </div>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.SystemDescription)
+            <div class="disabled-text">
+                @Html.DisplayFor(x => x.SystemDescription)
+            </div>
+        </div>
+    </div>  
+    <hr/>
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.Name)
+            @Html.EditorFor(x => x.Form.Name)
+        </div>
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.Description)
+            @Html.EditorFor(x => x.Form.Description)
+        </div>
+    </div>
+    
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save)      
+        @bg.Link(CommonResources.PreviousShort, ButtonStyle.Normal, Url.Action("EnumEdit", new { langId = Model.Form.LanguageId, typeId = Model.EnumType.EnumTypeId, id = ViewBag.PredecessorId }), ViewBag.PredecessorId == null)
+        @bg.Link(CommonResources.Next, ButtonStyle.Normal, Url.Action("EnumEdit", new { langId = Model.Form.LanguageId, typeId = Model.EnumType.EnumTypeId, id = ViewBag.SuccessorId }), ViewBag.SuccessorId == null)
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("EnumList", new { langId = Model.Form.LanguageId, typeId = Model.Form.EnumTypeId }))
+    }
+
+</form>
+
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+                      
+            // INITIALIZATION AND VALIDATION
+
+            var enumLocalisationForm = new CorabeuControl.Form("enumLocalisationForm");           
+
+            enumLocalisationForm.validateControl($("#name"), "@Html.DisplayNameFor(x => x.Form.Name)", { maxlength: 100 });
+            enumLocalisationForm.validateControl($("#description"), "@Html.DisplayNameFor(x => x.Form.Name)", { maxlength: 512 });
+
+
+            @if (ViewBag.TriggerValidation != null)
+            {
+                <text>enumLocalisationForm.valid();</text>
+            }
+
+        }
+
+    </script>
+
+}

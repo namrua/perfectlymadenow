@@ -1,0 +1,23 @@
+﻿@{
+
+    // creates base text input
+    var metadata = new EditorTemplateMetadataProvider<dynamic>(ViewData);
+    var name = metadata.Name;
+    var id = metadata.Id;
+    var dropdown = DropDownInput.New(id, name, metadata.Placeholder, CssClassHelper.New());
+
+    // obtains pick input options and sets them to text input
+    var pickInputOptions = metadata.GetAttribute<PickInputOptions>();
+
+    // apply spinner input options and other values
+    dropdown.SetPickInputOptions(pickInputOptions);
+    dropdown.Select(Model);
+
+}
+
+
+@InputControl.AddDropDownList(this, dropdown)
+@if (!metadata.NoErrorPlaceholder)
+{
+    <div id="@TextHelper.DecorateName(id, "error-placeholder")"></div>
+}

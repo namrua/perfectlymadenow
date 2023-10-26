@@ -1,0 +1,62 @@
+﻿@model AppLocalisationList
+@{
+    ViewBag.Title = CommonResources.MenuCoreLocalisation;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoreLocalisation;
+}
+
+<h4>@MainTextHelper.GetLanguageTitle("Texts", Model.Language)</h4>
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Index"))
+}
+
+@*List of app localisations*@
+@if (Model.Items.Count == 0)
+{
+    <p>
+        <em>No records</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">       
+        <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr class="@CssClassHelper.New().AddIf(item.IsEmpty, "table-warning").Render()">
+                <td>
+                    <p>
+                        @if (item.IsEmpty)
+                        {
+                            <em>Empty</em>
+                        }
+                        else
+                        {
+                            @Html.Raw(item.Value)
+                        }
+                    </p>
+                    <div class="row">
+                        <div class="col-12 col-lg-9 col-xl-10 row">
+                            <div class="col-md-6 col-xl-4">
+                                <strong>@Html.DisplayNameFor(x => item.Module)</strong>
+                                @Html.DisplayFor(x => item.Module)
+                            </div>
+                            <div class="col-md-6 col-xl-4">
+                                <strong>@Html.DisplayNameFor(x => item.Label)</strong>
+                                @Html.DisplayFor(x => item.Label)
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-xl-2 row justify-content-center justify-content-lg-end align-self-end block-item-group-placeholder">
+                            @using (var bg = Html.ButtonGroup(ButtonGroupType.BlockItemGroup))
+                            {
+                                @bg.Link(CommonResources.Detail, ButtonStyle.Primary, Url.Action("Edit", new { langId = Model.LanguageId, id = item.OriginAppLocalisationId}))
+                            }
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

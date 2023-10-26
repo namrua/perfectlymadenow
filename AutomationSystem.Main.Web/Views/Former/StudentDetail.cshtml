@@ -1,0 +1,123 @@
+﻿@model FormerStudentDetail
+@{
+    IContextManager cm = ContextHelper.GetContextManager(ViewBag);
+    var pushContext = cm.UpdateBacks().Get();
+    var formerContext = cm.GetCustomContext<FormerContext>();
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    if (formerContext.PickForRegistrationId.HasValue)
+    {
+        @bg.Command("Pick for review", ButtonStyle.Primary, false, new { id = "pick-button"} )
+    }
+    if (Model.CanEdit)
+    {
+        @bg.Link(CommonResources.Edit, ButtonStyle.Primary, Url.Action("StudentEdit", new {id = Model.FormerStudentId, context = pushContext}))
+    }
+    if (Model.CanDelete)
+    {
+        @bg.Command(CommonResources.Delete, ButtonStyle.Primary, false, new {id = "delete-button"})
+    }
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, cm.GetBackUrl(Url.Action("Student")))
+}
+
+<div class="row">
+
+    <div class="col-xl-6 align-content-start">
+
+        <h5>Student</h5>
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Address.FullName)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Address.FullName)</dd>
+
+        </dl>
+        <dl class="row dl-compact">
+
+            <dt class="col-sm-4">@CommonResources.Address</dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(x => x.Address.FullStreet)<br/>
+                @Html.DisplayFor(x => x.Address.FullCity)<br/>
+                @Html.DisplayFor(x => x.Address.Country)
+            </dd>
+
+        </dl>
+        <dl class="row dl-compact">
+
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Email)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Email)</dd>
+            @if (!string.IsNullOrEmpty(Model.Phone))
+            {
+                <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Phone)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(x => x.Phone)</dd>
+            }           
+        </dl>
+
+    </div>
+    
+    <div class="col-xl-6 align-content-start">
+
+        <h5>Class</h5>
+
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Class.FullClassDate)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Class.FullClassDate)</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Class.Location)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Class.Location)</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Class.ClassType)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Class.ClassType) </dd>           
+        </dl>
+        
+        @if (Model.Class.Profile != null)
+        {
+            <dl class="row dl-compact">
+                <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Class.Profile)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(x => x.Class.Profile)</dd>
+            </dl>
+        }
+
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">Link</dt>
+            <dd class="col-sm-8">
+                <a href="@Url.Action("ClassDetail", new { id = Model.Class.FormerClassId, context = pushContext })">
+                    @Url.Action("ClassDetail", "Former", new { id = Model.Class.FormerClassId }, Request.Url.Scheme)
+                </a>
+            </dd>
+        </dl>
+
+    </div>
+
+</div>
+
+
+@section scripts
+{
+
+<script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // DELETE FUNCTIONALITY
+
+            // registration helper
+            var requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("delete", "@Url.Action("StudentDelete", new { id = Model.FormerStudentId, context = cm.Get() })");
+            requestHelper.addAction("pick", "@Html.Raw(Url.Action("ManualReview", "Registration", new { id = formerContext.PickForRegistrationId, context = pushContext, formerStudentId = Model.FormerStudentId }))");
+
+            // connect delete-button
+            $("#delete-button").click(function () {
+                var confirmed = confirm("@TextHelper.ToHtmlString($"Are you sure to delete former student {Model.Address.FullName}?")");
+                if (!confirmed) return;
+                requestHelper.executePost("delete");
+            });
+
+            // connect pick-button
+            $("#pick-button").click(function () {
+                requestHelper.executePost("pick");
+            });
+
+        }
+
+</script>
+
+}

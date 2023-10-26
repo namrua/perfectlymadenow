@@ -1,0 +1,36 @@
+﻿@{
+
+    // creates base text input
+    var metadata = new EditorTemplateMetadataProvider<dynamic>(ViewData);
+    var name = metadata.Name;
+    var id = metadata.Id;
+
+    // gets value
+    var isChecked = false;
+    if (Model is bool)
+    {
+        isChecked = (bool)Model;
+    }
+
+    // obtains placeholder text
+    var placeholder = metadata.Placeholder;
+
+    // determines whether component is disabled
+    var isDisabled = metadata.IsDisabled;
+}
+
+<div class="form-check">
+    <input id="@id" name="@name" class="form-check-input" type="checkbox" value="true"
+           @HtmlPropertyHelper.New().AddIf(isChecked, "checked").Render()
+           @HtmlPropertyHelper.New().AddIf(isDisabled, "disabled").Render()>
+    <input name="@name" type="hidden" value="false" />
+    <label class="form-check-label" for="@id">
+        @placeholder
+    </label>
+</div>
+@if (!metadata.NoErrorPlaceholder)
+{
+    <div id="@TextHelper.DecorateName(id, "error-placeholder")"></div>
+}
+
+

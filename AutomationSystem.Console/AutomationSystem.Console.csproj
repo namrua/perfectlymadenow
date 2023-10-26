@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net472</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.2.0" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.3" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AutomationSystem.Base.Contract\AutomationSystem.Base.Contract.csproj" />
+    <ProjectReference Include="..\AutomationSystem.Main.Contract\AutomationSystem.Main.Contract.csproj" />
+    <ProjectReference Include="..\AutomationSystem.Main.Core\AutomationSystem.Main.Core.csproj" />
+    <ProjectReference Include="..\AutomationSystem.Main.Model\AutomationSystem.Main.Model.csproj" />
+    <ProjectReference Include="..\AutomationSystem.Shared.Contract\AutomationSystem.Shared.Contract.csproj" />
+    <ProjectReference Include="..\AutomationSystem.Shared.Core\AutomationSystem.Shared.Core.csproj" />
+    <ProjectReference Include="..\AutomationSystem.Shared.Model\AutomationSystem.Shared.Model.csproj" />
+    <ProjectReference Include="..\PerfectlyMadeInc.DesignTools.Contract\PerfectlyMadeInc.DesignTools.Contract.csproj" />
+    <ProjectReference Include="..\PerfectlyMadeInc.DesignTools\PerfectlyMadeInc.DesignTools.csproj" />
+    <ProjectReference Include="..\PerfectlyMadeInc.Helpers.Contract\PerfectlyMadeInc.Helpers.Contract.csproj" />
+    <ProjectReference Include="..\PerfectlyMadeInc.Helpers\PerfectlyMadeInc.Helpers.csproj" />
+    <ProjectReference Include="..\PerfectlyMadeInc.WebEx.Contract\PerfectlyMadeInc.WebEx.Contract.csproj" />
+    <ProjectReference Include="..\PerfectlyMadeInc.WebEx\PerfectlyMadeInc.WebEx.csproj" />
+  </ItemGroup>
+
+</Project>

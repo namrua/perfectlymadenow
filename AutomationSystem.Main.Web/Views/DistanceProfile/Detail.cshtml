@@ -1,0 +1,104 @@
+﻿@model DistanceProfileDetail
+@{
+    ViewBag.Title = CommonResources.MenuDistanceCoordinatorDistanceProfiles;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.DistanceCoordinatorDistanceProfiles;
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Link(CommonResources.Edit, ButtonStyle.Primary, Url.Action("Edit", new { id = Model.DistanceProfileId }))
+    if (Model.IsActive)
+    {
+        @bg.Command(CommonResources.Deactivate, ButtonStyle.Primary, false, new { id = "deactivate-button" })
+    }
+    else
+    {
+        @bg.Command(CommonResources.Activate, ButtonStyle.Primary, false, new { id = "activate-button" })
+    }
+    @bg.Command(CommonResources.Delete, ButtonStyle.Primary, false, new { id = "delete-button" })
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Index"))
+}
+
+<div class="row">
+
+    <div class="col-xl-6 align-content-start">
+
+        <h5>Distance profile</h5>
+
+        <dl class="row dl-compact">
+
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Profile)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Profile)</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.DistanceCoordinator)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.DistanceCoordinator)</dd>
+
+        </dl>
+
+        <dl class="row dl-compact">
+
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.PriceList)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.PriceList)</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.PayPalKey)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.PayPalKey)</dd>
+
+        </dl>
+
+        <dl class="row dl-compact">
+
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.IsActive)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.IsActive)</dd>
+
+        </dl>
+
+    </div>
+</div>
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+    var runPageScript = function () {
+
+        // delete functionality
+
+        var requestHelper = new CorabeuControl.RequestHelper();
+        requestHelper.addAction("activate", "@Url.Action("Activate", "DistanceProfile")");
+        requestHelper.addAction("deactivate", "@Url.Action("Deactivate", "DistanceProfile")");
+        requestHelper.addAction("delete", "@Url.Action("Delete", "DistanceProfile")");
+
+        $("#activate-button").click(function () {
+            var confirmed = confirm("@TextHelper.ToHtmlString($"Are you sure to activate distance profile {Model.Profile}? Activation causes creating of missing distance classes on profile.")");
+            if (!confirmed)
+            {
+                return;
+            }
+
+            requestHelper.executePost("activate", { id: @Model.DistanceProfileId });
+        });
+
+        $("#deactivate-button").click(function () {
+            var confirmed = confirm("@TextHelper.ToHtmlString($"Are you sure to deactivate distance profile {Model.Profile}?")");
+            if (!confirmed)
+            {
+                return;
+            }
+
+            requestHelper.executePost("deactivate", { id: @Model.DistanceProfileId });
+        });
+
+        $("#delete-button").click(function () {
+            var confirmed = confirm("@TextHelper.ToHtmlString($"Are you sure to delete distance profile {Model.Profile}?")");
+            if (!confirmed)
+            {
+                return;
+            }
+
+            requestHelper.executePost("delete", { id: @Model.DistanceProfileId });
+        });
+    }
+
+    </script>
+
+}
+

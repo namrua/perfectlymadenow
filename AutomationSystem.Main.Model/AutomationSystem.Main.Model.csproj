@@ -1,0 +1,316 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{828EC2CD-7D76-4541-8F06-B31E73601609}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AutomationSystem.Main.Model</RootNamespace>
+    <AssemblyName>AutomationSystem.Main.Model</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MvasProd|AnyCPU'">
+    <OutputPath>bin\MvasProd\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugSwisth|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\DebugSwisth\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugJuraj|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\DebugJuraj\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MvasProdDebug|AnyCPU'">
+    <OutputPath>bin\MvasProdDebug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugMvasProd|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\DebugMvasProd\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MvasTest|AnyCPU'">
+    <OutputPath>bin\MvasTest\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Address.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ApprovementType.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Class.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClassAction.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClassActionType.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClassBusiness.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClassCategory.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClassExpense.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClassExpenseType.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClassFile.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClassMaterial.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClassMaterialDownloadLog.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClassMaterialFile.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClassMaterialRecipient.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClassPerson.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClassPreference.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClassPreferenceExpense.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClassRegistration.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClassRegistrationFile.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClassRegistrationInvitation.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClassRegistrationLastClass.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClassRegistrationPayment.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClassReportSetting.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClassStyle.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClassType.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContactBlackList.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContactList.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContactListItem.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Country.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Currency.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DistanceClassTemplate.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DistanceClassTemplateClass.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DistanceClassTemplatePerson.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DistanceProfile.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\ClassType.cs" />
+    <Compile Include="Entities\Country.cs" />
+    <Compile Include="Entities\Currency.cs" />
+    <Compile Include="Entities\RegistrationType.cs" />
+    <Compile Include="Entities\TimeZone.cs" />
+    <Compile Include="FormerClass.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FormerStudent.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MainContext.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MainContext.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MainContext.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MainContext.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MainContext.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Person.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PersonRole.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PersonRoleType.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PriceList.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PriceListItem.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PriceListType.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Profile.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProfileUser.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\ActiveExtensions.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ActiveExtensions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RegistrationColorScheme.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RegistrationFormType.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RegistrationType.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RoyaltyFeeRate.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RoyaltyFeeRateType.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TimeZone.cs">
+      <DependentUpon>MainContext.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="MainContext.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>MainContext.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="App.Config" />
+    <None Include="MainContext.edmx.diagram">
+      <DependentUpon>MainContext.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MainContext.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>MainContext.edmx</DependentUpon>
+      <LastGenOutput>MainContext.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="MainContext.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>MainContext.edmx</DependentUpon>
+      <LastGenOutput>MainContext.cs</LastGenOutput>
+    </Content>
+    <Content Include="Queries\ActiveExtensions.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ActiveExtensions.cs</LastGenOutput>
+    </Content>
+    <Content Include="Queries\TableModel.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AutomationSystem.Base.Contract\AutomationSystem.Base.Contract.csproj">
+      <Project>{c359a55f-f29d-4b9d-905e-39f94684674d}</Project>
+      <Name>AutomationSystem.Base.Contract</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

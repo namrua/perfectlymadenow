@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<definition templatePath="Templates\IZI LLC FA Closing Statement.xlsx"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <blocks>   
+    <dataBlock id="GeneralInfoDataBlock">
+      <dataCell bind="ReportDate" positionX="0" positionY="0" fillingMethod="UnderscoreCellTextProcessor" />
+      <dataCell bind="Coordinator" positionX="0" positionY="2" fillingMethod="SheetUtility.AppendTextCellProcessor"/>
+      <dataCell bind="Address" positionX="0" positionY="3" fillingMethod="SheetUtility.AppendTextCellProcessor"/>
+      <dataCell bind="Phone" positionX="0" positionY="4" fillingMethod="SheetUtility.AppendTextCellProcessor"/>
+      <dataCell bind="Email" positionX="0" positionY="5" fillingMethod="SheetUtility.AppendTextCellProcessor"/>
+      <dataCell bind="EventName" positionX="0" positionY="7" fillingMethod="SheetUtility.AppendTextCellProcessor"/>
+      <dataCell bind="EventLocation" positionX="0" positionY="8" fillingMethod="SheetUtility.AppendTextCellProcessor"/>
+      <dataCell bind="EventDates" positionX="0" positionY="9" fillingMethod="SheetUtility.AppendTextCellProcessor"/>
+      <dataCell bind="Instructors" positionX="0" positionY="10" fillingMethod="SheetUtility.AppendTextCellProcessor"/>
+    </dataBlock>
+    <dataBlock id="CrfDetailBlock">
+      <dataCell bind="PaidStudentsCount"/>
+      <dataCell bind="ProgramRevenue" positionX="0" positionY="1"/>
+    </dataBlock>
+    <dataBlock id="ProgramRevenueItemsBlock">
+      <dataCell bind="Quantity" positionX="0"/>
+      <dataCell bind="Rate" positionX="1"/>
+    </dataBlock>
+    <dataBlock id="ProgramExpenseBlock">
+      <dataCell bind="Text" positionX="0" />
+      <dataCell bind="Value" positionX="3" />     
+    </dataBlock>
+  </blocks>
+  <layout>
+    <solid id="GeneralInfoSolid" positionX="1" positionY="3" bind="GeneralInfo">
+      <block blockId="GeneralInfoDataBlock"/>
+    </solid>
+    <solid id="CrfDetailSolid" positionX="4" positionY="16" bind="CrfDetail">
+      <block blockId="CrfDetailBlock"/>     
+    </solid>
+    <table id="ProgramRevenueItemsSolid" positionX="2" positionY="39" rowCount="1" verticalSpace="8" bind="ProgramRevenueItems">
+      <block blockId="ProgramRevenueItemsBlock"/>
+    </table>
+    <table id="ProgramExpanseTable" positionX="1" positionY="62" rowCount="1" verticalSpace="20" bind="ProgramExpenses">
+      <block blockId="ProgramExpenseBlock"/>    
+    </table>
+  </layout>
+</definition>

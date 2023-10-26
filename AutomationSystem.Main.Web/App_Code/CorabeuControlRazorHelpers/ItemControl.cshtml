@@ -1,0 +1,27 @@
+﻿@using System.Web.Mvc;
+@using global::CorabeuControl.Components
+@using global::CorabeuControl.Helpers
+
+
+@helper ExpanseTextBlock(WebViewPage view, TextBlock textBlock)
+    {
+        var expander = new TextExpander(textBlock);
+
+        var expandCommand = expander.Configuration.CssCommand();
+        var foldedClasses = expander.Configuration.CssFolded(textBlock.Id);
+        var unfoldedClasses = expander.Configuration.CssUnfolded(textBlock.Id);
+
+        if (expander.CanExpand)
+        {
+            <span>@expander.ShortText</span>
+            <span class="@foldedClasses">...</span>
+            <span class="@unfoldedClasses">@expander.RestText</span><br />
+            <span class="@foldedClasses"><a href="javascript: return false;" class="@expandCommand" data-command="@ExpanseConfiguration.ShowCommand" data-id="@textBlock.Id">more</a></span>
+            <span class="@unfoldedClasses"><a href="javascript: return false;" class="@expandCommand" data-command="@ExpanseConfiguration.HideCommand" data-id="@textBlock.Id">less</a></span>
+        }
+        else
+        {
+            @expander.ShortText;
+        }
+}
+

@@ -1,0 +1,102 @@
+﻿@model PriceListDetail
+@{
+    ViewBag.Title = CommonResources.MenuCommonPriceLists;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CommonPriceLists;
+    var priceListItems = Model.PriceListItems;
+}
+
+
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Link(CommonResources.Edit, ButtonStyle.Primary, Url.Action("Edit", "PriceList", new { id = Model.PriceListId }), Model.State != PriceListState.New)
+    @bg.Command(CommonResources.Approve, ButtonStyle.Primary, Model.State != PriceListState.New, new { id = "approve-button" })
+    @bg.Command(CommonResources.Discard, ButtonStyle.Primary, Model.State != PriceListState.Approved, new { id = "discard-button" })
+    @bg.Command(CommonResources.Delete, ButtonStyle.Primary, !Model.CanDelete, new { id = "delete-button" })
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Index", "PriceList"))
+}
+
+<h5>Price list</h5>
+
+
+<dl class="row dl-compact">
+
+    <dt class="col-sm-4 col-lg-2">@Html.DisplayNameFor(x => x.Name)</dt>
+    <dd class="col-sm-8 col-lg-10">@Html.DisplayFor(x => x.Name)</dd>
+
+    <dt class="col-sm-4 col-lg-2">@Html.DisplayNameFor(x => x.PriceListType)</dt>
+    <dd class="col-sm-8 col-lg-10">@Html.DisplayFor(x => x.PriceListType)</dd>
+
+    <dt class="col-sm-4 col-lg-2">@Html.DisplayNameFor(x => x.Currency)</dt>
+    <dd class="col-sm-8 col-lg-10">@Html.DisplayFor(x => x.Currency)</dd>
+
+</dl>
+
+<dl class="row dl-compact">
+
+    <dt class="col-sm-4 col-lg-2">@Html.DisplayNameFor(x => x.Approved)</dt>
+    <dd class="col-sm-8 col-lg-10">@Html.DisplayFor(x => x.Approved, new { ShowOnlyDate = true })</dd>
+
+    <dt class="col-sm-4 col-lg-2">@Html.DisplayNameFor(x => x.Discarded)</dt>
+    <dd class="col-sm-8 col-lg-10">@Html.DisplayFor(x => x.Discarded, new { ShowOnlyDate = true })</dd>
+
+</dl>
+
+
+<h5>Price list items</h5>
+
+<table class="table table-hover table-sm">
+    <thead>
+    <tr>
+        <th>Item name</th>
+        <th>Price</th>        
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in priceListItems.OrderBy(x => x.RegistrationTypeId))
+    {
+        <tr>
+            <td>@Html.DisplayFor(x => item.Name)</td>
+            <td>@Html.DisplayFor(x => item.Price, new { Currency = Model.CurrencyCode })</td>           
+        </tr>
+    }
+    </tbody>
+</table>
+
+
+@section scripts
+{
+
+<script type="text/javascript">
+
+        var runPageScript = function () {
+
+            var requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("approve", "@Url.Action("Approve", "PriceList")");
+            requestHelper.addAction("discard", "@Url.Action("Discard", "PriceList")");
+            requestHelper.addAction("delete", "@Url.Action("Delete", "PriceList")");
+
+            $("#approve-button").click(function () {
+                var confirmed = confirm("@TextHelper.ToHtmlString($"Are you sure to approve price list {Model.Name}? Approved price lists cannot be changed anymore.")");
+                if (!confirmed) return;
+                requestHelper.executePost("approve", { id: @Model.PriceListId });
+            });
+
+            $("#discard-button").click(function () {
+                var confirmed = confirm("@TextHelper.ToHtmlString($"Are you sure to discard price list {Model.Name}? Discard price lists cannot be used anymore in the Class administration.")");
+                if (!confirmed) return;
+                requestHelper.executePost("discard", { id: @Model.PriceListId });
+            });
+
+            $("#delete-button").click(function () {
+                var confirmed = confirm("@TextHelper.ToHtmlString($"Are you sure to delete price list {Model.Name}?")");
+                if (!confirmed) return;
+                requestHelper.executePost("delete", { id: @Model.PriceListId });
+            });
+
+        }
+
+</script>
+
+}
+

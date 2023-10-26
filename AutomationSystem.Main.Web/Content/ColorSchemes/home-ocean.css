@@ -1,0 +1,88 @@
+﻿.dropdown-item.active, .dropdown-item:active {
+    background-color: #007bff !important;
+}
+
+/* BUTTONS */
+.btn-public {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+    .btn-public:hover {
+        color: #fff;
+        background-color: #0069d9;
+        border-color: #0062cc;
+    }
+
+    .btn-public:focus, .btn-public.focus {
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+    }
+
+    .btn-public.disabled, .btn-public:disabled {
+        color: #fff;
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-public:not(:disabled):not(.disabled):active, .btn-public:not(:disabled):not(.disabled).active,
+    .show > .btn-public.dropdown-toggle {
+        color: #fff;
+        background-color: #0062cc;
+        border-color: #005cbf;
+    }
+
+        .btn-public:not(:disabled):not(.disabled):active:focus, .btn-public:not(:disabled):not(.disabled).active:focus,
+        .show > .btn-public.dropdown-toggle:focus {
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+        }
+
+.btn-outline-public {
+    color: #007bff;
+    background-color: transparent;
+    background-image: none;
+    border-color: #007bff;
+}
+
+    .btn-outline-public:hover {
+        color: #fff;
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-outline-public:focus, .btn-outline-public.focus {
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+    }
+
+    .btn-outline-public.disabled, .btn-outline-public:disabled {
+        color: #007bff;
+        background-color: transparent;
+    }
+
+    .btn-outline-public:not(:disabled):not(.disabled):active, .btn-outline-public:not(:disabled):not(.disabled).active,
+    .show > .btn-outline-public.dropdown-toggle {
+        color: #fff;
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+        .btn-outline-public:not(:disabled):not(.disabled):active:focus, .btn-outline-public:not(:disabled):not(.disabled).active:focus,
+        .show > .btn-outline-public.dropdown-toggle:focus {
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+        }
+
+
+.table-public,
+.table-public > th,
+.table-public > td {
+    background-color: #d2f5f8;
+}
+
+.table-hover .table-public:hover {
+    background-color: #d2f5f8;
+}
+
+    .table-hover .table-public:hover > td,
+    .table-hover .table-public:hover > th {
+        background-color: #d2f5f8;
+    }

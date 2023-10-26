@@ -1,0 +1,113 @@
+﻿@{
+    var messageContainer = new MessageContainer(Session);
+    var message = messageContainer.PopMessage();
+
+    RegistrationPageStyle style = RegistrationPageStyleHelper.GetStyle(ViewBag);
+}
+
+<!DOCTYPE html>
+<html lang="en" class="full-height">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@string.Format(LayoutTexts.PageTitleMainString, ViewBag.Title)</title>
+        
+    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+    <script src="https://js.braintreegateway.com/web/3.16.0/js/client.min.js"></script>
+    <script src="https://js.braintreegateway.com/web/3.16.0/js/paypal-checkout.min.js"></script>
+
+    @Styles.Render("~/HomeContent/css")
+    @Styles.Render(RegistrationPageStyleHelper.GetBundleByColorScheme(style.ColorSchemeId))
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body class="full-height footer-placeholder expand-placeholder">
+
+    <div class="expand-height">       
+        
+        @* header *@
+        <header class="container" style="background-image: url('@(style.HeaderPictureId.HasValue ? $"/File/Image/{style.HeaderPictureId.Value}" : "/Images/mskr-flowers.jpg")');">
+            <div class="row">
+                <div class="header-title col-md-auto">                   
+                    <h1>@LayoutTexts.Headline</h1>
+                </div>
+                <div class="col-md-auto ml-md-auto">
+                    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+                    {
+                        var languageSelectorModel = ViewServices.LayoutHelper.GetLanguageSelectorModel();
+                        @bg.DropdownCommand(languageSelectorModel.CurrentLanguage, ButtonStyle.PublicPrimary, "lang-selector", "select-lang",false, languageSelectorModel.SupporteLanguages)                       
+                    }
+                </div>
+            </div>
+        </header>
+
+        @* main content *@
+        <section class="container main-content">
+            @RenderBody()
+        </section>
+
+    </div>
+
+    @* footer *@
+    <footer class="container">
+        <hr />
+        <div class="row">
+            <div class="col-auto">
+                @LayoutTexts.Footer
+            </div>
+            <div class="col-auto ml-auto">
+                <a class="admin-link" href="@Url.Action("Index", "Administration")">
+                    #{Build.BuildNumber}#
+                    <span class="fas fa-cog"></span>
+                </a>
+               
+            </div>
+        </div>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/datetimepicker")
+    @Scripts.Render("~/bundles/ace")
+    @Scripts.Render("~/bundles/typeahead")    
+    @Scripts.Render("~/bundles/pagescripts")
+
+
+    <script type="text/javascript">
+        // initialize of empty run page script
+        var runPageScript = function () { }
+    </script>
+
+    @RenderSection("scripts", required: false)
+
+    <script type="text/javascript">
+
+    // ready event
+    $(document).ready(function () {
+
+        var _langRequestHelper = new CorabeuControl.RequestHelper();
+        _langRequestHelper.addAction("change", "@TextHelper.ToHtmlString(Url.Action("ChangeLanguage", "Account"))");
+
+        // initializes language selector     
+        $(".command-select-lang").click(function () {
+            var sender = $(this);
+            var id = sender.attr("data-id");
+            _langRequestHelper.executePost("change", { languageCode: id, returnUrl: "@Ajax.JavaScriptStringEncode(Request.RawUrl)" });
+        });
+
+
+        @if (message != null && message.IsAlert)
+        {
+            <text>alert("@message.Message");</text>
+        }
+
+        @RenderSection("javascript_ready", required: false)
+
+        // runs page script
+        runPageScript();
+    });
+
+    </script>
+
+</body>
+</html>

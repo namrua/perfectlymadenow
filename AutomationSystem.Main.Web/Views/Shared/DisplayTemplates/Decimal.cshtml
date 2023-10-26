@@ -1,0 +1,25 @@
+﻿@model Decimal?
+@{
+    // loads options
+    var isPrice = (bool?)ViewData[DisplayOptions.IsMoney] ?? false;
+    var useCurrentCulture = (bool?)ViewData[DisplayOptions.UseCurrentCulture] ?? false;
+    var currency = (string)ViewData[DisplayOptions.Currency];
+
+    CultureInfo culture = null;
+    if (!string.IsNullOrEmpty(currency))
+    {
+        isPrice = true;
+        culture = CurrencyHelper.TryGetCultureInfoByIsoCurrencySymbol(currency);
+    }
+
+    culture = useCurrentCulture ? CultureInfo.CurrentUICulture : culture;
+}
+
+@if (Model == null)
+{
+    @TextHelper.NoValueText
+}
+else
+{
+    @(isPrice ? TextHelper.GetMoney(Model, culture) : TextHelper.GetPlainDecimalString(Model, culture))
+}

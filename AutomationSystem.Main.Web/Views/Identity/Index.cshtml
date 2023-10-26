@@ -1,0 +1,47 @@
+﻿@model List<UserListItem>
+@{
+    ViewBag.Title = CommonResources.MenuCommonConferenceAccounts;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoreUserAccounts;
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Link(CommonResources.AddNew, ButtonStyle.Primary, Url.Action("New", "Identity"))
+}
+
+@*List of users*@
+@if (Model.Count == 0)
+{
+    <p>
+        <em>@CommonResources.NoRecords</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x[0].Name)</th>
+                <th>@Html.DisplayNameFor(x => x[0].GoogleAccount)</th>
+                <th>@Html.DisplayNameFor(x => x[0].Active)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(x => item.Name)</td>
+                    <td>@Html.DisplayFor(x => item.GoogleAccount)</td>
+                    <td>@Html.DisplayFor(x => item.Active)</td>
+                    <td>
+                        @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                        {
+                            @bg.Link(CommonResources.Detail, ButtonStyle.Primary, Url.Action("Edit", "Identity", new { id = item.UserId }))
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

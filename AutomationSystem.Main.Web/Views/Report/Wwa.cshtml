@@ -1,0 +1,88 @@
+﻿@model WwaCrfReportForEdit
+@{
+    ViewBag.Title = CommonResources.MenuCoordinatorReports;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorReports;
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.Reports, TabItemId.ReportsWwa);
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+}
+
+<form id="wwaReportFrom" method="post" action="@Url.Action("Wwa")">
+
+    <h5>WWA CRF Report</h5>
+
+    <div class="row">
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.FromDate)
+            @Html.EditorFor(x => x.Form.FromDate)
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.ToDate)
+            @Html.EditorFor(x => x.Form.ToDate)
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.DistanceCoordinatorId)
+            @Html.EditorFor(x => x.Form.DistanceCoordinatorId, new { Items = Model.DistanceCoordinators.Select(x => DropDownItem.Item(x.PersonId, x.Name)) })
+        </div>
+
+    </div>
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit("Generate report")
+    }
+
+</form>
+
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // INITIALIZATION AND VALIDATION
+
+            var wwaReportFrom = new CorabeuControl.Form("wwaReportFrom");
+            var fromDate = new CorabeuControl.DateTimePicker("fromDate", "FromDate", { format: "MMMM DD, YYYY" });
+            var toDate = new CorabeuControl.DateTimePicker("toDate", "ToDate", { format: "MMMM DD, YYYY" });
+            var distanceCoordinatorId = new CorabeuControl.DropDownList("distanceCoordinatorId", "DistanceCoordinatorId");
+            wwaReportFrom.registerDateTimeValidators();
+
+            // helper variables
+            var minMoment = moment({ y: 2000 });
+            var minText = "1/1/2000";
+            var fromDateName = "@Html.DisplayNameForJava(x => x.Form.FromDate)";
+            var toDateName = "@Html.DisplayNameForJava(x => x.Form.ToDate)";
+
+            // validation
+            wwaReportFrom.validateDateTimeControl(fromDate, fromDateName,
+                {
+                    required: true,
+                    dateMin: minMoment, dateMinText: minText
+                });
+            wwaReportFrom.validateDateTimeControl(toDate, toDateName,
+                {
+                    required: true,
+                    dateMin: minMoment, dateMinText: minText,
+                    dateMinPicker: fromDate, dateMinPickerText: fromDateName
+                });
+            wwaReportFrom.validateControl(distanceCoordinatorId.element, "@Html.DisplayNameForJava(x => x.Form.DistanceCoordinatorId)", { notSelected: true });
+
+            // binds validations
+            wwaReportFrom.validationBindOne(fromDate, toDate);
+
+            @if (ViewBag.TriggerValidation != null)
+            {
+                @:wwaReportFrom.valid();
+            }
+
+        }
+
+    </script>
+
+}

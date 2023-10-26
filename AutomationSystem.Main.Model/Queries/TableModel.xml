@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <schema name="core">
+    <codeLists>
+      <codelist name="AsyncRequestType" />
+      <codelist name="BatchUploadOperationType" />
+      <codelist name="BatchUploadState" />
+      <codelist name="BatchUploadType" />
+      <codelist name="ConferenceAccountType" />
+      <codelist name="EmailParameterType" />
+      <codelist name="EmailType" />
+      <codelist name="EntityType" />
+      <codelist name="EnumType" />
+      <codelist name="EnvironmentType" />
+      <codelist name="FileType" />
+      <codelist name="IncidentType" />
+      <codelist name="IntegrationType" />
+      <codelist name="JobType" />
+      <codelist name="Language" />
+      <codelist name="ProcessingState" />
+      <codelist name="Severity" />
+      <codelist name="UserGroupType" />
+      <codelist name="UserRoleType" />
+    </codeLists>
+    <tables>
+      <table name="AppLocalisation" />
+      <table name="AsyncRequest" />
+      <table name="BatchUpload" />
+      <table name="BatchUploadField" />
+      <table name="BatchUploadItem" />
+      <table name="ConferenceAccount" />
+      <table name="DataLocalisation" />
+      <table name="Email" />
+      <table name="EmailAttachment" />
+      <table name="EmailParameter" />
+      <table name="EmailTemplate" />
+      <table name="EmailTemplateParameter" />
+      <table name="EnumLocalisation" />
+      <table name="File" />
+      <table name="Incident" />
+      <table name="Job" />
+      <table name="JobRun" />
+      <table name="PayPalKey" />
+      <table name="PayPalRecord" />
+      <table name="Preference" />
+      <table name="User" />
+      <table name="UserLogin" />
+      <table name="UserRoleAssignment" />
+    </tables>
+  </schema>
+  <schema name="enum">
+    <codeLists>
+      <codelist name="Country" />
+      <codelist name="Currency" />
+      <codelist name="TimeZone" />
+    </codeLists>
+  </schema>
+  <schema name="main">
+    <codeLists>
+      <codelist name="ApprovementType" />
+      <codelist name="ClassActionType" />
+      <codelist name="ClassExpenseType" />
+      <codelist name="ClassType" />
+      <codelist name="PersonRoleType" />
+      <codelist name="PriceListType" />
+      <codelist name="RegistrationColorScheme" />
+      <codelist name="RegistrationFormType" />
+      <codelist name="RegistrationType" />
+      <codelist name="RoyaltyFeeRateType" />
+    </codeLists>
+    <tables>
+      <table name="Address" />
+      <table name="Class" />
+      <table name="ClassAction" />
+      <table name="ClassBusiness" />
+      <table name="ClassExpense" />
+      <table name="ClassFile" />
+      <table name="ClassMaterial" />
+      <table name="ClassMaterialDownloadLog" />
+      <table name="ClassMaterialFile" />
+      <table name="ClassMaterialRecipient" />
+      <table name="ClassPerson" />
+      <table name="ClassPreference" />
+      <table name="ClassPreferenceExpense" />
+      <table name="ClassRegistration" />
+      <table name="ClassRegistrationFile" />
+      <table name="ClassRegistrationInvitation" />
+      <table name="ClassRegistrationLastClass" />
+      <table name="ClassRegistrationPayment" />
+      <table name="ClassReportSetting" />
+      <table name="ClassStyle" />
+      <table name="ContactBlackList" />
+      <table name="ContactList" />
+      <table name="ContactListItem" />
+      <table name="DistanceClassTemplate" />
+      <table name="DistanceClassTemplateClass" />
+      <table name="DistanceClassTemplatePerson" />
+      <table name="DistanceProfile" />
+      <table name="FormerClass" />
+      <table name="FormerStudent" />
+      <table name="Person" />
+      <table name="PersonRole" />
+      <table name="PriceList" />
+      <table name="PriceListItem" />
+      <table name="Profile" />
+      <table name="ProfileUser" />
+      <table name="RoyaltyFeeRate" />
+    </tables>
+  </schema>
+  <schema name="webex">
+    <codeLists>
+      <codelist name="IntegrationStateType" />
+    </codeLists>
+    <tables>
+      <table name="Account" />
+      <table name="Event" />
+      <table name="IntegrationState" />
+      <table name="Program" />
+    </tables>
+  </schema>
+</root>

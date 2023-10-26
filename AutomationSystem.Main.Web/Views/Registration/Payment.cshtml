@@ -1,0 +1,128 @@
+﻿@model RegistrationPaymentDetailPageModel
+@{
+    ViewBag.Title = CommonResources.TitleCoordinatedRegistrations;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.Registration, TabItemId.RegistrationPayment,
+        new { id = Model.ClassRegistrationId });
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Link(CommonResources.Edit, ButtonStyle.Primary, Url.Action("PaymentEdit", new { id = Model.ClassRegistrationId }), !Model.CanEdit)
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Students", "Class", new { id = Model.ClassId }))
+}
+
+<h4>Registration payment detail</h4>
+
+<div class="row">
+
+    <div class="col-xl-6 align-content-start">
+        
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Detail.IsPaidPmi)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Detail.IsPaidPmi)</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Detail.IsAbsentee)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Detail.IsAbsentee)</dd>
+        </dl>
+
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Detail.CheckNumber)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Detail.CheckNumber)</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Detail.TransactionNumber)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Detail.TransactionNumber)</dd>
+        </dl>            
+
+    </div>
+
+    <div class="col-xl-6 align-content-start">      
+
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Detail.PayPalFee)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Detail.PayPalFee, new { Currency = Model.CurrencyCode })</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Detail.TotalPayPal)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Detail.TotalPayPal, new { Currency = Model.CurrencyCode })</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Detail.TotalCheck)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Detail.TotalCheck, new { Currency = Model.CurrencyCode })</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Detail.TotalCash)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Detail.TotalCash, new { Currency = Model.CurrencyCode })</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Detail.TotalCreditCard)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Detail.TotalCreditCard, new { Currency = Model.CurrencyCode })</dd>
+        </dl>
+
+    </div>
+
+</div>
+
+@if (Model.PayPalRecord != null)
+{
+
+    <hr />
+
+    <h4>PayPal transaction record</h4>
+
+    <div class="row">
+
+        <div class="col-xl-6 align-content-start">
+
+            <h5>Payment</h5>
+
+            <dl class="row dl-compact">
+                <dt class="col-sm-4">@Html.DisplayNameFor(x => x.PayPalRecord.PayPalId)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(x => x.PayPalRecord.PayPalId)</dd>
+                <dt class="col-sm-4">@Html.DisplayNameFor(x => x.PayPalRecord.TransactionId)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(x => x.PayPalRecord.TransactionId)</dd>
+                <dt class="col-sm-4">@Html.DisplayNameFor(x => x.PayPalRecord.Total)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(x => x.PayPalRecord.Total, new { Currency = Model.CurrencyCode })</dd>
+                <dt class="col-sm-4">@Html.DisplayNameFor(x => x.PayPalRecord.Fee)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(x => x.PayPalRecord.Fee, new { Currency = Model.CurrencyCode })</dd>
+            </dl>
+
+        </div>
+
+        <div class="col-xl-6 align-content-start">
+
+            <h5>Payer</h5>
+
+            <dl class="row dl-compact">
+                <dt class="col-sm-4">@Html.DisplayNameFor(x => x.PayPalRecord.PayerId)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(x => x.PayPalRecord.PayerId)</dd>
+                <dt class="col-sm-4">@Html.DisplayNameFor(x => x.PayPalRecord.FullName)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(x => x.PayPalRecord.FullName)</dd>
+                <dt class="col-sm-4">@Html.DisplayNameFor(x => x.PayPalRecord.Email)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(x => x.PayPalRecord.Email)</dd>
+                <dt class="col-sm-4">@Html.DisplayNameFor(x => x.PayPalRecord.CountryCode)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(x => x.PayPalRecord.CountryCode)</dd>
+            </dl>
+
+        </div>
+
+
+        <div class="col-xl-6 align-content-start">
+
+            <h5>@Html.DisplayNameFor(x => x.PayPalRecord.ShippingAddress)</h5>
+
+            <dl class="row dl-compact">
+                <dt class="col-sm-4">@Html.DisplayNameFor(x => x.PayPalRecord.ShippingAddress.RecipientName)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(x => x.PayPalRecord.ShippingAddress.RecipientName)</dd>
+                <dt class="col-sm-4">@CommonResources.Address</dt>
+                <dd class="col-sm-8">
+                    @if (Model.PayPalRecord.ShippingAddress.FullStreet != null)
+                    {
+                        @Html.DisplayFor(x => x.PayPalRecord.ShippingAddress.FullStreet)<br />
+                    }
+                    @if (Model.PayPalRecord.ShippingAddress.FullCity != null)
+                    {
+                        @Html.DisplayFor(x => x.PayPalRecord.ShippingAddress.FullCity)<br />
+                    }
+                    @Html.DisplayFor(x => x.PayPalRecord.ShippingAddress.CountryCode)
+                </dd>
+            </dl>
+
+        </div>
+
+    </div>
+
+}

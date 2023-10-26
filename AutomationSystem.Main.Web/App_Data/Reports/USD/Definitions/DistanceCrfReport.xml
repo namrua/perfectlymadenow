@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<definition templatePath="Templates\IZI LLC WWA CRF - Distance  Coordinator.xlsx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <blocks>
+    <dataBlock id="HeaderBlock">
+      <dataCell bind="Coordinator" positionX="1" positionY="0" />
+      <dataCell bind="CoordinatorNo" positionX="1" positionY="1" />
+      <dataCell bind="StartDate" positionX="6" positionY="0" />
+      <dataCell bind="EndDate" positionX="6" positionY="1" />
+    </dataBlock>
+    <dataBlock id="CountsBlock">
+      <dataCell bind="Absentee" positionX="0" positionY="1" />
+    </dataBlock>
+    <formatBlock id="StudentPaymentFormat">
+      <formatCell positionX="12" type="Number">[>=1000]"$"#_)##0.00;"$"###0.00</formatCell>
+      <formatCell positionX="13" type="Number">[>=1000]"$"#_)##0.00;"$"###0.00</formatCell>
+      <formatCell positionX="14" type="Number">[>=1000]"$"#_)##0.00;"$"###0.00</formatCell>
+    </formatBlock>
+    <dataBlock id="StudentBlock">
+      <dataCell bind="ClassDate" positionX="0" positionY="0" />
+      <dataCell bind="ClassLocation" positionX="1" positionY="0" />
+
+      <dataCell bind="RegistrantLastName" positionX="4" positionY="0" />
+      <dataCell bind="RegistrantFirstName" positionX="5" positionY="0" />
+      <dataCell bind="RegistrantAddress" positionX="6" positionY="0" />
+      <dataCell bind="RegistrantEmail" positionX="9" positionY="0" />
+
+      <dataCell bind="ParticipantLastName" positionX="4" positionY="1" />
+      <dataCell bind="ParticipantFirstName" positionX="5" positionY="1" />
+      <dataCell bind="ParticipantAddress" positionX="6" positionY="1" />
+      <dataCell bind="ParticipantCountry" positionX="7" positionY="1" />
+
+      <dataCell bind="RegistrationDate" positionX="8" positionY="1" />
+
+      <dataCell bind="CheckNumber" positionX="10" positionY="0" />
+      <dataCell bind="TransactionNumber" positionX="11" positionY="0" />
+      <dataCell bind="TotalCheck" positionX="12" positionY="0" />
+      <dataCell bind="PayPalFee" positionX="13" positionY="0" />
+      <dataCell bind="NetPayPal" positionX="14" positionY="0" />
+      <dataCell bind="TotalRevenue" positionX="15" positionY="0" />
+    </dataBlock>
+  </blocks>
+  <layout>
+    <solid id="HeaderSolid" positionX="1" positionY="4" bind="Header">
+      <block blockId ="HeaderBlock" />
+    </solid>
+    <solid id="CountsSolid" positionX="16" positionY="4" bind="Counts">
+      <block blockId ="CountsBlock" />
+    </solid>
+    <table id="StudentsTable" rowCount="2" verticalSpace="250" bind="Students" positionX="1" positionY="8">
+      <block blockId="StudentBlock" />
+      <block blockId="StudentPaymentFormat" />
+    </table>
+  </layout>
+</definition>

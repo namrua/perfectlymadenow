@@ -1,0 +1,94 @@
+﻿@model RegistrationForEdit<RegistrationStudentForm>
+
+@{
+    ViewBag.Title = LayoutTexts.PageTitleRegistrationString;
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+
+<content>
+
+    <h2>@TitleTexts.RegistrationForm</h2>
+    <hr class="headline-hr" />
+
+    <form id="registrationForm" method="post" action="@Url.Action(ViewBag.ActionForSave)">
+
+        @Html.EditorFor(x => x.Form.ClassId)
+        @Html.EditorFor(x => x.Form.ClassRegistrationId)
+        @Html.EditorFor(x => x.Form.RegistrationTypeId)
+        @Html.EditorFor(x => x.Form.InvitationRequest)
+
+        <h5>@Html.DisplayNameFor(x => x.Form.Address)</h5>
+
+        @Html.EditorFor(x => x.Form.Address, new { Model.Countries })
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                @Html.LabelFor(x => x.Form.Email)
+                @Html.EditorFor(x => x.Form.Email)
+            </div>
+            <div class="form-group col-md-6">
+                @Html.LabelFor(x => x.Form.Phone)
+                @Html.EditorFor(x => x.Form.Phone)
+            </div>
+            <div class="form-group col-md-6">
+                @Html.LabelFor(x => x.Form.LanguageId)
+                @Html.EditorFor(x => x.Form.LanguageId, new { Items = Model.Languages.Select(x => DropDownItem.Item((LanguageEnum)x.Id, x.Description)) })
+            </div>
+        </div>
+
+        @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+        {
+            @bg.Submit(ButtonTexts.SaveString, ButtonStyle.PublicPrimary)
+            if (Model.Form.ClassRegistrationId == 0)
+            {
+                @bg.Link(ButtonTexts.BackString, ButtonStyle.PublicNormal, Url.Action("SelectRegistration",
+                    new{ id = Model.Form.ClassId, backFromRegistrationTypeId = Model.Form.RegistrationTypeId }))
+            }
+        }
+
+    </form>
+
+</content>
+
+
+@section scripts
+{
+
+    @Localisation.Validation(this)
+
+    <script type="text/javascript">
+
+        var runPageScript = function() {
+
+            // INITIALIZATION AND VALIDATION
+
+            var registrationForm = new CorabeuControl.Form("registrationForm");
+
+            var addressLocalisation = new AutomationSystem.AddressLocalisationTemplate();          
+
+            addressLocalisation.firstName = "@Html.DisplayNameForJava(x => x.Form.Address.FirstName)";
+            addressLocalisation.lastName = "@Html.DisplayNameForJava(x => x.Form.Address.LastName)";
+            addressLocalisation.street = "@Html.DisplayNameForJava(x => x.Form.Address.Street)";
+            addressLocalisation.street2 = "@Html.DisplayNameForJava(x => x.Form.Address.Street2)";
+            addressLocalisation.city = "@Html.DisplayNameForJava(x => x.Form.Address.City)";
+            addressLocalisation.state = "@Html.DisplayNameForJava(x => x.Form.Address.State)";
+            addressLocalisation.country = "@Html.DisplayNameForJava(x => x.Form.Address.CountryId)";
+            addressLocalisation.zipCode = "@Html.DisplayNameForJava(x => x.Form.Address.ZipCode)";
+
+            var languageId = new CorabeuControl.DropDownList("languageId", "LanguageId");
+            var addressComponent = new AutomationSystem.Address(registrationForm, "Address", { }, addressLocalisation);
+
+            registrationForm.validateControl($("#email"), "@Html.DisplayNameForJava(x => x.Form.Email)", { required: true, maxlength: 128, email: true });
+            registrationForm.validateControl($("#phone"), "@Html.DisplayNameForJava(x => x.Form.Phone)", { maxlength: 15 });
+            registrationForm.validateControl(languageId.element, "@Html.DisplayNameForJava(x => x.Form.LanguageId)", { notSelected: true });
+
+            @if (ViewBag.TriggerValidation != null)
+            {
+                @:registrationForm.valid();
+            }
+
+        }
+
+    </script>
+
+}

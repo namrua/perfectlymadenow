@@ -1,0 +1,17 @@
+﻿@model object
+@{
+
+    // loads options
+    var value = Model == null ? "" : Model.ToString();
+    var isHtml = (bool?)ViewData[DisplayOptions.IsHtml] ?? false;
+
+}
+
+@if (isHtml)
+{
+    @TextHelper.ToHtmlString(value)
+}
+else
+{
+    @TextHelper.ReplaceNewLines(HttpUtility.HtmlEncode(value))
+}

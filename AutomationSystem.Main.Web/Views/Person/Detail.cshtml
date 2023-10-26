@@ -1,0 +1,124 @@
+﻿@model PersonDetail
+@{
+    ViewBag.Title = CommonResources.MenuCommonPersons;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CommonPersons;
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Link(CommonResources.Edit, ButtonStyle.Primary, Url.Action("Edit", new { id = Model.PersonId }), !Model.CanEdit)
+    @bg.Command(CommonResources.Delete, ButtonStyle.Primary, !Model.CanDelete, new { id = "delete-button" })
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Index"))
+}
+
+<div class="row">
+
+    <div class="col-xl-6 align-content-start">
+        
+        <h5>Person</h5>
+
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Address.FullName)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Address.FullName)</dd>
+        </dl>
+        <dl class="row dl-compact">
+
+            <dt class="col-sm-4">@CommonResources.Address</dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(x => x.Address.FullStreet)<br/>
+                @Html.DisplayFor(x => x.Address.FullCity)<br/>
+                @Html.DisplayFor(x => x.Address.Country)
+            </dd>
+
+        </dl>
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Email)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Email)</dd>
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Phone)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Phone)</dd>
+        </dl>
+
+    </div>
+    
+    <div class="col-xl-6 align-content-start">
+        
+        <h5>Misc</h5>
+
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Profile)</dt>
+            @if (Model.ProfileId.HasValue)
+            {
+                <dd class="col-sm-8">@Html.DisplayFor(x => x.Profile)</dd>
+            }
+            else
+            {
+                <dd class="col-sm-8"><em>default</em></dd>
+            }
+            @if (Model.CoordinatorNumber.HasValue)
+            {
+                <dt class="col-sm-4">@Html.DisplayNameFor(x => x.CoordinatorNumber)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(x => x.CoordinatorNumber)</dd>
+            }
+        </dl>
+
+    </div>
+    
+</div>
+
+
+@*List of roles*@
+<h5>@Html.DisplayNameFor(x => x.AssignedRoles)</h5>
+@if (Model.AssignedRoles.Count == 0)
+{
+    <p>
+        <em>@CommonResources.NoRecords</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.AssignedRoles[0].RoleType)</th>
+                <th>@Html.DisplayNameFor(x => x.AssignedRoles[0].IsDefault)</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.AssignedRoles.OrderBy(x => x.RoleTypeId))
+        {
+            <tr>
+                <td>@Html.DisplayFor(x => item.RoleType)</td>
+                <td>@Html.DisplayFor(x => item.IsDefault)</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function() {
+
+            // DELETE FUNCTIONALITY
+
+            // registration helper
+            var requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("delete", "@Url.Action("Delete", "Person")");
+
+            // connect delete-button
+            $("#delete-button").click(function() {
+                var confirmed = confirm(
+                    "@TextHelper.ToHtmlString($"Are you sure to delete person {MainTextHelper.GetFullName(Model.Address.FirstName, Model.Address.LastName)}?")");
+                if (!confirmed) return;
+                requestHelper.executePost("delete", { id: @Model.PersonId });
+            });
+
+        }
+
+    </script>
+
+}

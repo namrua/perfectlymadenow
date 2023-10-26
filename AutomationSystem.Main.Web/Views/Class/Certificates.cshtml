@@ -1,0 +1,191 @@
+﻿@model ClassCertificatesPageModel
+@{
+    ViewBag.Title = CommonResources.MenuCoordinatorClasses;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.Class, TabItemId.ClassCertificates,
+        new { id = Model.Class.ClassId });
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Command("Generate certificates", ButtonStyle.Primary, false, new { id = "certificate-button" })
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Index"))
+}
+
+<div class="badge-title">
+    <h4>@Model.Class.ClassTitle</h4>
+    @Html.ClassCategoryBadge(Model.Class.ClassCategoryId)
+    @Html.ClassStateBadge(Model.Class.ClassState)
+</div>
+
+<h5>Staffs and composed</h5>
+
+@*List of certificates*@
+@if (Model.StaffsAndComposed.Count == 0)
+{
+    <p>
+        <em>@CommonResources.NoRecords</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.StaffsAndComposed[0].DisplayedName)</th>
+                <th>@Html.DisplayNameFor(x => x.StaffsAndComposed[0].Assigned)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.StaffsAndComposed.OrderBy(x => x.DisplayedName))
+            {
+                <tr>
+                    <td>@Html.DisplayFor(x => item.DisplayedName)</td>
+                    <td>@Html.DisplayFor(x => item.Assigned)</td>
+                    <td>
+                        @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                        {
+                            @bg.Link(CommonResources.Download, ButtonStyle.Primary, Url.Action("Download", "File", new { id = item.FileId }))
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<h5>Students</h5>
+
+@*List of certificates*@
+@if (Model.Students.Count == 0)
+{
+    <p>
+        <em>@CommonResources.NoRecords</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.Students[0].DisplayedName)</th>
+                <th>@Html.DisplayNameFor(x => x.Students[0].Assigned)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Students.OrderBy(x => x.DisplayedName))
+            {
+                <tr>
+                    <td>@Html.DisplayFor(x => item.DisplayedName)</td>
+                    <td>@Html.DisplayFor(x => item.Assigned)</td>
+                    <td>
+                        @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                        {
+                            @bg.Link(CommonResources.Download, ButtonStyle.Primary, Url.Action("Download", "File", new { id = item.FileId }))
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<h5>WWA</h5>
+
+@*List of certificates*@
+@if (Model.WwaStudents.Count == 0)
+{
+    <p>
+        <em>@CommonResources.NoRecords</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.WwaStudents[0].DisplayedName)</th>
+                <th>@Html.DisplayNameFor(x => x.WwaStudents[0].Assigned)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.WwaStudents.OrderBy(x => x.DisplayedName))
+            {
+                <tr>
+                    <td>@Html.DisplayFor(x => item.DisplayedName)</td>
+                    <td>@Html.DisplayFor(x => item.Assigned)</td>
+                    <td>
+                        @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                        {
+                            @bg.Link(CommonResources.Download, ButtonStyle.Primary, Url.Action("Download", "File", new { id = item.FileId }))
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@*List of Generating requests*@
+@if (Model.GeneratingRequests.Count != 0)
+{
+    <hr />
+    <h5>Document generating</h5>
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.GeneratingRequests[0].AsyncRequestType)</th>
+                <th>@Html.DisplayNameFor(x => x.GeneratingRequests[0].ProcessingState)</th>
+                <th>@Html.DisplayNameFor(x => x.GeneratingRequests[0].Started)</th>
+                <th>@Html.DisplayNameFor(x => x.GeneratingRequests[0].Finished)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.GeneratingRequests)
+            {
+                <tr class="@CssClassHelper.New().AddIf(item.ProcessingStateId != ProcessingStateEnum.Finished, "table-warning").Render()">
+                    <td>@Html.DisplayFor(x => item.AsyncRequestType)</td>
+                    <td>@Html.DisplayFor(x => item.ProcessingState)</td>
+                    <td>@Html.DisplayFor(x => item.Started)</td>
+                    <td>@Html.DisplayFor(x => item.Finished)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // DELETE FUNCTIONALITY
+
+            // registration helper
+            var requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("certificate", "@Url.Action("GenerateCertificates", new { id = Model.Class.ClassId })");
+
+            // connect certificate-button
+            $("#certificate-button").click(function () {
+                requestHelper.executePost("certificate");
+            });
+
+            //// connect financial-button
+            //$("#financial-button").click(function () {
+            //    requestHelper.executePost("financial");
+            //});
+
+        }
+
+    </script>
+
+}

@@ -1,0 +1,78 @@
+﻿@model DistanceClassesPageModel
+
+@{
+    ViewBag.Title = LayoutTexts.PageTitleHomeString;
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+
+    var style = RegistrationPageStyleHelper.GetStyle(ViewBag);
+}
+
+<content>
+
+    @ContentTexts.DistanceClassesInstruction
+
+</content>
+
+<content>
+
+    <h2>@TitleTexts.WwaRegistration</h2>
+
+    @*List of TABLE_NAME*@
+    @if (Model.Classes.Count == 0)
+    {
+        <hr class="headline-hr"/>
+        <p>
+            <em>@TextTexts.NoClass</em>
+        </p>
+    }
+    else
+    {
+        <table class="table table-hover table-sm">
+            <tbody>
+            @foreach (var item in Model.Classes)
+            {
+                <tr class="@CssClassHelper.New().AddIf(item.EnvironmentTypeId == EnvironmentTypeEnum.Test, "table-dark").Render()">
+                    <td>
+                        <h5>@Html.DisplayFor(x => item.Title)</h5>
+                        <p>
+                            @if (item.Instructors.Any())
+                            {
+                                <strong>
+                                    @Html.DisplayNameFor(x => item.Instructors): @Html.DisplayFor(x => item.Instructors)
+                                </strong><br/>
+                            }
+                            @MainTextHelper.GetEventDate(item.EventStart, item.EventEnd, CultureInfo.CurrentCulture), @item.Year<br/>
+                            @MainTextHelper.GetEventLanguageInfo(item.OriginLanguage, item.TransLanguage, CommonTexts.LanguageTranslationString)<br/>
+                        </p>
+                        <div class="row">
+                            <div class="col-12 col-lg-10 row">
+                                <div class="col-lg-6">
+                                    <strong>@Html.DisplayNameFor(x => item.RegistrationStart)</strong>
+                                    @Html.DisplayFor(x => item.RegistrationStart, new {ShowOnlyDate = true, UseCurrentCulture = true})
+                                </div>
+                                <div class="col-lg-6">
+                                    <strong>@Html.DisplayNameFor(x => item.RegistrationEnd)</strong>
+                                    @Html.DisplayFor(x => item.RegistrationEnd, new {ShowOnlyDate = true, UseCurrentCulture = true})
+                                </div>
+                            </div>
+                            <div class="col-lg-2 row justify-content-center justify-content-lg-end align-self-end block-item-group-placeholder">
+                                @using (var bg = Html.ButtonGroup(ButtonGroupType.BlockItemGroup))
+                                {
+                                    @bg.Link(ButtonTexts.RegisterString, ButtonStyle.PublicPrimary, Url.Action("SelectRegistrationForDistance", new {id = item.ClassId}))
+                                }
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Link(ButtonTexts.BackToHomeString, ButtonStyle.PublicPrimary, style.HomepageUrl ?? Url.Action("Index"))
+    }
+
+</content>
+

@@ -1,0 +1,337 @@
+﻿
+/* Title badges*/
+.badge-title {
+     margin-bottom: 0.5rem;
+}
+.badge-title h4, .badge-title h5 { 
+    display: inline;
+    margin-right: 0.25rem;
+}
+
+
+/* MISC */
+.horizontal-link-list a {
+    margin-left: 12px
+}
+
+.paragraph {
+    margin-bottom: 16px;
+}
+
+.btn-email-param {
+    margin-top: 3px;
+}
+
+.strong {
+    font-weight: bold;
+}
+
+.disabled-text {
+    color: #383d41;
+    background-color: #e9ecef;   
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    width: 100%;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+
+
+/* FORMS AND VALIDATION */
+/* labels and validation texts */
+label {
+    font-weight: bold;
+}
+
+label.error {
+    color: #fb7400;
+    font-weight: normal;
+}
+
+.warning-text {
+    color: #fb7400;
+}
+
+/* Checkboxes*/
+
+.padded-checkbox {
+    padding-top: 2.25rem;
+}
+
+
+/* DropDowns*/
+
+/* restriction of size of ddl */
+.dropdown-oversize {
+    max-height: 300px;
+    min-width: 200px;
+    overflow-y: scroll;
+}
+
+/* class for multi-ddl div, more dll in one line*/
+.multi-ddl {
+    width: 100%;
+}
+
+/* class for multi-ddl div, more dll in one line*/
+.multi-ddl div {
+    width: 100%;
+    margin-right: 1px;
+}
+
+/* class for multi-ddl div, more dll in one line*/
+.multi-ddl div button {
+    width: 100%;
+}
+
+/* ACE code editor */
+.ace-editor { 
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 300px;
+    width: 100%;
+    border: 1px solid #ced4da;
+    border-radius: 0.2rem;
+}
+
+/* Typeahead */
+
+.twitter-typeahead {
+    width: 100%;
+}
+
+.typeahead {	    
+}
+
+.tt-query {       
+}
+
+.tt-hint {   
+    color: #BBBBBB;
+}
+.tt-menu {
+    min-width: 200px;
+    background-color: #FFFFFF;
+    border: 1px solid #ced4da;
+    border-radius: 0.2rem;
+    margin-top: 2px;
+    padding: 8px 0;
+}
+.tt-suggestion {
+    font-size: 1rem; 
+    padding: 2px 20px;
+}
+    .tt-suggestion:hover {
+        cursor: pointer;
+        background-color: #007bff;
+        color: #FFFFFF;
+    }
+.tt-suggestion p {
+    margin: 0;
+}
+.tt-empty-message {
+    padding: 2px 10px;
+    font-style: italic;
+    text-align: center;
+}
+
+
+/* Sets */
+
+.set-item {
+    margin-top: 5px;
+}
+
+/* BUTTONS */
+
+/* filter btn group*/
+.btn-group-filter {
+
+}
+
+/* item block button group */
+.btn-group-item-block {
+    margin-top: 8px;
+}
+
+/* placeholder for block item group */
+.block-item-group-placeholder {
+}
+
+/* higher and equal lg */
+@media (min-width: 992px) {
+
+    /* item block button group */
+    .btn-group-item-block {            
+    }
+
+    /* placeholder for block item group */
+    .block-item-group-placeholder {
+        margin-left: auto !important;
+        margin-right: 0px;
+    }
+
+}
+
+
+/* item right button group */
+.btn-group-item-right {
+    float: right;
+}
+
+/* top command button group */
+.btn-group-top-command {
+    margin-top: 8px;
+    margin-bottom: 16px;
+}
+
+/* page part button group */
+.btn-group-page-part {
+}
+
+
+/* DETAIL */
+
+/* provides compacts detail definitions - minimal vertical gutters*/
+dl.dl-compact dt, dl.dl-compact dd{      
+    margin-bottom: 0px;
+}
+
+/* equalizes proportions of dd start with one and two column dl mixing */
+dl.dl-single-column dd {
+    padding-left: 15px;
+}
+
+/* higher and equal lg */
+@media (min-width: 992px) {
+
+    /* equalizes proportions of dd start with one and two column dl mixing */
+    dl.dl-single-column dd {
+        padding-left: 10px;
+    }
+
+}
+
+
+/* equalizes proportions of dd start with one and two column dl mixing */
+dl.dl-single-column-xl dd {
+    padding-left: 15px;
+}
+
+
+/* higher and equal xl */
+@media (min-width: 1200px) {
+
+    /* equalizes proportions of dd start with one and two column dl mixing */
+    dl.dl-single-column-xl dd {
+        padding-left: 10px;
+    }
+}
+
+
+/* lower that sm */
+@media (max-width: 575px) {
+    /* provides compacts detail definitions - disables minimal vertical gutters*/
+    dl .dl-compact dt {
+        margin-bottom: 0px;
+    } 
+    dl.dl-compact dd{           
+        margin-bottom: 8px;
+    }
+}
+
+/* TABLES */
+small {
+    color: grey;
+}
+
+
+/* TABS */
+.nav-vertical-padding {
+    margin-bottom: 12px;
+}
+
+
+/* PREVIEW IMAGES */
+
+/* image preview - form 2 columns system */
+.img-preview-placeholder-form-2 {
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 0.2rem;
+}
+
+@media(max-width:765px) {
+
+    .img-preview-placeholder-form-2 img {
+        width: 492px;
+    }
+
+}
+
+@media(min-width: 768px) {
+
+    .img-preview-placeholder-form-2 img {
+        width: 312px;
+    }
+}
+
+@media(min-width: 992px) {
+
+    .img-preview-placeholder-form-2 img {
+        width: 432px;
+    }
+}
+
+@media(min-width: 1200px) {
+
+    .img-preview-placeholder-form-2 img {
+        width: 522px;
+    }
+}
+
+
+/* image preview - detail 2 columns system */
+.img-preview-placeholder-detail-2 {
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 0.2rem;
+}
+
+@media(max-width:765px) {
+
+    .img-preview-placeholder-detail-2 img {
+        width: 492px;
+    }
+}
+
+@media(min-width: 768px) {
+
+    .img-preview-placeholder-detail-2 img {
+        width: 672px;
+    }
+}
+
+@media(min-width: 992px) {
+
+    .img-preview-placeholder-detail-2 img {
+        width: 912px;
+    }
+}
+
+@media(min-width: 1200px) {
+
+    .img-preview-placeholder-detail-2 img {
+        width: 522px;
+    }
+}

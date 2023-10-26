@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="e8d07d7786984131a8790ca53186f6cf" Name="Diagram1" ZoomLevel="67">
+        <EntityTypeShape EntityType="MainModel.Country" Width="1.5" PointX="1.5" PointY="33.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MainModel.Currency" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MainModel.TimeZone" Width="1.5" PointX="0.75" PointY="17.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MainModel.Address" Width="1.5" PointX="1.5" PointY="26.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MainModel.ApprovementType" Width="1.375" PointX="9" PointY="6.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MainModel.ClassPerson" Width="1.5" PointX="11.25" PointY="17.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MainModel.ClassRegistrationInvitation" Width="1.5" PointX="16.625" PointY="14.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MainModel.ClassType" Width="1.5" PointX="0.75" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MainModel.PersonRole" Width="1.5" PointX="11.25" PointY="25.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MainModel.PersonRoleType" Width="1.5" PointX="9" PointY="26.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MainModel.RegistrationFormType" Width="1.5" PointX="9" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MainModel.RegistrationType" Width="1.5" PointX="9" PointY="23.25" IsExpanded="true" />
+        <AssociationConnector Association="MainModel.FK_Address_CountryId" ManuallyRouted="false" />
+        <AssociationConnector Association="MainModel.FK_ClassPerson_RoleTypeId" ManuallyRouted="false" />
+        <AssociationConnector Association="MainModel.FK_ClassRegistrationInvitation_RegistrationTypeId" ManuallyRouted="false" />
+        <AssociationConnector Association="MainModel.FK_PersonRole_RoleTypeId" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="MainModel.PriceListItem" Width="1.5" PointX="8.75" PointY="16.625" />
+        <AssociationConnector Association="MainModel.FK_PriceListItem_RegistrationTypeId" />
+        <EntityTypeShape EntityType="MainModel.FormerStudent" Width="1.5" PointX="6.125" PointY="25.625" />
+        <AssociationConnector Association="MainModel.FK_FormerStudent_AddressId" />
+        <EntityTypeShape EntityType="MainModel.ClassRegistrationLastClass" Width="1.625" PointX="20" PointY="11.25" />
+        <EntityTypeShape EntityType="MainModel.PriceListType" Width="1.5" PointX="3.375" PointY="2.125" />
+        <EntityTypeShape EntityType="MainModel.ClassFile" Width="1.5" PointX="17.125" PointY="6.75" />
+        <EntityTypeShape EntityType="MainModel.ClassRegistrationFile" Width="3.25" PointX="29.875" PointY="12.625" />
+        <EntityTypeShape EntityType="MainModel.ClassRegistrationPayment" Width="2" PointX="22.375" PointY="12" />
+        <EntityTypeShape EntityType="MainModel.ClassBusiness" Width="2.875" PointX="14.25" PointY="2.625" />
+        <EntityTypeShape EntityType="MainModel.ClassExpense" Width="2.125" PointX="18.5" PointY="3" />
+        <EntityTypeShape EntityType="MainModel.ClassExpenseType" Width="1.5" PointX="16.625" PointY="0.75" />
+        <AssociationConnector Association="MainModel.FK_ClassExpense_ClassBusinessId" />
+        <AssociationConnector Association="MainModel.FK_ClassExpense_ClassExpenseTypeId" />
+        <EntityTypeShape EntityType="MainModel.ClassPreferenceExpense" Width="1.75" PointX="22" PointY="18" />
+        <EntityTypeShape EntityType="MainModel.ClassStyle" Width="1.5" PointX="19.625" PointY="26.375" />
+        <EntityTypeShape EntityType="MainModel.Profile" Width="1.5" PointX="19.625" PointY="30.25" />
+        <EntityTypeShape EntityType="MainModel.ProfileUser" Width="1.5" PointX="21.875" PointY="30.625" />
+        <EntityTypeShape EntityType="MainModel.RegistrationColorScheme" Width="1.5" PointX="17.375" PointY="26.875" />
+        <AssociationConnector Association="MainModel.FK_ClassPreferenceExpense_ClassExpenseTypeId" />
+        <AssociationConnector Association="MainModel.FK_ClassStyle_RegistrationColorSchemeId" />
+        <AssociationConnector Association="MainModel.FK_ProfileUser_ProfileId" />
+        <EntityTypeShape EntityType="MainModel.ClassMaterialFile" Width="2.125" PointX="22.25" PointY="21.75" />
+        <EntityTypeShape EntityType="MainModel.ClassAction" Width="1.5" PointX="28.875" PointY="8.625" />
+        <EntityTypeShape EntityType="MainModel.ClassActionType" Width="1.5" PointX="26.625" PointY="6.25" />
+        <AssociationConnector Association="MainModel.FK_ClassAction_ClassActionTypeId" />
+        <EntityTypeShape EntityType="MainModel.Person" Width="4.125" PointX="22.375" PointY="1.875" />
+        <AssociationConnector Association="MainModel.FK_Person_AddressId" />
+        <AssociationConnector Association="MainModel.FK_ClassPerson_PersonId" />
+        <AssociationConnector Association="MainModel.FK_Person_ProfileId" />
+        <AssociationConnector Association="MainModel.FK_PersonRole_PersonId" />
+        <EntityTypeShape EntityType="MainModel.RoyaltyFeeRate" Width="2.25" PointX="2.625" PointY="5" />
+        <EntityTypeShape EntityType="MainModel.RoyaltyFeeRateType" Width="2.625" PointX="3.625" PointY="11.125" />
+        <AssociationConnector Association="MainModel.FK_RoyaltyFeeRate_CurrencyId" />
+        <AssociationConnector Association="MainModel.FK_RoyaltyFeeRate_RoyaltyFeeRateTypeId" />
+        <EntityTypeShape EntityType="MainModel.PriceList" Width="1.5" PointX="5.625" PointY="0.75" />
+        <AssociationConnector Association="MainModel.FK_PriceList_CurrencyId" />
+        <AssociationConnector Association="MainModel.FK_PriceList_PriceListTypeId" />
+        <AssociationConnector Association="MainModel.FK_PriceListItem_PriceListId" />
+        <EntityTypeShape EntityType="MainModel.ClassPreference" Width="3.25" PointX="18.5" PointY="16" />
+        <EntityTypeShape EntityType="MainModel.ClassReportSetting" Width="3.25" PointX="10.25" PointY="0.5" />
+        <AssociationConnector Association="MainModel.FK_ClassPreference_CurrencyId" />
+        <AssociationConnector Association="MainModel.FK_ClassPreference_LocationInfoId" />
+        <AssociationConnector Association="MainModel.FK_ClassPreference_RegistrationColorSchemeId" />
+        <AssociationConnector Association="MainModel.FK_ClassPreferenceExpense_ClassPreferenceId" />
+        <AssociationConnector Association="MainModel.FK_Profile_ClassPreferenceId" />
+        <AssociationConnector Association="MainModel.FK_ClassReportSetting_LocationInfoId" />
+        <EntityTypeShape EntityType="MainModel.ClassMaterial" Width="1.75" PointX="29.5" PointY="25.125" />
+        <EntityTypeShape EntityType="MainModel.ClassMaterialRecipient" Width="1.75" PointX="31.75" PointY="29.75" />
+        <EntityTypeShape EntityType="MainModel.ClassRegistration" Width="1.75" PointX="32.5" PointY="16.5" />
+        <AssociationConnector Association="MainModel.FK_ClassRegistration_RegistrantAddressId" />
+        <AssociationConnector Association="MainModel.FK_ClassRegistration_StudentAddressId" />
+        <AssociationConnector Association="MainModel.FK_ClassRegistration_ApprovementTypeId" />
+        <AssociationConnector Association="MainModel.FK_ClassMaterialFile_ClassMaterialId" />
+        <AssociationConnector Association="MainModel.FK_ClassMaterialRecipient_ClassMaterialId" />
+        <AssociationConnector Association="MainModel.FK_ClassRegistration_ClassRegistrationLastClassId" />
+        <AssociationConnector Association="MainModel.FK_ClassRegistration_ClassRegistrationPaymentId" />
+        <AssociationConnector Association="MainModel.FK_ClassRegistration_FormerStudentId" />
+        <AssociationConnector Association="MainModel.FK_ClassRegistration_ProfileId" />
+        <AssociationConnector Association="MainModel.FK_ClassRegistration_RegistrationFormTypeId" />
+        <AssociationConnector Association="MainModel.FK_ClassRegistration_RegistrationTypeId" />
+        <AssociationConnector Association="MainModel.FK_ClassRegistrationFile_ClassRegistrationId" />
+        <AssociationConnector Association="MainModel.FK_ClassRegistrationInvitation_ClassRegistrationId" />
+        <EntityTypeShape EntityType="MainModel.ClassMaterialDownloadLog" Width="2.125" PointX="34.625" PointY="25.25" />
+        <AssociationConnector Association="MainModel.FK_ClassMaterialDownloadLog_ClassMaterialFileId" />
+        <AssociationConnector Association="MainModel.FK_ClassMaterialDownloadLog_ClassMaterialRecipientId" />
+        <EntityTypeShape EntityType="MainModel.DistanceClassTemplateClass" Width="2.75" PointX="29.625" PointY="16.75" />
+        <EntityTypeShape EntityType="MainModel.DistanceClassTemplatePerson" Width="2.75" PointX="34.5" PointY="12.75" />
+        <EntityTypeShape EntityType="MainModel.DistanceProfile" Width="2.75" PointX="29.5" PointY="20.5" />
+        <AssociationConnector Association="MainModel.FK_DistanceClassTemplateClass_DistanceProfileId" />
+        <AssociationConnector Association="MainModel.FK_DistanceClassTemplatePerson_PersonId" />
+        <AssociationConnector Association="MainModel.FK_DistanceClassTemplatePerson_RoleTypeId" />
+        <AssociationConnector Association="MainModel.FK_DistanceProfile_DistanceCoordinatorId" />
+        <AssociationConnector Association="MainModel.FK_DistanceProfile_PriceListId" />
+        <AssociationConnector Association="MainModel.FK_DistanceProfile_ProfileId" />
+        <EntityTypeShape EntityType="MainModel.DistanceClassTemplate" Width="3.25" PointX="31" PointY="2.875" />
+        <AssociationConnector Association="MainModel.FK_DistanceClassTemplate_ClassTypeId" />
+        <AssociationConnector Association="MainModel.FK_DistanceClassTemplate_GuestInstructorId" />
+        <AssociationConnector Association="MainModel.FK_DistanceClassTemplateClass_DistanceClassTemplateId" />
+        <AssociationConnector Association="MainModel.FK_DistanceClassTemplatePerson_DistanceClassTemplateId" />
+        <EntityTypeShape EntityType="MainModel.ContactBlackList" Width="1.5" PointX="5.5" PointY="7" />
+        <EntityTypeShape EntityType="MainModel.ContactListItem" Width="1.5" PointX="24.125" PointY="30.5" />
+        <EntityTypeShape EntityType="MainModel.FormerClass" Width="1.5" PointX="21.875" PointY="25.625" />
+        <AssociationConnector Association="MainModel.FK_FormerClass_ClassTypeId" />
+        <AssociationConnector Association="MainModel.FK_ContactListItem_FormerStudentId" />
+        <AssociationConnector Association="MainModel.FK_FormerClass_ProfileId" />
+        <AssociationConnector Association="MainModel.FK_FormerStudent_FormerClassId" />
+        <EntityTypeShape EntityType="MainModel.ContactList" Width="1.5" PointX="35.25" PointY="16.5" />
+        <AssociationConnector Association="MainModel.FK_ContactList_ProfileId" />
+        <AssociationConnector Association="MainModel.FK_ContactList_SenderId" />
+        <AssociationConnector Association="MainModel.FK_ContactListItem_ContactListId" />
+        <EntityTypeShape EntityType="MainModel.Class" Width="2.5" PointX="27.25" PointY="12.625" />
+        <EntityTypeShape EntityType="MainModel.ClassCategory" Width="1.5" PointX="25" PointY="17.5" />
+        <AssociationConnector Association="MainModel.FK_Class_CurrencyId" />
+        <AssociationConnector Association="MainModel.FK_Class_TimeZoneId" />
+        <AssociationConnector Association="MainModel.FK_Class_ClassBusinessId" />
+        <AssociationConnector Association="MainModel.FK_Class_ClassCategoryId" />
+        <AssociationConnector Association="MainModel.FK_Class_ClassReportSettingId" />
+        <AssociationConnector Association="MainModel.FK_Class_ClassStyleId" />
+        <AssociationConnector Association="MainModel.FK_Class_ClassTypeId" />
+        <AssociationConnector Association="MainModel.FK_Class_CoordinatorId" />
+        <AssociationConnector Association="MainModel.FK_Class_GuestInstructorId" />
+        <AssociationConnector Association="MainModel.FK_Class_PriceListId" />
+        <AssociationConnector Association="MainModel.FK_Class_ProfileId" />
+        <AssociationConnector Association="MainModel.FK_ClassAction_ClassId" />
+        <AssociationConnector Association="MainModel.FK_ClassBusiness_AssociatedLectureId" />
+        <AssociationConnector Association="MainModel.FK_ClassFile_ClassId" />
+        <AssociationConnector Association="MainModel.FK_ClassMaterial_ClassId" />
+        <AssociationConnector Association="MainModel.FK_ClassPerson_ClassId" />
+        <AssociationConnector Association="MainModel.FK_ClassRegistration_ClassId" />
+        <AssociationConnector Association="MainModel.FK_ClassRegistrationInvitation_ClassId" />
+        <AssociationConnector Association="MainModel.FK_DistanceClassTemplateClass_ClassId" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

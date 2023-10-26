@@ -1,0 +1,84 @@
+﻿@model RegistrationForEdit<RegistrationChildForm>
+@{
+    ViewBag.Title = CommonResources.TitleCoordinatedRegistrations;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;   
+}
+
+<form id="registrationForm" method="post" action="@Url.Action(ViewBag.ActionForSave)">
+
+    @Html.EditorFor(x => x.Form.ClassId)
+    @Html.EditorFor(x => x.Form.ClassRegistrationId)
+    @Html.EditorFor(x => x.Form.RegistrationTypeId)
+
+    <h5>@Html.DisplayNameFor(x => x.Form.ParentAddress)</h5>
+
+    @Html.EditorFor(x => x.Form.ParentAddress, new { Model.Countries })
+
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.ParentEmail)
+            @Html.EditorFor(x => x.Form.ParentEmail)
+        </div>
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.ParentPhone)
+            @Html.EditorFor(x => x.Form.ParentPhone)
+        </div>
+    </div>
+
+
+    <h5>@Html.DisplayNameFor(x => x.Form.ChildAddress)</h5>
+
+    @Html.EditorFor(x => x.Form.ChildAddress, new { Model.Countries })
+
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.ChildEmail)
+            @Html.EditorFor(x => x.Form.ChildEmail)
+        </div>
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.LanguageId)
+            @Html.EditorFor(x => x.Form.LanguageId, new { Items = Model.Languages.Select(x => DropDownItem.Item((LanguageEnum)x.Id, x.Description)) })
+        </div>
+    </div>
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save);
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, Model.Form.ClassRegistrationId == 0
+                 ? Url.Action("Registrations", "Class", new { id = Model.Form.ClassId })
+                 : Url.Action("PersonalData", new { id = Model.Form.ClassRegistrationId }))
+    }
+
+</form>
+
+
+@section scripts
+{
+
+<script type="text/javascript">
+
+        var runPageScript = function() {
+
+            // INITIALIZATION AND VALIDATION
+
+            var registrationForm = new CorabeuControl.Form("registrationForm");
+
+            var languageId = new CorabeuControl.DropDownList("languageId", "LanguageId");
+            var parentAddressComponent = new AutomationSystem.Address(registrationForm, "ParentAddress");
+            var childAddressComponent = new AutomationSystem.Address(registrationForm, "ChildAddress");
+
+            registrationForm.validateControl($("#parentEmail"), "@Html.DisplayNameFor(x => x.Form.ParentEmail)", { required: true, maxlength: 128, email: true });
+            registrationForm.validateControl($("#parentPhone"), "@Html.DisplayNameForJava(x => x.Form.ParentPhone)", { maxlength: 15 });
+            registrationForm.validateControl($("#childEmail"), "@Html.DisplayNameFor(x => x.Form.ChildEmail)", { required: true, maxlength: 128, email: true });
+            registrationForm.validateControl(languageId.element, "@Html.DisplayNameFor(x => x.Form.LanguageId)", { notSelected: true });
+
+            @if (ViewBag.TriggerValidation != null)
+            {
+                @:registrationForm.valid();
+            }
+
+        }
+
+</script>
+
+}

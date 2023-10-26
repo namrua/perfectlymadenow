@@ -1,0 +1,179 @@
+﻿@model PreviewStylePageModel
+@{
+    ViewBag.Title = LayoutTexts.PageTitleRegistrationString;
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+
+    var style = RegistrationPageStyleHelper.GetStyle(ViewBag);
+}
+
+
+<content>
+
+    <h2>PREVIEW TABLE</h2>
+    <hr class="headline-hr" />
+
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Class</th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr class="table-public">
+                <td>
+                    John Doe<br />
+                    <a href="mailto://johndoe@noreply.com">johndoe@noreply.com</a>
+                </td>
+
+                <td>
+                    12345 de crisanto place<br />
+                    Elk Grove, California 84216<br />
+                    USA
+                </td>
+
+                <td>
+                    November 1 & 2, 2019<br />
+                    Anchorage, Alaska<br />
+                    SITH® Basic I Ho’oponopono ONLINE class
+                </td>
+
+                <td>
+                    @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                    {
+                        @bg.Command(ButtonTexts.SelectString, "select", ButtonStyle.PublicPrimary, false, "select", 1)
+                    }
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    John Doe<br />
+                    <a href="mailto://johndoe@noreply.com">johndoe@noreply.com</a>
+                </td>
+
+                <td>
+                    12345 de crisanto place<br />
+                    Elk Grove, California 84216<br />
+                    USA
+                </td>
+
+                <td>
+                    November 11 & 12, 2016<br />
+                    San Diego, California<br />
+                    SITH® Basic I Ho’oponopono class
+                </td>
+
+                <td>
+                    @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                    {
+                        @bg.Command(ButtonTexts.SelectString, "select", ButtonStyle.PublicPrimary, false, "select", 1)
+                    }
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+
+</content>
+
+
+<content>
+
+    <h2>PREVIEW FORM</h2>
+    <hr class="headline-hr" />
+
+    <form id="registrationForm" method="post" action="">
+
+
+        <h5>Address</h5>
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                @Html.LabelFor(x => x.Form.FirstName)
+                @Html.EditorFor(x => x.Form.FirstName)
+            </div>
+            <div class="form-group col-md-6">
+                @Html.LabelFor(x => x.Form.LastName)
+                @Html.EditorFor(x => x.Form.LastName)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-12">
+                <label>Address</label>
+                @Html.EditorFor(x => x.Form.Street)
+            </div>
+            <div class="form-group col-md-12">
+                @Html.EditorFor(x => x.Form.Street2)
+            </div>
+            <div class="form-group col-md-6">
+                @Html.EditorFor(x => x.Form.City)
+            </div>
+            <div class="form-group col-md-6">
+                @Html.EditorFor(x => x.Form.State)
+            </div>
+            <div class="form-group col-md-6">
+                @Html.EditorFor(x => x.Form.CountryId, new { Items = Model.Countries.Select(x => DropDownItem.Item((CountryEnum)x.Id, x.Description)) })
+            </div>
+            <div class="form-group col-md-6">
+                @Html.EditorFor(x => x.Form.ZipCode)
+            </div>
+        </div>
+
+
+        @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+        {
+            @bg.Link(ButtonTexts.BackToHomeString, ButtonStyle.PublicPrimary, style.HomepageUrl ?? Url.Action("Index", "Home"))
+            @bg.Link("Preview button", ButtonStyle.PublicPrimary, "", true)
+            @bg.Link("Preview button", ButtonStyle.PublicNormal, "", true)
+            @bg.Link(ButtonTexts.BackString, ButtonStyle.PublicNormal, Model.BackUrl)
+        }
+
+    </form>
+
+</content>
+
+@section scripts
+{
+
+    @Localisation.Validation(this)
+
+    <script type="text/javascript">
+
+        var runPageScript = function() {
+
+            // INITIALIZATION AND VALIDATION
+
+            var registrationForm = new CorabeuControl.Form("registrationForm");
+
+            var localisation = new AutomationSystem.AddressLocalisationTemplate();
+
+            localisation.firstName = "@Html.DisplayNameForJava(x => x.Form.FirstName)";
+            localisation.lastName = "@Html.DisplayNameForJava(x => x.Form.LastName)";
+            localisation.street = "@Html.DisplayNameForJava(x => x.Form.Street)";
+            localisation.street2 = "@Html.DisplayNameForJava(x => x.Form.Street2)";
+            localisation.city = "@Html.DisplayNameForJava(x => x.Form.City)";
+            localisation.state = "@Html.DisplayNameForJava(x => x.Form.State)";
+            localisation.country = "@Html.DisplayNameForJava(x => x.Form.CountryId)";
+            localisation.zipCode = "@Html.DisplayNameForJava(x => x.Form.ZipCode)";
+
+            this.countryId = new CorabeuControl.DropDownList("countryId", "CountryId");
+
+            registrationForm.validateControl($("#firstName"), localisation.firstName, { required: true, maxlength: 64 });
+            registrationForm.validateControl($("#lastName"), localisation.lastName, { required: true, maxlength: 64 });
+            registrationForm.validateControl($("#street"), localisation.street, { required: true, maxlength: 64 });
+            registrationForm.validateControl($("#street2"), localisation.street2, { maxlength: 64 });
+            registrationForm.validateControl($("#city"), localisation.city, { required: true, maxlength: 64 });
+            registrationForm.validateControl($("#state"), localisation.state, { maxlength: 64 });
+            registrationForm.validateControl(countryId.element, localisation.country, { notSelected: true });
+            registrationForm.validateControl($("#zipCode"), localisation.zipCode, { required: true, maxlength: 16 });
+        }
+
+    </script>
+
+}

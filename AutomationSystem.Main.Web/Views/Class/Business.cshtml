@@ -1,0 +1,112 @@
+﻿@model ClassFinancePageModel
+@{
+    ViewBag.Title = CommonResources.MenuCoordinatorClasses;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.Class, TabItemId.ClassFinance, new {id = Model.Class.ClassId});
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Link(CommonResources.Edit, ButtonStyle.Primary, Url.Action("BusinessEdit", new { id = Model.Class.ClassId }))
+    @bg.Link("Edit expenses layout", ButtonStyle.Normal, Url.Action("ExpensesLayoutEdit", new { id = Model.Class.ClassId }), !Model.Finance.AreFinancialFormsAllowed)
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Index"))
+}
+
+<div class="badge-title">
+    <h4>@Model.Class.ClassTitle</h4>
+    @Html.ClassCategoryBadge(Model.Class.ClassCategoryId)
+    @Html.ClassStateBadge(Model.Class.ClassState)
+</div>
+
+<div class="row">
+
+    <div class="col-xl-6 align-content-start">
+
+        <h5>CRF Parameters</h5>
+
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Finance.ApprovedBudget)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Finance.ApprovedBudget, new { Currency = Model.Finance.CurrencyCode })</dd>            
+        </dl>
+
+    </div>    
+    
+</div>
+
+<div class="row">
+
+    @if (Model.Finance.AreFinancialFormsAllowed)
+    {
+        <div class="col-xl-6 align-content-start">
+
+            <h5>Financial Form Parameters</h5>
+
+            <dl class="row dl-compact">
+                <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Finance.PrintReimbursement)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(x => x.Finance.PrintReimbursement, new { Currency = Model.Finance.CurrencyCode })</dd>
+                <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Finance.AccociatedLecture)</dt>
+                @if (Model.Finance.AssociatedLectureId.HasValue)
+                {
+                    <dd class="col-sm-8">
+                        <a href="@Url.Action("Detail", "Class", new {id = Model.Finance.AssociatedLectureId})" target="_blank">@Html.DisplayFor(x => x.Finance.AccociatedLecture)</a>
+                    </dd>
+                }
+                else
+                {
+                    <em>no lecture</em>
+                }
+            </dl>
+
+        </div>
+    }
+
+</div>
+
+@if (Model.Finance.AreFinancialFormsAllowed)
+{
+    <h5>Expenses</h5>
+
+
+    if (Model.Finance.Expenses.Count == 0)
+    {
+        <p>
+            <em>@CommonResources.NoRecords</em>
+        </p>
+    }
+    else
+    {
+
+        @*List of ClassExpenses*@
+        <table class="table table-hover table-sm">
+            <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.Finance.Expenses[0].Order)</th>
+                <th>@Html.DisplayNameFor(x => x.Finance.Expenses[0].Text)</th>
+                <th>@Html.DisplayNameFor(x => x.Finance.Expenses[0].Value)</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model.Finance.Expenses.OrderBy(x => x.Order))
+            {
+                <tr>
+                    <td><strong>@Html.DisplayFor(x => item.Order).</strong></td>
+                    <td>@Html.DisplayFor(x => item.Text)</td>
+                    <td>
+                        @if (item.ClassExpenseTypeId == ClassExpenseTypeEnum.Custom)
+                        {
+                            @Html.DisplayFor(x => item.Value, new { Currency = Model.Finance.CurrencyCode })
+                        }
+                        else
+                        {
+                            <em>computed</em>
+                        }
+                    </td>
+
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+}

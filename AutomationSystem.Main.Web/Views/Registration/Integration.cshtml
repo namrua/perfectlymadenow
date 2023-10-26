@@ -1,0 +1,105 @@
+﻿@model RegistrationIntegrationPageModel
+@{
+    ViewBag.Title = CommonResources.TitleCoordinatedRegistrations;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.Registration, TabItemId.RegistrationIntegration, new { id = Model.ClassRegistrationId });
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+
+    var isApproved = Model.RegistrationState == RegistrationState.Approved;
+    var canIntegrate = Model.RegistrationState == RegistrationState.Approved || Model.RegistrationState == RegistrationState.Canceled;
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Command("Update", ButtonStyle.Primary, !canIntegrate, new { id = "update-button" })
+    @bg.Command("Synchronize", ButtonStyle.Primary, !canIntegrate, new { id = "sync-button" })
+    @bg.Command("Send invitation", ButtonStyle.Primary, !isApproved, new { id = "send-button" })
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Students", "Class", new { id = Model.ClassId }))
+}
+
+<div id="integrationStates">
+    @{
+        Html.RenderPartial("~/Views/Registration/_IntegrationStatesPartial.cshtml", Model.Attendees);
+    }
+</div>
+
+@Html.LoaderLarge("loader-large", "spinner-large")
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function() {
+
+            // enabled command buttons array
+            var enabledCommandButtons = [];
+
+            @if (canIntegrate)
+            {
+                @:enabledCommandButtons.push($("#update-button"));
+                @:enabledCommandButtons.push($("#sync-button"));
+            }
+
+            @if (isApproved)
+            {
+                @:enabledCommandButtons.push($("#send-button"));
+            }
+
+            // AJAX CALLS
+            // executes loading of integration states
+            function executeAsyncCommand(_url, _successMessage) {
+                $.ajax({
+                    url: _url,
+                    type: "POST",
+                    beforeSend: function () {
+                        $.each(enabledCommandButtons, function(index, value) { value.prop("disabled", true); });
+                        $("#integrationStates").empty();
+                        $("#loader-large").show();
+                    },
+                    complete: function () {                        
+                        $("#loader-large").hide();
+                        $.each(enabledCommandButtons, function (index, value) { value.prop("disabled", false); });
+                    },
+                    error: function(_response) {
+                        $("#loader-large").hide();
+                        AutomationSystem.createAdminMessage("alert-warning",
+                            _response.status + " " + _response.statusText);
+                    },
+                    success: function(_data) {
+                        $("#integrationStates").empty().append(_data);
+                        AutomationSystem.createAdminMessage("alert-primary", _successMessage);
+                    }
+                });
+            }
+
+            // EVENT HANDLING AND SUBSCRIPTION
+
+            $("#update-button").click(function(_event) {
+                _event.preventDefault();
+                executeAsyncCommand("@Url.Action("UpdateIntegrationState", new {id = Model.ClassRegistrationId})",
+                    "WebEx integration state was updated.");
+            });
+
+            $("#sync-button").click(function(_event) {
+                _event.preventDefault();
+                executeAsyncCommand("@Url.Action("SyncWebExState", new {id = Model.ClassRegistrationId})",
+                    "Registration and WebEx was synchronized.");
+            });
+
+            $("#send-button").click(function(_event) {
+                _event.preventDefault();
+                executeAsyncCommand("@Url.Action("SendWebExInvitation", new {id = Model.ClassRegistrationId})",
+                    "WebEx invitation email was sent to the student.");
+            });
+
+        }
+
+    </script>
+
+}
+
+
+
+

@@ -1,0 +1,140 @@
+﻿@model ClassPreferenceForEdit
+@{
+    ViewBag.Title = CommonResources.MenuCommonProfiles;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CommonProfiles;
+
+    var personHelper = Model.PersonHelper;
+}
+
+<form id="preferenceForm" method="post" enctype="multipart/form-data" action="@Url.Action("ClassPreferenceEdit")">
+
+    @Html.EditorFor(x => x.Form.ProfileId)
+
+    <h5>Class style</h5>
+
+    <div class="row">
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.HomepageUrl)
+            @Html.EditorFor(x => x.Form.HomepageUrl)
+        </div>
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.RegistrationColorSchemeId)
+            @Html.EditorFor(x =>
+                x.Form.RegistrationColorSchemeId,
+                new { Items = Model.ColorSchemes.Select(x => DropDownItem.Item(x.RegistrationColorSchemeId, x.Description)) })
+        </div>
+
+        <div class="col-md-6">
+
+            @if (Model.Form.OriginHeaderPictureId.HasValue)
+            {
+                <label>Header picture</label>
+                <div class="img-preview-placeholder-form-2">
+                    <img src="@Url.Action("Image", "File", new {id = Model.Form.OriginHeaderPictureId})" />
+                </div>
+                <div class="form-group">
+                    @Html.EditorFor(x => x.Form.RemoveHeaderPicture)
+                </div>
+            }
+
+
+            <div class="form-group">
+                <label for="headerPicture">Upload new header picture</label><br />
+                <input type="file" class="form-control-file" name="HeaderPicture" id="headerPicture" aria-describedby="headerPictureHelp" />
+                <div id="@TextHelper.DecorateName("headerPicture", "error-placeholder")"></div>
+                <small id="headerPictureHelp" class="form-text text-muted">Only .jpg files are accepted. Recommended size of image is <strong>1140px x 420px</strong>. Minimal allowed size is 540px x 200px.</small>
+            </div>
+        </div>
+
+    </div>
+
+    <h5>Class behavior</h5>
+
+    <div class="row">
+
+        <div class="form-group col-md-6">
+            @Html.EditorFor(x => x.Form.SendCertificatesByEmail)
+        </div>
+
+    </div>
+
+    <h5>Report settings</h5>
+
+    <div class="row">
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.VenueName)
+            @Html.EditorFor(x => x.Form.VenueName)
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.LocationCode)
+            @Html.EditorFor(x => x.Form.LocationCode)
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.LocationInfoId)
+            @Html.EditorFor(x => x.Form.LocationInfoId, new { Text = personHelper.GetPersonNameById(Model.Form.LocationInfoId)})
+        </div>
+
+
+    </div>
+
+    <h5>Finance</h5>
+
+    <div class="row">
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.CurrencyId)
+            @Html.EditorFor(x =>
+                x.Form.CurrencyId,
+                new { Items = Model.Currencies.Select(x => DropDownItem.Item((CurrencyEnum)x.Id, MainTextHelper.GetCurrencyFullName(x.Description, x.Name))) })
+        </div>
+
+    </div>
+
+
+    
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save)
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("ClassPreference", new { id = Model.Form.ProfileId }))
+    }
+
+</form>
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function() {
+
+            // INITIALIZATION AND VALIDATION
+
+             @Html.TypeaheadDropDownSource("personsForLocationInfo", personHelper.GetPickerItemsForRole(PersonRoleTypeEnum.Contact))
+
+            var preferenceForm = new CorabeuControl.Form("preferenceForm");
+
+            var registrationColorSchemeId = new CorabeuControl.DropDownList("registrationColorSchemeId", "RegistrationColorSchemeId");
+
+            var locationInfoId = new CorabeuControl.TypeaheadDropDownInput("locationInfoId", "LocationInfoId", personsForLocationInfo);
+
+            var currencyId = new CorabeuControl.DropDownList("currencyId", "CurrencyId");
+
+            preferenceForm.validateControl($('#homepageUrl'), "@Html.DisplayNameForJava(x => x.Form.HomepageUrl)", { maxlength: 248 });
+            preferenceForm.validateControl(registrationColorSchemeId.element, "@Html.DisplayNameForJava(x => x.Form.RegistrationColorSchemeId)", { notSelected: true });
+            preferenceForm.validateControl($("#venueName"), "@Html.DisplayNameForJava(x => x.Form.VenueName)", { required: false, maxlength: 64 });
+            preferenceForm.validateControl($("#locationCode"), "@Html.DisplayNameForJava(x => x.Form.LocationCode)", { required: true, maxlength: 16 });
+
+            @if (ViewBag.TriggerValidation != null)
+            {
+                @:preferenceForm.valid();
+            }
+
+        }
+
+    </script>
+
+}

@@ -1,0 +1,180 @@
+﻿@model FormerStudentSelectionPageModel
+@{
+    ViewBag.Title = LayoutTexts.PageTitleRegistrationString;
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+
+
+<content>
+    
+    <h2>@TitleTexts.RegistrationSummary</h2>
+    <hr class="headline-hr" />
+
+    @{
+        Html.RenderPartial(Model.DetailView, Model.Registration);
+    }
+
+</content>
+
+<content>
+
+    <h2>@TitleTexts.ReviewStudent</h2>
+    <hr class="headline-hr" />
+
+    @Html.Raw(string.Format(TextTexts.ReviewInstructionString, Model.Class.ClassType, Url.Action("SelectRegistration", new { id = Model.Class.ClassId })))
+     
+</content>
+
+<content>
+
+    <h2>@TitleTexts.FormerSuggestion</h2>
+
+    @*List of former students*@
+    @if (Model.FormerStudents.Count == 0)
+    {
+        <hr class="headline-hr" />
+        <p>
+            <em>@TextTexts.NoFormerStudent</em>
+        </p>
+    }
+    else
+    {
+        <table class="table table-hover table-sm">
+            <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.FormerStudents[0].Address.FullName)</th>
+                <th>@Html.DisplayNameFor(x => x.FormerStudents[0].Address)</th>
+                <th>@Html.DisplayNameFor(x => x.FormerStudents[0].ClassTitle)</th>
+
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model.FormerStudents)
+            {
+                <tr class="@CssClassHelper.New().AddIf(item.FormerStudentId == Model.SelectedFormerStudentId, "table-public").Render()">
+                    <td>
+                        @Html.DisplayFor(x => item.Address.FullName)<br/>
+                        @Html.DisplayFor(x => item.Email)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(x => item.Address.FullStreet)<br/>
+                        @Html.DisplayFor(x => item.Address.FullCity)<br/>
+                        @Html.DisplayFor(x => item.Address.Country)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(x => item.FullClassDate)<br/>
+                        @Html.DisplayFor(x => item.Location)<br/>
+                        @Html.DisplayFor(x => item.ClassType)
+                    </td>
+
+                    <td>
+                        @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                        {
+                            @bg.Command(ButtonTexts.SelectString, "select", ButtonStyle.PublicPrimary, false, "select", item.FormerStudentId)
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        
+    }
+    
+</content>
+
+
+<content>
+
+    <h2>@TitleTexts.FormerClassForm</h2>
+    <hr class="headline-hr" />
+
+    <form id="lastClassForm" method="post" action="@Url.Action("SaveLastClass")">
+
+        @Html.EditorFor(x => x.FormLastClass.ClassRegistrationId)
+
+        <div class="row">
+
+            <div class="form-group col-md-6 col-lg-3">
+                @Html.LabelFor(x => x.FormLastClass.Month)
+                @Html.EditorFor(x => x.FormLastClass.Month, new { Items = MainTextHelper.GetMonthsForDdl(CultureInfo.CurrentCulture) })
+            </div>
+
+            <div class="form-group col-md-6 col-lg-3">
+                @Html.LabelFor(x => x.FormLastClass.Year)
+                @Html.EditorFor(x => x.FormLastClass.Year, new { Items = MainTextHelper.GetYearsForDdl(1992) })
+            </div>
+
+            <div class="form-group col-md-6 col-lg-6">
+                @Html.LabelFor(x => x.FormLastClass.Location)
+                @Html.EditorFor(x => x.FormLastClass.Location)
+            </div>
+
+        </div>
+
+
+        @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+        {
+            @bg.Submit(ButtonTexts.ManualReviewString, ButtonStyle.PublicPrimary)
+            if (Model.SelectedFormerStudentId.HasValue)
+            {
+                @bg.Link(ButtonTexts.KeepSelectionString, ButtonStyle.PublicPrimary, Url.Action("Confirmation", new {id = Model.Registration.ClassRegistrationId}))
+                @bg.Command(ButtonTexts.ResetStudentString, "select", ButtonStyle.PublicPrimary, false, "select", "")
+            }
+            @bg.Link(ButtonTexts.ModifyPersonalString, ButtonStyle.PublicNormal, Url.Action("Edit", new {id = Model.Registration.ClassRegistrationId}))
+        }
+
+    </form>
+
+</content>
+
+
+
+
+@section scripts
+{
+
+    @Localisation.Validation(this)
+
+
+<script type="text/javascript">
+
+        var runPageScript = function() {
+
+            // COMMANDS
+
+            // connects expandable textblocks
+            var requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("select", "@Url.Action("SelectStudent")");
+
+            // connects command-incidents
+            $(".command-select").click(function() {
+                var sender = $(this);
+                var id = sender.attr("data-id");
+                requestHelper.executePost("select", { id: @Model.Registration.ClassRegistrationId,
+                    formerStudentId: id
+                });
+            });
+
+
+            // VALIDATION
+            var lastClassForm = new CorabeuControl.Form("lastClassForm");
+            var month = new CorabeuControl.DropDownList("month", "Month");
+            var year = new CorabeuControl.DropDownList("year", "Year");
+
+            lastClassForm.validateControl($("#location"), "@Html.DisplayNameForJava(x => x.FormLastClass.Location)", { required: true, maxlength: 255 });
+            lastClassForm.validateControl(month.element, "@Html.DisplayNameForJava(x => x.FormLastClass.Month)", { notSelected: true });
+            lastClassForm.validateControl(year.element, "@Html.DisplayNameForJava(x => x.FormLastClass.Year)", { notSelected: true });
+
+            @if (ViewBag.TriggerValidation != null)
+            {
+                @:lastClassForm.valid();
+            }
+
+        }
+
+</script>
+
+}

@@ -1,0 +1,58 @@
+﻿@model FormerStudentForEdit
+@{
+    IContextManager cm = ContextHelper.GetContextManager(ViewBag);   
+}
+
+<form id="formerStudentForm" method="post" action="@Url.Action("StudentEdit", new { context = cm.Get() })">
+
+    @Html.EditorFor(x => x.Form.FormerStudentId)
+    @Html.EditorFor(x => x.Form.FormerClassId)
+
+    @Html.EditorFor(x => x.Form.Address, new { Model.Countries })
+
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.Email)
+            @Html.EditorFor(x => x.Form.Email)
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.Phone)
+            @Html.EditorFor(x => x.Form.Phone)
+        </div>
+    </div>
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save)
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, cm.GetBackUrl(Model.Form.FormerStudentId == 0 
+            ? Url.Action("ClassStudents", new { id = Model.Form.FormerClassId }) 
+            : Url.Action("StudentDetail", new { id = Model.Form.FormerStudentId })))
+    }
+
+</form>
+
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+    var runPageScript = function () {
+
+        // INITIALIZATION AND VALIDATION
+        var formerStudentForm = new CorabeuControl.Form("formerStudentForm");
+        var addressComponent = new AutomationSystem.Address(formerStudentForm, "Address");
+        formerStudentForm.validateControl($("#email"), "@Html.DisplayNameFor(x => x.Form.Email)", { required: true, maxlength: 128, email: true });
+        formerStudentForm.validateControl($("#phone"), "@Html.DisplayNameFor(x => x.Form.Phone)", { maxlength: 15 });
+
+        @if (ViewBag.TriggerValidation != null)
+        {
+            <text>formerStudentForm.valid();</text>
+        }
+
+    }
+
+    </script>
+
+}

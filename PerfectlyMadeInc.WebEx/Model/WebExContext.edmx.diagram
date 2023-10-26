@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="800109fcf0f54bfdbeb3eec16ed9df05" Name="Diagram1">
+        <EntityTypeShape EntityType="WebExModel.Account" Width="1.5" PointX="0.75" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebExModel.IntegrationState" Width="1.5" PointX="7.5" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebExModel.IntegrationStateType" Width="2.5" PointX="5.25" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebExModel.Program" Width="1.5" PointX="3" PointY="8.5" IsExpanded="true" />
+        <AssociationConnector Association="WebExModel.FK_Program_AccountId" ManuallyRouted="false" />
+        <AssociationConnector Association="WebExModel.FK_IntegrationState_IntegrationStateTypeId" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="WebExModel.Event" Width="1.5" PointX="5.25" PointY="6.375" />
+        <AssociationConnector Association="WebExModel.FK_Event_AccountId" />
+        <AssociationConnector Association="WebExModel.FK_Event_ProgramId" />
+        <AssociationConnector Association="WebExModel.FK_IntegrationState_EventId" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

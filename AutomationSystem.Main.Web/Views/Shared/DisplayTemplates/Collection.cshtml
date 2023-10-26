@@ -1,0 +1,25 @@
+﻿@model System.Collections.IEnumerable
+@{
+
+    // loads options
+    var selector = (ViewData[DisplayOptions.Selector] as Func<object, string>) ?? (x => x == null ? "" : x.ToString());
+    var separator = (string)ViewData[DisplayOptions.Separator] ?? ", ";
+    var isHtml = (bool?)ViewData[DisplayOptions.IsHtml] ?? false;
+
+    var list = new List<string>();
+    foreach (object item in Model)
+    {
+        list.Add(selector(item));
+    }
+    var value = string.Join(separator, list);
+
+}
+
+@if (isHtml)
+{
+    @TextHelper.ToHtmlString(value)    
+}
+else
+{
+    @value
+}

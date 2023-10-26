@@ -1,0 +1,112 @@
+﻿@model ClassRegistrationPageModel
+@{
+    ViewBag.Title = CommonResources.MenuCoordinatorClasses;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.Class, TabItemId.ClassRegistrations,
+new { id = Model.Class.ClassId });
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.DropdownLink(CommonResources.AddNew, ButtonStyle.Primary, "new-button", !Model.CanAddNewRegistration,
+        Model.RegistrationTypes.Select(x => PickerItem.Item(Url.Action("New", "Registration", new { classId = Model.Class.ClassId, id = (RegistrationTypeEnum)x.Id }), x.Description)))
+    @bg.Link("Upload registrations", ButtonStyle.Primary, Url.Action("UploadNew", "RegistrationUpload", new { id = Model.Class.ClassId } ), !Model.CanBatchUpload)
+    @bg.Link("Download excel template", ButtonStyle.Normal, Url.Action("DownloadMainStored", "File", new { id = MainStoredFile.StudentRegistrationUploadSheet }))
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Index"))
+}
+
+<div class="badge-title">
+    <h4>@Model.Class.ClassTitle</h4>
+    @Html.ClassCategoryBadge(Model.Class.ClassCategoryId)
+    @Html.ClassStateBadge(Model.Class.ClassState)
+</div>
+
+
+<h5>@Html.DisplayNameFor(x => x.RegistrationsForApprove)</h5>
+
+@*List of registrations for approval*@
+@if (Model.RegistrationsForApprove.Count == 0)
+{
+    <p>
+        <em>@CommonResources.NoRecords</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(x => x.RegistrationsForApprove[0].Name)</th>
+            <th>@Html.DisplayNameFor(x => x.RegistrationsForApprove[0].Country)</th>
+            <th>@Html.DisplayNameFor(x => x.RegistrationsForApprove[0].Email)</th>
+            <th>@Html.DisplayNameFor(x => x.RegistrationsForApprove[0].ApprovementType)</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.RegistrationsForApprove)
+        {
+            <tr>
+                <td>@Html.DisplayFor(x => item.Name)</td>
+                <td>@Html.DisplayFor(x => item.Country)</td>
+                <td>@Html.DisplayFor(x => item.Email)</td>
+                <td>@Html.DisplayFor(x => item.ApprovementType)</td>
+
+                <td>
+                    @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                    {
+                        @bg.Link(CommonResources.Detail, ButtonStyle.Primary, Url.Action("Detail", "Registration", new { id = item.ClassRegistrationId }))
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+<div>
+    <h4>Registration batch upload</h4>
+</div>
+
+@if (Model.RegistrationBatchUploads.Count == 0)
+{
+    <p>
+        <em>@CommonResources.NoRecords</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(x => x.RegistrationBatchUploads[0].Name)</th>
+            <th>@Html.DisplayNameFor(x => x.RegistrationBatchUploads[0].BatchUploadType)</th>
+            <th>@Html.DisplayNameFor(x => x.RegistrationBatchUploads[0].BatchUploadState)</th>
+            <th>@Html.DisplayNameFor(x => x.RegistrationBatchUploads[0].Uploaded)</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.RegistrationBatchUploads.OrderBy(x => x.BatchUploadStateId).ThenByDescending(x => x.Uploaded))
+        {
+            var unprocessed = item.BatchUploadStateId != BatchUploadStateEnum.Complete && item.BatchUploadStateId != BatchUploadStateEnum.Discarded;
+            <tr class="@CssClassHelper.New().AddIf(unprocessed, "table-warning").AddIf(item.BatchUploadStateId == BatchUploadStateEnum.Discarded, "table-secondary").Render()">
+                <td>@Html.DisplayFor(x => item.Name)</td>
+                <td>@Html.DisplayFor(x => item.BatchUploadType)</td>
+                <td>@Html.DisplayFor(x => item.BatchUploadState)</td>
+                <td>@Html.DisplayFor(x => item.Uploaded)</td>
+
+                <td>
+                    @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                    {
+                        @bg.Link(CommonResources.Detail, ButtonStyle.Primary, Url.Action("BatchDetail", "RegistrationUpload", new {id = item.BatchUploadId }), !Model.CanBatchUpload)
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+

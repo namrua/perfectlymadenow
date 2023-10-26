@@ -1,0 +1,18 @@
+﻿@model EmailTypeSummary
+@{
+    ViewBag.Title = CommonResources.MenuCommonProfiles;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CommonProfiles;
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.Profile, TabItemId.ProfileEmailTemplates, new { id = Model.EmailTemplateEntityId.Id });
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Index"))
+}
+
+@{
+    Html.RenderPartial("~/Views/Email/_EmailIndexPartial.cshtml", Model);
+}
+

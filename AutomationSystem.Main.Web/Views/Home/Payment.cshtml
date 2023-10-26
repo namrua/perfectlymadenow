@@ -1,0 +1,172 @@
+﻿@model RegistrationPaymentPageModel
+@{
+    ViewBag.Title = LayoutTexts.PageTitleRegistrationString;
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+
+<content>
+
+    <h2>@TitleTexts.PaymentSummary</h2>
+    <hr class="headline-hr" />
+
+    <dl class="row dl-compact">
+        <dt class="col-sm-4 col-lg-2">@Html.DisplayNameFor(x => x.Class.Title)</dt>
+        <dd class="col-sm-8 col-lg-10">@Html.DisplayFor(x => x.Class.Title)</dd>
+        <dt class="col-sm-4 col-lg-2">@Html.DisplayNameFor(x => x.RegistrationType.RegistrationType)</dt>
+        <dd class="col-sm-8 col-lg-10">@Html.DisplayFor(x => x.RegistrationType.RegistrationType)</dd>
+        <dt class="col-sm-4 col-lg-2">@Html.DisplayNameFor(x => x.RegistrationType.Price)</dt>
+        <dd class="col-sm-8 col-lg-10">@Html.DisplayFor(x => x.RegistrationType.Price, new { Currency = Model.PayPalTransactionInfo.CurrencyCode })</dd>
+    </dl>
+        
+    <p>
+        <em>@TextTexts.PaymentInstruction</em>
+    </p>
+    
+    <p>
+        @TextTexts.ShippmentAddressInfo
+    </p>
+    
+    <div id="paypal-button-wrapper">
+
+        <div id="paypal-button-container"></div>
+        @Html.LoaderSmall("loader-paypal", "spinner-small")
+
+    </div>
+           
+    @if (!Model.WorkflowState.Properties.HasFlag(HomeWorkflowProperty.PaymentOnly))
+    {
+        using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+        {
+            @bg.Link(ButtonTexts.BackString, ButtonStyle.PublicNormal, Url.Action("Agreement", new {id = Model.ClassRegistrationId}), false, new { id = "back-button"})
+        }
+    }
+
+</content>
+
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+
+        // payment error alert
+        var paymentErrorAlert = function(_message) {
+            alert("@TextTexts.PayPalErrorString" + "\n" + _message);
+        }
+
+        var togglePaymentButton = function(_buttonVisible)
+        {
+            if (_buttonVisible) {
+                $("#loader-paypal").hide();
+                $("#paypal-button-container").show();
+               
+            } else {
+                $("#paypal-button-container").hide();
+                $("#loader-paypal").show();
+            }
+        }
+
+        var disableBackButton = function () {
+            var button = $("#back-button");
+            button.addClass("disabled");
+            button.attr("aria-disabled", "true");
+        }
+
+
+        braintree.client.create({
+            authorization: '@Model.PayPalTransactionInfo.ClientToken'
+            },
+            function(clientErr, clientInstance) {
+
+                // Stop if there was a problem creating the client.
+                // This could happen if there is a network error or if the authorization
+                // is invalid.
+                if (clientErr) {
+                    console.error('Error creating client:', clientErr);
+                    paymentErrorAlert(clientErr);
+                    return;
+                }
+
+                // Create a PayPal Checkout component.
+                braintree.paypalCheckout.create({
+                        client: clientInstance
+                    },
+                    function(paypalCheckoutErr, paypalCheckoutInstance) {
+
+                        // Stop if there was a problem creating PayPal Checkout.
+                        // This could happen if there was a network error or if it's incorrectly
+                        // configured.
+                        if (paypalCheckoutErr) {
+                            console.error('Error creating PayPal Checkout:', paypalCheckoutErr);
+                            paymentErrorAlert(clientErr);
+                            return;
+                        }
+
+                        // Set up PayPal with the checkout.js library
+                        paypal.Button.render({
+                            env: '@Model.PayPalTransactionInfo.Environment', // or 'production'
+
+                            // set language
+                            locale: '@Model.PayPalTransactionInfo.Locale',
+
+
+                            payment: function() {
+                                return paypalCheckoutInstance.createPayment({
+                                    flow: 'checkout',
+                                    amount: '@TextHelper.GetPlainDecimalString(Model.PayPalTransactionInfo.Amount)',
+                                    currency: '@Model.PayPalTransactionInfo.CurrencyCode',
+                                    displayName: 'Zerolag.biz',
+                                    enableShippingAddress: true
+                                });
+                            },
+
+                            onAuthorize: function(data, actions) {
+
+
+                                return paypalCheckoutInstance.tokenizePayment(data)
+                                    .then(function (payload) {
+                                        togglePaymentButton(false);
+                                        disableBackButton();
+                                        var requestHelper = new CorabeuControl.RequestHelper();
+                                        requestHelper.addAction("executePayment", "@Url.Action("ExecutePayment")");
+                                        requestHelper.executePost("executePayment", {
+                                                registrationId: '@Model.ClassRegistrationId',
+                                                nonce: payload.nonce,
+                                                type: payload.type,
+                                                detailsJson: JSON.stringify(payload.details)
+                                            });
+                                    });
+                                },
+
+                                onCancel: function(data) {
+                                    console.log('checkout.js payment cancelled', JSON.stringify(data, 0, 2));
+                                },
+
+                                onError: function(err) {
+                                    console.error('checkout.js error', err);
+                                    paymentErrorAlert(err);
+                                }
+                            },
+                            '#paypal-button-container').then(function() {
+                            togglePaymentButton(true);
+                        });
+
+                    });
+
+            });
+
+
+        @if (!string.IsNullOrEmpty(Model.PaymentErrorMessage))
+        {
+            @:paymentErrorAlert("@Ajax.JavaScriptStringEncode(Model.PaymentErrorMessage)");
+        }
+
+        // initializes page
+        var runPageScript = function () {
+            togglePaymentButton(false);
+        }
+
+    </script>
+
+}

@@ -1,0 +1,13 @@
+﻿@model List<HierarchicalMenuItem>
+
+<ul class="nav nav-tabs nav-vertical-padding">
+    
+    
+    @foreach (var item in Model)
+    {
+        <li class="nav-item">
+            <a class="@CssClassHelper.New().Add("nav-link", "dropdown").AddIf(item.IsActive, "active").AddIf(item.IsDisabled, "disabled").Render()"
+               href="@(item.IsDisabled ? "#" : Url.Action(item.Activity, item.Controller, item.Parameters))">@item.Text</a>
+        </li>
+    }  
+</ul>

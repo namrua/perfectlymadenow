@@ -1,0 +1,107 @@
+﻿@model AppLocalisationForEdit
+@{
+    ViewBag.Title = CommonResources.MenuCoreLocalisation;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoreLocalisation;
+}
+
+<h4>@MainTextHelper.GetAppItemTitle(Model.Module, Model.Label, Model.Language)</h4>
+
+<form id="appLocalisationForm" method="post" action="@Url.Action("Edit")">
+
+    @Html.EditorFor(x => x.Form.LanguageId)
+    @Html.EditorFor(x => x.Form.AppLocalisationOriginId)
+
+    @if (!Model.IsDefaultLanguage)
+    {
+        <hr />
+
+        <h5>Default language (@LocalisationInfo.DefaultLanguage)</h5>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-primary">
+                    @Html.DisplayFor(x => x.OriginalValue, new { IsHtml = true })
+                </div>
+            </div>
+            <div class="col-md-12">
+                @Html.LabelFor(x => x.OriginalValue)
+                <div class="alert alert-secondary">
+                    @Html.DisplayFor(x => x.OriginalValue, new { IsMultiline = true })
+                </div>
+            </div>
+        </div>
+        <hr />
+
+        <h5>@MainTextHelper.GetFullLanguageName(Model.Language)</h5>
+
+    }
+
+    <div class="row">
+        <div class="col-md-12">
+            @if (Model.ValidationResult.IsValid)
+            {
+                <div class="alert alert-primary">
+                    @Html.DisplayFor(x => x.Form.Value, new { IsHtml = true })
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning">
+                    @TextHelper.GetValidationMessage(Model.ValidationResult.ValidationMessages)
+                </div>
+            }
+        </div>
+        <div class="form-group col-md-12">
+            @Html.LabelFor(x => x.Form.Value)
+            @Html.EditorFor(x => x.Form.Value)
+        </div>
+    </div>
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save)
+        @bg.Command(CommonResources.Validate, ButtonStyle.Primary, false, new { id = "validate-command" })
+        @bg.Link(CommonResources.PreviousShort, ButtonStyle.Normal, Url.Action("Edit", new { langId = Model.Form.LanguageId, id = ViewBag.PredecessorId }), ViewBag.PredecessorId == null)
+        @bg.Link(CommonResources.Next, ButtonStyle.Normal, Url.Action("Edit", new { langId = Model.Form.LanguageId, id = ViewBag.SuccessorId }), ViewBag.SuccessorId == null)
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("List", new { langId = Model.Form.LanguageId }))
+    }
+
+</form>
+
+@section scripts
+{
+
+<script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // INITIALIZATION AND VALIDATION
+
+            var value = new CorabeuControl.AceTextInput("value", "Value", { mode: "ace/mode/html", theme: "ace/theme/crimson_editor" });
+
+            var appLocalisationForm = new CorabeuControl.Form("appLocalisationForm");
+
+            appLocalisationForm.validateControl(value.element, "@Html.DisplayNameFor(x => x.Form.Value)", { required: true, maxlength: 8000 });
+
+            @if (ViewBag.TriggerValidation != null)
+            {
+                <text>appLocalisationForm.valid();</text>
+            }
+
+
+            // COMMANDS
+
+            // request helper
+            var requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("validate", "@Url.Action("Validate")");
+
+            // handles validate command
+            $("#validate-command").click(function () {
+                requestHelper.submitFormToAction(appLocalisationForm.element, "validate");
+            });
+
+        }
+
+</script>
+
+}

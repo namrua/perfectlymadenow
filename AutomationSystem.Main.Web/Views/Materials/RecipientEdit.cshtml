@@ -1,0 +1,65 @@
+﻿@model MaterialRecipientForEdit
+@{
+    ViewBag.Title = CommonResources.TitleMaterials;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+}
+
+<form id="materialForm" method="post" action="@Url.Action("RecipientEdit")">
+
+    @Html.EditorFor(x => x.Form.ClassMaterialRecipientId)
+    @Html.EditorFor(x => x.Form.RecipientTypeId)
+    @Html.EditorFor(x => x.Form.RecipientId)
+
+    <div class="row">
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.Password)
+            @Html.EditorFor(x => x.Form.Password)
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.LanguageId)
+            @Html.EditorFor(x => x.Form.LanguageId, new { items = Model.Languages.Select(x => DropDownItem.Item((LanguageEnum)x.Id, x.Description)) })
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.DownloadLimit)
+            @Html.EditorFor(x => x.Form.DownloadLimit)
+        </div>
+
+    </div>
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save)
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.MaterialRecipientUrl(new RecipientId(Model.Form.RecipientTypeId, Model.Form.RecipientId), Model.Form.ClassMaterialRecipientId))
+    }
+
+</form>
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function() {
+
+            // INITIALIZATION AND VALIDATION
+
+            var materialForm = new CorabeuControl.Form("materialForm");
+            var languageId = new CorabeuControl.DropDownList("languageId", "LanguageId");
+            var downloadLimit = new CorabeuControl.Spinner("downloadLimit", "DownloadLimit");
+
+            materialForm.validateControl($("#password"), "@Html.DisplayNameForJava(x => x.Form.Password)", { required: true, maxlength: 32 });
+            materialForm.validateControl(downloadLimit.element, "@Html.DisplayNameForJava(x => x.Form.DownloadLimit)", { number: true, min: 0, max: 100 });
+
+            @if (ViewBag.TriggerValidation != null)
+            {
+                @:materialForm.valid();
+            }
+
+        }
+
+    </script>
+
+}

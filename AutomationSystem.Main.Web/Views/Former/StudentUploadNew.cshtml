@@ -1,0 +1,71 @@
+﻿@model BatchUploadForEdit<BatchUploadForm>
+@{
+    IContextManager cm = ContextHelper.GetContextManager(ViewBag);   
+    var currentContext = cm.Get();
+}
+
+<form id="formerBatchUploadForm" method="post" enctype="multipart/form-data" action="@Url.Action("StudentUploadNew", new { context = currentContext })" >
+
+    @Html.EditorFor(x => x.Form.ParentEntityId)
+
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.Name)
+            @Html.EditorFor(x => x.Form.Name)
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.BatchUploadTypeId)
+            @Html.EditorFor(x => x.Form.BatchUploadTypeId, new { Items = Model.FileTypes.Select(x => DropDownItem.Item(x.BatchUploadTypeId, x.Description)) })
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="form-group col-md-6">
+            <label for="batchFile">Batch file</label><br />
+            <input type="file" name="BatchFile" id="batchFile" />
+            <div id="@TextHelper.DecorateName("batchFile", "error-placeholder")"></div>
+        </div>
+    </div>
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save)
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, cm.GetBackUrl(Url.Action("StudentUpload", "Former", new { id = Model.Form.ParentEntityId })))
+    }
+
+</form>
+
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // INITIALIZATION AND VALIDATION
+
+            var formerBatchUploadForm = new CorabeuControl.Form("formerBatchUploadForm");
+
+            var batchUploadTypeId = new CorabeuControl.DropDownList("batchUploadTypeId", "BatchUploadTypeId");
+            var batchFile = $("#batchFile");
+
+            formerBatchUploadForm.validateControl($("#name"), "@Html.DisplayNameForJava(x => x.Form.Name)", { required: true, maxlength: 64 });
+            formerBatchUploadForm.validateControl(batchUploadTypeId.element, "@Html.DisplayNameForJava(x => x.Form.BatchUploadTypeId)", { notSelected: true });
+            formerBatchUploadForm.validateControl(batchFile, "Batch file", { required: true });
+
+            batchFile.change(function() {
+                batchFile.valid();
+            });
+
+            @if (ViewBag.TriggerValidation != null)
+            {
+                @:formerBatchUploadForm.valid();
+            }
+
+        }
+
+    </script>
+
+}

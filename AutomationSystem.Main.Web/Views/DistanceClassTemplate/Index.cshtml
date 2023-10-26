@@ -1,0 +1,119 @@
+﻿@model DistanceClassTemplatePageModel
+@{
+    ViewBag.Title = CommonResources.MenuDistanceCoordinatorDistanceTemplates;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.DistanceCoordinatorDistanceTemplates;
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Link(CommonResources.AddNew, ButtonStyle.Primary, Url.Action("New"))
+}
+
+<form id="filterForm" class="alert alert-info" method="get" action="@Url.Action("Index")">
+
+    @Html.HiddenConstant("search", true)
+
+    <div class="row">
+
+        <div class="form-group col-md-6 col-lg-4">
+            @Html.LabelFor(x => x.Filter.TemplateState)
+            @Html.EditorFor(x => x.Filter.TemplateState,
+                new { Items = Model.TemplateStates.Select(x => DropDownItem.Item(x, MainTextHelper.GetDistanceClassTemplateStateCapitalText(x))) })
+        </div>
+
+    </div>
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.FilterGroup))
+    {
+        @bg.Submit(CommonResources.Search, ButtonStyle.FilterPrimary)
+        @bg.Command(CommonResources.Clear, ButtonStyle.FilterNormal, false, new { id = "clear-button" });
+    }
+
+</form>
+
+@*List of distance classes*@
+@if (Model.Items.Count == 0)
+{
+    if (Model.WasSearched)
+    {
+        <p>
+            <em>@CommonResources.NoRecords</em>
+        </p>
+    }
+}
+else
+{
+
+    <table class="table table-hover table-sm">
+        <tbody>
+            @foreach (var item in Model.Items.OrderByDescending(x => x.EventStart))
+            {
+                <tr>
+                    <td>
+                        <div class="badge-title">
+                            <h5>@item.Title</h5>
+                            @Html.DistanceClassTemplateStateBadge(item.TemplateState)
+                            @if (item.Instructors.Any())
+                            {
+                                <p class="mb-0">
+                                    <strong>
+                                        @Html.DisplayNameFor(x => item.Instructors): @Html.DisplayFor(x => item.Instructors)
+                                    </strong>
+                                </p>
+                            }
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-lg-10 row">
+                                <div class="col-lg-6">
+                                    <strong>@Html.DisplayNameFor(x => item.RegistrationStart)</strong>
+                                    @Html.DisplayFor(x => item.RegistrationStart, new { ShowOnlyDate = true })
+                                </div>
+                                <div class="col-lg-6">
+                                    <strong>@Html.DisplayNameFor(x => item.RegistrationEnd)</strong>
+                                    @Html.DisplayFor(x => item.RegistrationEnd, new { ShowOnlyDate = true })
+                                </div>
+                                <div class="col-lg-6">
+                                    <strong>@Html.DisplayNameFor(x => item.TransLanguage)</strong>
+                                    (@MainTextHelper.GetTranslation(item.OriginLanguage, item.TransLanguage))
+                                </div>
+                            </div>
+                            <div class="col-lg-2 row justify-content-center justify-content-lg-end align-self-end block-item-group-placeholder">
+                                @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                                {
+                                    @bg.Link(CommonResources.Detail, ButtonStyle.Primary, Url.Action("Detail", "DistanceClassTemplate", new { id = item.DistanceClassTemplateId }))
+                                }
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // clear logic
+
+            var filterControls = [
+                new CorabeuControl.DropDownList("templateState", "TemplateState")
+            ];
+
+            // connect delete-button
+            $("#clear-button").click(function () {
+                $.each(filterControls, function (index, control) {
+                    control.setDefaultValue();
+                });
+            });
+            
+        }
+
+    </script>
+}
+

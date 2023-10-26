@@ -1,0 +1,67 @@
+﻿@model IziPreferenceForEdit
+
+@{
+    ViewBag.Title = CommonResources.MenuCorePreferences;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CorePreferences;
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.Preferences, TabItemId.PreferencesIzi);
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+
+    var personHelper = Model.PersonHelper;
+}
+
+<form id="iziPreferencesForm" method="post" action="@Url.Action("Izi", "Preference")">
+
+    <h5>IZI LLC</h5>
+
+    <div class="row">    
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.MasterCoordinatorRecipient)
+            @Html.EditorFor(x => x.Form.MasterCoordinatorRecipient)
+        </div>
+        
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.MasterLeadInstructorId)
+            @Html.EditorFor(x => x.Form.MasterLeadInstructorId, new { Text = personHelper.GetPersonNameById(Model.Form.MasterLeadInstructorId) })
+        </div>
+
+    </div>
+  
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save)
+    }
+
+</form>
+
+
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // INITIALIZATION AND VALIDATION
+
+            @Html.TypeaheadDropDownSource("masterLeadInstructors", personHelper.GetPickerItemsForRole(PersonRoleTypeEnum.GuestInstructor))
+
+            var iziPreferencesForm = new CorabeuControl.Form("iziPreferencesForm");
+
+            var guestInstructorId = new CorabeuControl.TypeaheadDropDownInput("masterLeadInstructorId", "MasterLeadInstructorId", masterLeadInstructors);
+
+            iziPreferencesForm.validateControl($("#masterCoordinatorRecipient"), "@Html.DisplayNameFor(x => x.Form.MasterCoordinatorRecipient)", { required: true, maxlength: 128, email: true });
+          
+            @if (ViewBag.TriggerValidation != null)
+            {
+                <text>iziPreferencesForm.valid();</text>
+            }
+
+        }
+
+    </script>
+
+}

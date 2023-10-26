@@ -1,0 +1,72 @@
+﻿@model List<JobListItem>
+@{
+    ViewBag.Title = CommonResources.MenuCoreJobs;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoreJobs;
+}
+
+
+@if (Model.Count == 0)
+{
+    <p>
+        <em>@CommonResources.NoRecords</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x[0].Name)</th>
+                <th>@Html.DisplayNameFor(x => x[0].IntervalInMinutes)</th>
+                <th>@Html.DisplayNameFor(x => x[0].FromHourAndMinute)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(x => item.Name)</td>
+                    <td>@Html.DisplayFor(x => item.IntervalInMinutes)</td>
+                    <td>@Html.DisplayFor(x => item.FromHourAndMinute)</td>
+                    <td>
+                        @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                        {
+                            @bg.Command("Schedule now", "jobs", ButtonStyle.Primary, false, "schedule-now", item.JobId)
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // COMMANDS
+
+            // connects expandable textblocks
+            var eg = new CorabeuControl.ExpansionGroup("expandable");
+            var requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("schedule-now", "@Url.Action("ScheduleNow")");
+
+            // connects command-incidents
+            $(".command-jobs").click(function() {
+                var sender = $(this);
+                var id = sender.attr("data-id");
+                var command = sender.attr("data-command");
+                if (requestHelper.hasAction(command))
+                    requestHelper.executePost(command, { id: id });
+                else
+                    alert("Unknown action " + command);
+            });
+        }
+
+    </script>
+
+}

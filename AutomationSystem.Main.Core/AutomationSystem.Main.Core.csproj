@@ -1,0 +1,779 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{18174580-3FC3-4A10-9E50-C328603BF656}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AutomationSystem.Main.Core</RootNamespace>
+    <AssemblyName>AutomationSystem.Main.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MvasProd|AnyCPU'">
+    <OutputPath>bin\MvasProd\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugSwisth|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\DebugSwisth\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugJuraj|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\DebugJuraj\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MvasProdDebug|AnyCPU'">
+    <OutputPath>bin\MvasProdDebug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugMvasProd|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\DebugMvasProd\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MvasTest|AnyCPU'">
+    <OutputPath>bin\MvasTest\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper, Version=10.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.10.1.1\lib\net461\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="Braintree, Version=4.18.1.0, Culture=neutral, PublicKeyToken=31b586f34d3e96c7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Braintree.4.18.1\lib\net452\Braintree.dll</HintPath>
+    </Reference>
+    <Reference Include="ClosedXML, Version=0.91.0.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.0.91.0\lib\net452\ClosedXML.dll</HintPath>
+    </Reference>
+    <Reference Include="CorabeuControl, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\CorabeuControl\CorabeuControl.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.7.2.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.7.2\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelNumberFormat, Version=1.0.3.0, Culture=neutral, PublicKeyToken=23c6f5d73be07eca, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelNumberFormat.1.0.3\lib\net20\ExcelNumberFormat.dll</HintPath>
+    </Reference>
+    <Reference Include="FastMember.Signed, Version=1.3.0.0, Culture=neutral, PublicKeyToken=9e8f22703bef9a29, processorArchitecture=MSIL">
+      <HintPath>..\packages\FastMember.Signed.1.3.0\lib\net45\FastMember.Signed.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.5.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.5.0.0\lib\net461\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.5.0.0\lib\net461\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp, Version=1.50.5147.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PDFsharp.1.50.5147\lib\net20\PdfSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp.Charting, Version=1.50.5147.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PDFsharp.1.50.5147\lib\net20\PdfSharp.Charting.dll</HintPath>
+    </Reference>
+    <Reference Include="SheetUtility">
+      <HintPath>..\packages\SheetUtility\SheetUtility.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.FileSystem.Primitives.4.0.1\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Packaging, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Packaging.4.0.0\lib\net46\System.IO.Packaging.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.4\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.4\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.4\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.4\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.4\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.4\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Addresses\AppLogic\AddressServiceCollectionExtensions.cs" />
+    <Compile Include="Addresses\AppLogic\Convertors\IAddressConvertorLocalised.cs" />
+    <Compile Include="BatchUploads\System\BatchDataFetchers\ExcelBlockDataFetcher.cs" />
+    <Compile Include="Classes\System\Emails\ClassEmailParameterResolverFactory.cs" />
+    <Compile Include="Classes\System\Emails\ClassEmailService.cs" />
+    <Compile Include="Classes\System\Emails\EmailEntityParameterResolverFactoryForClass.cs" />
+    <Compile Include="Classes\System\Emails\EmailPermissionResolverForClass.cs" />
+    <Compile Include="Classes\System\Emails\EmailTemplateHierarchyResolverForClassAction.cs" />
+    <Compile Include="Classes\System\Emails\IClassEmailParameterResolverFactory.cs" />
+    <Compile Include="Classes\System\Emails\IClassEmailService.cs" />
+    <Compile Include="Classes\System\IClassTypeResolver.cs" />
+    <Compile Include="Classes\System\Model\ClassFeaturesConfiguration.cs" />
+    <Compile Include="Contacts\AppLogic\ContactAdministration.cs" />
+    <Compile Include="Contacts\AppLogic\ContactProvider.cs" />
+    <Compile Include="Contacts\AppLogic\IContactProvider.cs" />
+    <Compile Include="Contacts\AppLogic\MappingProfiles\ContactProfile.cs" />
+    <Compile Include="Contacts\ContactServiceCollectionExtensions.cs" />
+    <Compile Include="Contacts\Data\ContactDatabaseLayer.cs" />
+    <Compile Include="Contacts\Data\Extensions\ContactListIncludeExtensions.cs" />
+    <Compile Include="Contacts\Data\IContactDatabaseLayer.cs" />
+    <Compile Include="Contacts\Data\Models\ContactListIncludes.cs" />
+    <Compile Include="Contacts\System\Emails\ContactEmailParameterResolverFactory.cs" />
+    <Compile Include="Contacts\System\Emails\ContactEmailService.cs" />
+    <Compile Include="Contacts\System\Emails\EmailParameterResolvers\FormerStudentParameterResolver.cs" />
+    <Compile Include="Contacts\System\Emails\EmailPermissionResolverForContact.cs" />
+    <Compile Include="Contacts\System\Emails\EmailTemplateHierarchyResolverForContactList.cs" />
+    <Compile Include="Contacts\System\Emails\IContactEmailParameterResolverFactory.cs" />
+    <Compile Include="Contacts\System\Emails\IContactEmailService.cs" />
+    <Compile Include="Emails\System\IMainEmailHelper.cs" />
+    <Compile Include="Emails\System\MainEmailHelper.cs" />
+    <Compile Include="Enums\System\EnumMappingHelper.cs" />
+    <Compile Include="Enums\System\IEnumMappingHelper.cs" />
+    <Compile Include="FormerClasses\AppLogic\BatchDataFetchers\IFormerStudentBatchFileDataFetcher.cs" />
+    <Compile Include="FormerClasses\AppLogic\FormerClassFactory.cs" />
+    <Compile Include="FormerClasses\AppLogic\FormerStudentBatchUploadFactory.cs" />
+    <Compile Include="FormerClasses\AppLogic\IFormerClassFactory.cs" />
+    <Compile Include="FormerClasses\AppLogic\IFormerStudentBatchUploadFactory.cs" />
+    <Compile Include="FormerClasses\AppLogic\IFormerStudentUploadValidator.cs" />
+    <Compile Include="FormerClasses\AppLogic\MappingProfiles\FormerClassProfile.cs" />
+    <Compile Include="FormerClasses\AppLogic\FormerStudentBatchUploadValueResolver.cs" />
+    <Compile Include="FormerClasses\AppLogic\IFormerStudentBatchUploadValueResolver.cs" />
+    <Compile Include="Home\AppLogic\Comparers\DistanceAndWwaClassComparer.cs" />
+    <Compile Include="Home\AppLogic\Comparers\IDistanceAndWwaClassComparer.cs" />
+    <Compile Include="Home\AppLogic\IWwaRegistrationSplitter.cs" />
+    <Compile Include="Home\AppLogic\WwaRegistrationSplitter.cs" />
+    <Compile Include="Home\System\Incidents\MissingClassIdInUrlIncidentHandler.cs" />
+    <Compile Include="MainMapper.cs" />
+    <Compile Include="MaterialDistribution\System\Emails\IMaterialEmailParameterResolverFactory.cs" />
+    <Compile Include="MaterialDistribution\System\Emails\IMaterialEmailService.cs" />
+    <Compile Include="MaterialDistribution\System\Emails\MaterialEmailParameterResolverFactory.cs" />
+    <Compile Include="MaterialDistribution\System\Emails\MaterialEmailService.cs" />
+    <Compile Include="Profiles\System\Emails\EmailPermissionResolverForProfile.cs" />
+    <Compile Include="Registrations\System\Emails\EmailEntityParameterResolverFactoryForRegistration.cs" />
+    <Compile Include="Registrations\System\Emails\EmailPermissionResolverForRegistration.cs" />
+    <Compile Include="Classes\System\Model\ClassDomainInfo.cs" />
+    <Compile Include="Emails\System\IEmailTypeResolver.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\IClassMaterialBusinessRules.cs" />
+    <Compile Include="Persons\System\Extensions\PersonIdentityResolverExtensions.cs" />
+    <Compile Include="PriceLists\System\IPriceListTypeResolver.cs" />
+    <Compile Include="PriceLists\System\Models\PriceListTypeInfo.cs" />
+    <Compile Include="Profiles\AppLogic\ProfileEmailAdministration.cs" />
+    <Compile Include="Profiles\System\Emails\EmailTemplateHierarchyResolverForProfile.cs" />
+    <Compile Include="Profiles\System\Extensions\ProfileIdentityResolverExtensions.cs" />
+    <Compile Include="Registrations\System\Emails\EmailTemplateHierarchyResolverForRegistration.cs" />
+    <Compile Include="Registrations\System\Emails\IRegistrationEmailParameterResolverFactory.cs" />
+    <Compile Include="Registrations\System\Emails\IRegistrationEmailService.cs" />
+    <Compile Include="Registrations\System\IRegistrationCommandService.cs" />
+    <Compile Include="Registrations\System\IRegistrationPersonalDataService.cs" />
+    <Compile Include="Registrations\System\RegistrationTypeFeeders\IRegistrationTypeFeederForClassCategory.cs" />
+    <Compile Include="Registrations\System\RegistrationTypeFeeders\IRegistrationTypeResolver.cs" />
+    <Compile Include="Registrations\System\Emails\RegistrationEmailParameterResolverFactory.cs" />
+    <Compile Include="Registrations\System\Emails\RegistrationEmailService.cs" />
+    <Compile Include="Registrations\System\RegistrationCommandService.cs" />
+    <Compile Include="Registrations\System\RegistrationPersonalDataService.cs" />
+    <Compile Include="Registrations\System\RegistrationTypeFeeders\RegistrationTypeFeederForClasses.cs" />
+    <Compile Include="Registrations\System\RegistrationTypeFeeders\RegistrationTypeFeederForDistanceClasses.cs" />
+    <Compile Include="Registrations\System\RegistrationTypeFeeders\RegistrationTypeFeederForLectures.cs" />
+    <Compile Include="Registrations\System\RegistrationTypeFeeders\RegistrationTypeFeederForPrivateMaterialClasses.cs" />
+    <Compile Include="RegistrationUpload\AppLogic\BatchDataFetchers\ExcelStudentRegistrationFetcher.cs" />
+    <Compile Include="RegistrationUpload\AppLogic\BatchDataFetchers\IStudentRegistrationBatchDataFileFetcher.cs" />
+    <Compile Include="RegistrationUpload\AppLogic\IStudentRegistrationBatchMapper.cs" />
+    <Compile Include="RegistrationUpload\AppLogic\StudentRegistrationBatchMapper.cs" />
+    <Compile Include="RegistrationUpload\AppLogic\IRegistrationBatchUploadFactory.cs" />
+    <Compile Include="RegistrationUpload\AppLogic\IStudentRegistrationBatchValidator.cs" />
+    <Compile Include="RegistrationUpload\AppLogic\Models\StudentRegistrationBatchColumn.cs" />
+    <Compile Include="RegistrationUpload\AppLogic\RegistrationBatchUploadAdministration.cs" />
+    <Compile Include="RegistrationUpload\AppLogic\Models\RegistrationBatchUploadParameters.cs" />
+    <Compile Include="RegistrationUpload\AppLogic\StudentRegistrationBatchMergeResolver.cs" />
+    <Compile Include="RegistrationUpload\AppLogic\RegistrationBatchUploadFactory.cs" />
+    <Compile Include="RegistrationUpload\AppLogic\StudentRegistrationBatchValidator.cs" />
+    <Compile Include="RegistrationUpload\RegistrationUploadServiceCollectionExtensions.cs" />
+    <Compile Include="RegistrationUpload\AppLogic\IStudentRegistrationBatchUploadValueResolver.cs" />
+    <Compile Include="RegistrationUpload\AppLogic\StudentRegistrationBatchUploadValueResolver.cs" />
+    <Compile Include="Reports\System\DataProviders\IClassFinancialBusinessLogic.cs" />
+    <Compile Include="Reports\System\DataProviders\IClassDataProvider.cs" />
+    <Compile Include="Reports\System\Models\FinancialBusiness\ProgramExpenseItem.cs" />
+    <Compile Include="Reports\System\Models\FinancialBusiness\ProgramRevenueItem.cs" />
+    <Compile Include="Reports\System\Models\FinancialBusiness\ProgramRevenueType.cs" />
+    <Compile Include="Reports\System\Models\FinancialBusiness\QuantityAndRateItem.cs" />
+    <Compile Include="Reports\System\Models\FinancialBusiness\RoyaltyFeeItem.cs" />
+    <Compile Include="Addresses\AppLogic\Convertors\IAddressConvertor.cs" />
+    <Compile Include="MainAsyncRequestManagers\System\Models\DocumentRequestParameters.cs" />
+    <Compile Include="Reports\System\Models\ReportService\ClassReportTypeInfo.cs" />
+    <Compile Include="Reports\System\DataProviders\ICommonReportDataProvider.cs" />
+    <Compile Include="Reports\System\Models\CountryReport\CountryReportItem.cs" />
+    <Compile Include="Reports\System\Models\DistanceCrf\DistanceCrfCounts.cs" />
+    <Compile Include="Reports\System\Models\DistanceCrf\DistanceCrfHeader.cs" />
+    <Compile Include="Reports\System\Models\DistanceCrf\DistanceCrfReport.cs" />
+    <Compile Include="Reports\System\Models\ReportService\IClassReportComponents.cs" />
+    <Compile Include="Reports\System\ReportAvailabilityResolvers\IReportAvailabilityResolver.cs" />
+    <Compile Include="Reports\System\ReportGenerators\IClassReportGenerator.cs" />
+    <Compile Include="Reports\System\IClassReportFactory.cs" />
+    <Compile Include="Reports\System\IReportService.cs" />
+    <Compile Include="Reports\System\DataProviders\DistanceReportDataProviderFactory.cs" />
+    <Compile Include="Reports\System\DataProviders\IDistanceClassDataProvider.cs" />
+    <Compile Include="Reports\System\DataProviders\IDistanceReportDataProviderFactory.cs" />
+    <Compile Include="Reports\System\Models\DistanceReportService\DistanceCrfReportParameters.cs" />
+    <Compile Include="Reports\System\IDistanceReportService.cs" />
+    <Compile Include="Classes\AppLogic\ClassOperationChecker.cs" />
+    <Compile Include="Classes\AppLogic\IClassOperationChecker.cs" />
+    <Compile Include="Emails\EmailServiceCollectionExtensions.cs" />
+    <Compile Include="Emails\System\Models\LanguageWwaKey.cs" />
+    <Compile Include="Emails\System\LanguageWwaKeyEqualityComparer.cs" />
+    <Compile Include="Emails\System\Models\RecipientType.cs" />
+    <Compile Include="Enums\Data\Extensions\EnumFilterExtensions.cs" />
+    <Compile Include="FormerClasses\AppLogic\BatchDataFetchers\CsvFormerStudentBatchColumn.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\IMaterialAvailabilityResolver.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\IMaterialPasswordGenerator.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\MaterialAvailabilityResolver.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\MaterialPasswordGenerator.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\ClassMaterialOperationChecker.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\IClassMaterialOperationChecker.cs" />
+    <Compile Include="Registrations\AppLogic\Convertors\IRegistrationInvitationConvertor.cs" />
+    <Compile Include="Registrations\AppLogic\Convertors\IRegistrationLastClassConvertor.cs" />
+    <Compile Include="Registrations\AppLogic\IRegistrationOperationChecker.cs" />
+    <Compile Include="Registrations\AppLogic\Models\RegistrationOperation.cs" />
+    <Compile Include="Integration\System\Models\RegistrationIntegrationSyncResult.cs" />
+    <Compile Include="Integration\System\IRegistrationIntegrationRequestHandlerFactory.cs" />
+    <Compile Include="Integration\System\IRegistrationIntegrationSyncExecutor.cs" />
+    <Compile Include="Integration\System\IRegistrationIntegrationSyncExecutorFactory.cs" />
+    <Compile Include="Registrations\AppLogic\Convertors\IWebExRegistrationConvertor.cs" />
+    <Compile Include="Integration\System\IRegistrationIntegrationRequestHandler.cs" />
+    <Compile Include="Registrations\AppLogic\RegistrationOperationChecker.cs" />
+    <Compile Include="Registrations\System\IRegistrationLogicProvider.cs" />
+    <Compile Include="Registrations\System\IRegistrationLogicProviderLocalised.cs" />
+    <Compile Include="Registrations\System\IRegistrationStateProvider.cs" />
+    <Compile Include="Registrations\System\ITypedRegistrationService.cs" />
+    <Compile Include="Registrations\System\IRegistrationService.cs" />
+    <Compile Include="Registrations\System\Convertors\IBaseRegistrationConvertor.cs" />
+    <Compile Include="Registrations\System\Convertors\ITypedRegistrationConvertor.cs" />
+    <Compile Include="Registrations\System\Convertors\IRegistrationConvertor.cs" />
+    <Compile Include="Enums\EnumServiceCollectionExtensions.cs" />
+    <Compile Include="FileServices\FileServiceServiceCollectionExtensions.cs" />
+    <Compile Include="FileServices\System\Convertors\IMainFileConvertor.cs" />
+    <Compile Include="FileServices\System\Models\EntityFileToSave.cs" />
+    <Compile Include="FileServices\System\IMainFileService.cs" />
+    <Compile Include="FileServices\System\Models\MainFileReservedNames.cs" />
+    <Compile Include="Home\AppLogic\Convertors\HomeConvertor.cs" />
+    <Compile Include="Home\AppLogic\Convertors\HomePaymentConvertor.cs" />
+    <Compile Include="Home\AppLogic\HomeWorkflowManager.cs" />
+    <Compile Include="Home\AppLogic\Models\PayloadDetails.cs" />
+    <Compile Include="Home\AppLogic\Models\PayloadShippingAddress.cs" />
+    <Compile Include="Home\HomeServiceCollectionExtensions.cs" />
+    <Compile Include="MainAsyncRequestManagers\MainAsyncRequestManagerServiceCollectionExtensions.cs" />
+    <Compile Include="MainAsyncRequestManagers\System\IMainAsyncRequestManager.cs" />
+    <Compile Include="FormerClasses\AppLogic\FormerClassAdministration.cs" />
+    <Compile Include="FormerClasses\Data\Extensions\FormerClassFilterExtensions.cs" />
+    <Compile Include="FormerClasses\Data\Extensions\FormerClassIncludesExtensions.cs" />
+    <Compile Include="FormerClasses\Data\Extensions\FormerStudentFilterExtensions.cs" />
+    <Compile Include="FormerClasses\Data\Extensions\FormerStudentIncludesExtensions.cs" />
+    <Compile Include="FormerClasses\Data\Models\FormerClassIncludes.cs" />
+    <Compile Include="FormerClasses\Data\Models\FormerOperationOption.cs" />
+    <Compile Include="FormerClasses\Data\Models\FormerStudentIncludes.cs" />
+    <Compile Include="FormerClasses\AppLogic\Convertors\IClassFormerClassConvertor.cs" />
+    <Compile Include="Classes\AppLogic\EventCheckers\PayPalAccountToDeleteHasNoClassEventChecker.cs" />
+    <Compile Include="Classes\AppLogic\EventCheckers\PersonToDeleteHasNoClassEventChecker.cs" />
+    <Compile Include="Classes\AppLogic\EventCheckers\PriceListToDeleteHasNoClassEventChecker.cs" />
+    <Compile Include="Classes\AppLogic\EventCheckers\ProfileToDeleteHasNoClassEventChecker.cs" />
+    <Compile Include="Classes\Data\Extensions\ClassActiveExtensions.cs" />
+    <Compile Include="DistanceClassTemplates\AppLogic\EventCheckers\PersonToDeleteHasNoDistanceClassTemplate.cs" />
+    <Compile Include="DistanceClassTemplates\Data\Extensions\DistanceClassTemplateActiveExtensions.cs" />
+    <Compile Include="DistanceProfiles\AppLogic\EventCheckers\PayPalAccountToDeleteHasNoDistanceProfileEventChecker.cs" />
+    <Compile Include="DistanceProfiles\AppLogic\EventCheckers\PersonToDeleteHasNoDistanceProfileEventChecker.cs" />
+    <Compile Include="DistanceProfiles\AppLogic\EventCheckers\PriceListToDeleteHasNoDistanceProfileEventChecker.cs" />
+    <Compile Include="DistanceProfiles\AppLogic\EventCheckers\ProfileToDeleteHasNoDistanceProfileEventChecker.cs" />
+    <Compile Include="FormerClasses\AppLogic\Convertors\IFormerStudentBatchConvertor.cs" />
+    <Compile Include="FormerClasses\AppLogic\Convertors\IFormerStudentConvertor.cs" />
+    <Compile Include="FormerClasses\FormerClassesServiceCollectionExtensions.cs" />
+    <Compile Include="Integration\AppLogic\Convertors\IMainAccountConvertor.cs" />
+    <Compile Include="Integration\AppLogic\Convertors\IMainProgramConvertor.cs" />
+    <Compile Include="Integration\IntegrationServiceCollectionExtensions.cs" />
+    <Compile Include="MaterialDistribution\MaterialDistributionServiceCollectionExtensions.cs" />
+    <Compile Include="Payment\AppLogic\Convertors\IMainPayPalKeyConvertor.cs" />
+    <Compile Include="Certificates\CertificateServiceCollectionExtensions.cs" />
+    <Compile Include="Certificates\System\ICertificateDocumentCreator.cs" />
+    <Compile Include="Certificates\System\Models\CertificateInfo.cs" />
+    <Compile Include="Certificates\System\ICertificateService.cs" />
+    <Compile Include="Classes\AppLogic\Models\ClassOperation.cs" />
+    <Compile Include="Certificates\System\Convertors\ICertificateConvertor.cs" />
+    <Compile Include="Classes\AppLogic\ClassCertificateAdministration.cs" />
+    <Compile Include="Classes\AppLogic\ClassPreferenceAdministration.cs" />
+    <Compile Include="Classes\AppLogic\ClassReportAdministration.cs" />
+    <Compile Include="Classes\AppLogic\ClassActionAdministration.cs" />
+    <Compile Include="Classes\AppLogic\ClassStyleAdministration.cs" />
+    <Compile Include="Classes\AppLogic\ClassFinanceAdministration.cs" />
+    <Compile Include="Classes\AppLogic\Models\ClassActionRegistrationRestriction.cs" />
+    <Compile Include="Classes\Data\ClassPreferenceDatabaseLayer.cs" />
+    <Compile Include="Classes\Data\IClassPreferenceDatabaseLayer.cs" />
+    <Compile Include="Classes\System\ClassActionService.cs" />
+    <Compile Include="Classes\System\Convertors\IClassBusinessConvertor.cs" />
+    <Compile Include="Classes\System\Convertors\IClassActionConvertor.cs" />
+    <Compile Include="Classes\AppLogic\Models\ClassTypeInfo.cs" />
+    <Compile Include="Classes\AppLogic\Models\ClassTypeShape.cs" />
+    <Compile Include="Classes\AppLogic\Models\ClassTypeTopic.cs" />
+    <Compile Include="Classes\AppLogic\Models\Events\ClassCreatedEvent.cs" />
+    <Compile Include="Classes\AppLogic\Models\Events\PersonIdAndRole.cs" />
+    <Compile Include="Classes\AppLogic\Models\Events\ClassPersonsChangedEvent.cs" />
+    <Compile Include="Classes\AppLogic\Factories\IClassEventFactory.cs" />
+    <Compile Include="Home\AppLogic\IPublicPaymentResolver.cs" />
+    <Compile Include="Home\AppLogic\Convertors\IHomeConvertor.cs" />
+    <Compile Include="Home\AppLogic\Convertors\IHomePaymentConvertor.cs" />
+    <Compile Include="Home\AppLogic\IHomeWorkflowManager.cs" />
+    <Compile Include="Classes\AppLogic\Factories\IClassPreferenceFactory.cs" />
+    <Compile Include="Classes\AppLogic\Factories\IClassReportSettingFactory.cs" />
+    <Compile Include="Classes\Data\Extensions\ClassFilterExtensions.cs" />
+    <Compile Include="Classes\Data\Extensions\ClassIncludeExtensions.cs" />
+    <Compile Include="Classes\Data\Extensions\ClassRemoveInactive.cs" />
+    <Compile Include="Classes\Data\Models\ClassActionIncludes.cs" />
+    <Compile Include="Classes\Data\Models\ClassIncludes.cs" />
+    <Compile Include="Classes\Data\Models\ClassOperationOption.cs" />
+    <Compile Include="Classes\System\ClassService.cs" />
+    <Compile Include="Classes\System\IClassActionService.cs" />
+    <Compile Include="Classes\System\IClassService.cs" />
+    <Compile Include="Classes\System\Model\ClassWithClassForm.cs" />
+    <Compile Include="DistanceClassTemplates\AppLogic\AsyncRequestExecutors\CompleteDistanceClassesForTemplateAsyncRequestExecutor.cs" />
+    <Compile Include="DistanceClassTemplates\AppLogic\AsyncRequestExecutors\CompleteDistanceClassesForTemplateAsyncRequestExecutorFactory.cs" />
+    <Compile Include="DistanceClassTemplates\AppLogic\DistanceClassTemplateCompletionAdministration.cs" />
+    <Compile Include="DistanceClassTemplates\AppLogic\DistanceClassTemplateOperationChecker.cs" />
+    <Compile Include="DistanceClassTemplates\AppLogic\EventHandlers\CreateDistanceClassesForApprovedTemplateEventHandler.cs" />
+    <Compile Include="DistanceClassTemplates\AppLogic\EventHandlers\ChangesPropagatedToDistanceClassesEventHandler.cs" />
+    <Compile Include="DistanceClassTemplates\AppLogic\IDistanceClassTemplateOperationChecker.cs" />
+    <Compile Include="DistanceClassTemplates\AppLogic\AsyncRequestExecutors\CompleteDistanceClassesForTemplateAsyncRequestParams.cs" />
+    <Compile Include="DistanceClassTemplates\AppLogic\Models\DistanceClassTemplateOperation.cs" />
+    <Compile Include="DistanceClassTemplates\AppLogic\Models\Events\DistanceClassTemplateApprovedEvent.cs" />
+    <Compile Include="DistanceClassTemplates\AppLogic\Models\Events\DistanceClassTemplateChangedEvent.cs" />
+    <Compile Include="DistanceClassTemplates\Data\DistanceClassTemplateClassDatabaseLayer.cs" />
+    <Compile Include="DistanceClassTemplates\Data\IDistanceClassTemplateClassDatabaseLayer.cs" />
+    <Compile Include="DistanceClassTemplates\System\DistanceClassTemplateService.cs" />
+    <Compile Include="DistanceClassTemplates\System\IDistanceClassTemplateService.cs" />
+    <Compile Include="DistanceClassTemplates\AppLogic\EventHandlers\PopulateDistanceClassesForProfileEventHandler.cs" />
+    <Compile Include="DistanceClassTemplates\System\JobRunExecutors\DistanceCompletionJobExecutor.cs" />
+    <Compile Include="DistanceClassTemplates\System\JobRunExecutors\DistanceCompletionJobExecutorFactory.cs" />
+    <Compile Include="DistanceClassTemplates\System\Models\DistanceClassTemplateCompletionResult.cs" />
+    <Compile Include="DistanceProfiles\AppLogic\Models\Events\DistanceProfileStatusChangedEvent.cs" />
+    <Compile Include="DistanceProfiles\Data\Extensions\DistanceProfileFilterExtensions.cs" />
+    <Compile Include="DistanceProfiles\Data\Models\DistanceProfileFilter.cs" />
+    <Compile Include="MainEnum\MainEnumServiceCollectionExtensions.cs" />
+    <Compile Include="Payment\Payment ServiceCollectionExtensions.cs" />
+    <Compile Include="Persons\AppLogic\Convertors\IPersonConvertor.cs" />
+    <Compile Include="Persons\AppLogic\EventCheckers\ProfileToDeleteHasNoPersonEventChecker.cs" />
+    <Compile Include="Persons\AppLogic\IPersonDistinctComposer.cs" />
+    <Compile Include="Persons\AppLogic\IPersonIdMapper.cs" />
+    <Compile Include="Persons\AppLogic\Convertors\PersonConvertor.cs" />
+    <Compile Include="Persons\AppLogic\Models\Events\PersonDeletingEvent.cs" />
+    <Compile Include="Persons\AppLogic\PersonDistinctComposer.cs" />
+    <Compile Include="Persons\AppLogic\PersonHelper.cs" />
+    <Compile Include="Persons\AppLogic\PersonIdMapper.cs" />
+    <Compile Include="Persons\Data\Extensions\PersonFilterExtensions.cs" />
+    <Compile Include="Persons\Data\Extensions\PersonIncludeExtensions.cs" />
+    <Compile Include="Persons\Data\Extensions\PersonRemoveInactive.cs" />
+    <Compile Include="Persons\Data\Models\PersonIncludes.cs" />
+    <Compile Include="Persons\PersonServiceCollectionExtensions.cs" />
+    <Compile Include="Preferences\AppLogic\EventCheckers\PersonToDeleteNotUsedInPreferences.cs" />
+    <Compile Include="Preferences\PreferenceServiceCollectionExtensions.cs" />
+    <Compile Include="Preferences\System\IMainPreferenceProvider.cs" />
+    <Compile Include="Preferences\System\Models\MainPreferenceKey.cs" />
+    <Compile Include="PriceLists\AppLogic\IPriceListFactory.cs" />
+    <Compile Include="Classes\System\Convertors\IClassStyleConvertor.cs" />
+    <Compile Include="FormerClasses\AppLogic\IFormerClassPropagator.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\MaterialRecipientIntegrations\IMaterialRecipientIntegration.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\IMaterialRecipientIntegrationProvider.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\Convertors\IClassMaterialConvertor.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\Handlers\IClassMaterialDistributionHandler.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\Convertors\IClassMaterialFileConvertor.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\Convertors\IClassMaterialMonitoringConvertor.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\Convertors\IClassMaterialRecipientConvertor.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\IPdfEncryptor.cs" />
+    <Compile Include="Classes\AppLogic\Factories\IClassExpenseFactory.cs" />
+    <Compile Include="Classes\System\Convertors\IClassConvertor.cs" />
+    <Compile Include="Registrations\AppLogic\IFormerFilterForReviewProvider.cs" />
+    <Compile Include="Registrations\AppLogic\Factories\IRegistrationPaymentFactory.cs" />
+    <Compile Include="Registrations\AppLogic\Models\ReviewFormerClassFilterType.cs" />
+    <Compile Include="Reports\System\Models\DistanceCrf\DistanceCrfStudent.cs" />
+    <Compile Include="Reports\System\DataProviders\IDistanceReportDataProvider.cs" />
+    <Compile Include="Integration\System\Models\EventLocationInfo.cs" />
+    <Compile Include="Integration\System\IGenericIntegrationDataProvider.cs" />
+    <Compile Include="Integration\System\IIntegrationDataProvider.cs" />
+    <Compile Include="Reports\System\Models\Crf\CrfClassNumbers.cs" />
+    <Compile Include="Reports\System\Models\Crf\CrfEventInfo.cs" />
+    <Compile Include="Reports\System\Models\Crf\CrfEventLocationInfo.cs" />
+    <Compile Include="Reports\System\Models\Crf\CrfFinancialTotals.cs" />
+    <Compile Include="Reports\System\Models\Crf\CrfLocationInfo.cs" />
+    <Compile Include="Reports\System\Models\Crf\CrfPersonInfo.cs" />
+    <Compile Include="Reports\System\Models\Crf\CrfReport.cs" />
+    <Compile Include="Reports\System\Models\Crf\CrfTableTitles.cs" />
+    <Compile Include="Reports\System\Models\FinancialForms\DepositCalculations.cs" />
+    <Compile Include="Reports\System\Models\FinancialForms\FaClosingStatement.cs" />
+    <Compile Include="Reports\System\Models\FinancialForms\FaCrfDetail.cs" />
+    <Compile Include="Reports\System\Models\FinancialForms\FaProgramExpenseItem.cs" />
+    <Compile Include="Reports\System\Models\FinancialForms\FaProgramRevenueItems.cs" />
+    <Compile Include="Reports\System\Models\FinancialForms\FoiRoyaltyForm.cs" />
+    <Compile Include="Reports\System\Models\FinancialForms\GeneralInfo.cs" />
+    <Compile Include="Reports\System\Models\FinancialForms\GuestInstructorStatement.cs" />
+    <Compile Include="Reports\System\Models\FinancialForms\ReimbursementForPrinting.cs" />
+    <Compile Include="Reports\System\Models\FinancialForms\RevenueDepositForm.cs" />
+    <Compile Include="Reports\System\Models\FinancialForms\RoyaltyFeeItems.cs" />
+    <Compile Include="Reports\System\Models\FinancialForms\UsCurrencyInfo.cs" />
+    <Compile Include="Reports\System\Models\WwaCrf\WwaCrfEventInfo.cs" />
+    <Compile Include="Reports\System\Models\WwaCrf\WwaCrfPersonsInfo.cs" />
+    <Compile Include="Reports\System\Models\WwaCrf\WwaCrfReport.cs" />
+    <Compile Include="Registrations\System\IRegistrationTypeFeeder.cs" />
+    <Compile Include="Reports\System\DataProviders\IFinancialFormsDataProvider.cs" />
+    <Compile Include="Reports\System\Models\CountryReport\CountriesReportModel.cs" />
+    <Compile Include="Reports\System\ReportGenerators\IWordDocumentCreator.cs" />
+    <Compile Include="Addresses\AppLogic\Convertors\AddressConvertor.cs" />
+    <Compile Include="Registrations\System\Convertors\BaseRegistrationConvertor.cs" />
+    <Compile Include="Certificates\System\CertificateDocumentCreator.cs" />
+    <Compile Include="Classes\System\Convertors\ClassBusinessConvertor.cs" />
+    <Compile Include="Classes\System\Convertors\ClassActionConvertor.cs" />
+    <Compile Include="Certificates\System\Convertors\CertificateConvertor.cs" />
+    <Compile Include="Classes\AppLogic\MappingProfiles\ClassReportSettingProfile.cs" />
+    <Compile Include="Home\AppLogic\PublicPaymentResolver.cs" />
+    <Compile Include="Integration\AppLogic\Convertors\MainAccountConvertor.cs" />
+    <Compile Include="Integration\AppLogic\Convertors\MainProgramConvertor.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\Convertors\ClassMaterialConvertor.cs" />
+    <Compile Include="Classes\System\Convertors\ClassStyleConvertor.cs" />
+    <Compile Include="FormerClasses\AppLogic\Convertors\ClassFormerClassConvertor.cs" />
+    <Compile Include="Enums\System\EnumOrderStrategies.cs" />
+    <Compile Include="FormerClasses\AppLogic\Convertors\FormerStudentBatchConvertor.cs" />
+    <Compile Include="FormerClasses\AppLogic\FormerStudentBatchMergeResolver.cs" />
+    <Compile Include="FormerClasses\AppLogic\FormerStudentBatchValidator.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\Convertors\ClassMaterialFileConvertor.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\Convertors\ClassMaterialMonitoringConvertor.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\Convertors\ClassMaterialRecipientConvertor.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\MaterialAvailabilityResolverExtensions.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\PdfEncryptor.cs" />
+    <Compile Include="Payment\AppLogic\Convertors\MainPayPalKeyConvertor.cs" />
+    <Compile Include="PriceLists\AppLogic\MappingProfiles\PriceListProfile.cs" />
+    <Compile Include="Classes\AppLogic\MappingProfiles\ClassExpenseProfile.cs" />
+    <Compile Include="Classes\AppLogic\MappingProfiles\ClassPreferenceProfile.cs" />
+    <Compile Include="PriceLists\AppLogic\Models\Events\PriceListDeletingEvent.cs" />
+    <Compile Include="Profiles\AppLogic\MappingProfiles\ProfileProfile.cs" />
+    <Compile Include="Registrations\System\RegistrationStateProvider.cs" />
+    <Compile Include="Reports\AppLogic\Convertors\IGeneralReportServiceConvertor.cs" />
+    <Compile Include="Reports\ReportingServiceCollectionExtensions.cs" />
+    <Compile Include="Utilities\System\RandomStringGenerator.cs" />
+    <Compile Include="Registrations\AppLogic\FormerFilterForReviewProvider.cs" />
+    <Compile Include="Registrations\AppLogic\MappingProfiles\RegistrationPaymentProfile.cs" />
+    <Compile Include="Reports\System\DataProviders\DistanceClassDataProvider.cs" />
+    <Compile Include="Reports\System\DataProviders\DistanceReportDataProvider.cs" />
+    <Compile Include="Reports\System\Models\ReportService\FinancialFormConstants.cs" />
+    <Compile Include="Reports\AppLogic\Convertors\GeneralReportServiceConvertor.cs" />
+    <Compile Include="Classes\AppLogic\AsyncRequestExecutors\DocumentAsyncExecutorFactory.cs" />
+    <Compile Include="Classes\AppLogic\Factories\ClassEventFactory.cs" />
+    <Compile Include="Integration\System\GenericIntegrationDataProvider.cs" />
+    <Compile Include="Integration\System\NoIntegration\NoIntegrationDataProvider.cs" />
+    <Compile Include="Integration\System\NoIntegration\NoIntegrationRequestHandlerFactory.cs" />
+    <Compile Include="Integration\System\NoIntegration\NoIntegrationSyncExecutorFactory.cs" />
+    <Compile Include="Registrations\AppLogic\AsyncRequestExecutors\RegistrationIntegrationAsyncExecutorFactory.cs" />
+    <Compile Include="Registrations\System\JobRunExecutors\RegistrationIntegrationSyncJobFactory.cs" />
+    <Compile Include="Integration\System\WebEx\WebExIntegrationDataProvider.cs" />
+    <Compile Include="Classes\System\ClassTypeResolver.cs" />
+    <Compile Include="Emails\System\EmailTypeResolver.cs" />
+    <Compile Include="PriceLists\System\PriceListTypeResolver.cs" />
+    <Compile Include="Registrations\AppLogic\Convertors\RegistrationInvitationConvertor.cs" />
+    <Compile Include="FileServices\System\Convertors\MainFileConvertor.cs" />
+    <Compile Include="Registrations\AppLogic\Convertors\RegistrationLastClassConvertor.cs" />
+    <Compile Include="Classes\System\Convertors\ClassConvertor.cs" />
+    <Compile Include="FormerClasses\AppLogic\Convertors\FormerStudentConvertor.cs" />
+    <Compile Include="Registrations\System\Convertors\RegistrationChildConvertor.cs" />
+    <Compile Include="Registrations\System\Convertors\RegistrationStudentConvertor.cs" />
+    <Compile Include="Registrations\System\RegistrationTypeResolver.cs" />
+    <Compile Include="Integration\System\WebEx\WebExRegistrationIntegrationRequestHandlerFactory.cs" />
+    <Compile Include="Integration\System\WebEx\WebExRegistrationIntegrationSyncExecutorFactory.cs" />
+    <Compile Include="Classes\System\JobRunExecutors\ActiveClassReportJobExecutorFactory.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\Handlers\ClassMaterialDistributionHandler.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\ClassMaterialBusinessRules.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\ClassMaterialAdministration.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\ClassMaterialService.cs" />
+    <Compile Include="Classes\AppLogic\Factories\ClassPreferenceFactory.cs" />
+    <Compile Include="Classes\AppLogic\Factories\ClassReportSettingFactory.cs" />
+    <Compile Include="Reports\System\DistanceReportService.cs" />
+    <Compile Include="MaterialDistribution\System\Emails\EmailParameterResolvers\ClassMaterialRecipientParameterResolver.cs" />
+    <Compile Include="Reports\AppLogic\GeneralReportService.cs" />
+    <Compile Include="Classes\System\Extensions\ClassIdentityResolverExtensions.cs" />
+    <Compile Include="Profiles\System\ProfileMembershipProvider.cs" />
+    <Compile Include="Integration\AppLogic\MainAccountAdministration.cs" />
+    <Compile Include="Payment\AppLogic\MainPaymentAdministration.cs" />
+    <Compile Include="Integration\AppLogic\MainProgramAdministration.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\EventHandlers\CreateClassMaterialsEventHandler.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\EventHandlers\SyncMaterialsForPersonsEventHandler.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\MaterialRecipientIntegrationProvider.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\MaterialRecipientIntegrations\PersonMaterialIntegration.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\MaterialRecipientIntegrations\RegistrationMaterialIntegration.cs" />
+    <Compile Include="MaterialDistribution\AppLogic\Models\MaterialRequestFullInfo.cs" />
+    <Compile Include="Home\AppLogic\PreviewService.cs" />
+    <Compile Include="PriceLists\AppLogic\PriceListFactory.cs" />
+    <Compile Include="Profiles\AppLogic\Models\Events\ProfileDeletingEvent.cs" />
+    <Compile Include="Profiles\AppLogic\ProfileAdministration.cs" />
+    <Compile Include="Classes\AppLogic\Factories\ClassExpenseFactory.cs" />
+    <Compile Include="Registrations\AppLogic\Factories\RegistrationPaymentFactory.cs" />
+    <Compile Include="Registrations\System\RegistrationTypeFeeders\RegistrationTypeFeeder.cs" />
+    <Compile Include="Registrations\System\Convertors\RegistrationWwaConvertor.cs" />
+    <Compile Include="Reports\System\ReportAvailabilityResolvers\ClassReportAvailabilityResolver.cs" />
+    <Compile Include="Reports\System\Models\ReportService\ClassReportComponents.cs" />
+    <Compile Include="Reports\System\DataProviders\CommonReportDataProvider.cs" />
+    <Compile Include="Reports\System\ReportAvailabilityResolvers\EmptyReportAvailabilityResolver.cs" />
+    <Compile Include="Reports\System\DataProviders\FinancialFormsDataProvider.cs" />
+    <Compile Include="Reports\System\ReportAvailabilityResolvers\LectureReportAvailabilityResolver.cs" />
+    <Compile Include="Registrations\AppLogic\Convertors\WebExRegistrationConvertor.cs" />
+    <Compile Include="Reports\System\ReportGenerators\WordDocumentCreator.cs" />
+    <Compile Include="Classes\AppLogic\AsyncRequestExecutors\DocumentAsyncExecutor.cs" />
+    <Compile Include="Reports\System\DataProviders\ClassDataProvider.cs" />
+    <Compile Include="Reports\System\DataProviders\ClassFinancialBusinessLogic.cs" />
+    <Compile Include="Reports\System\DataProviders\CommonFinancialBusinessLogic.cs" />
+    <Compile Include="Reports\System\ClassReportFactory.cs" />
+    <Compile Include="Integration\System\NoIntegration\NoIntegrationSyncExecutor.cs" />
+    <Compile Include="Registrations\AppLogic\AsyncRequestExecutors\RegistrationIntegrationAsyncExecutor.cs" />
+    <Compile Include="Integration\System\NoIntegration\NoIntegrationRequestHandler.cs" />
+    <Compile Include="Registrations\System\JobRunExecutors\RegistrationIntegrationSyncJob.cs" />
+    <Compile Include="Integration\System\WebEx\WebExRegistrationIntegrationRequestHandler.cs" />
+    <Compile Include="FormerClasses\AppLogic\BatchDataFetchers\CsvFormerStudentsFetcher.cs" />
+    <Compile Include="Certificates\System\CertificateService.cs" />
+    <Compile Include="Registrations\System\Emails\EmailParameterResolvers\ClassRegistrationInvitiationParameterResolver.cs" />
+    <Compile Include="Registrations\System\Emails\EmailParameterResolvers\ClassRegistrationParameterResolver.cs" />
+    <Compile Include="FormerClasses\AppLogic\FormerClassPropagator.cs" />
+    <Compile Include="FormerClasses\AppLogic\FormerStudentBatchUploadAdministration.cs" />
+    <Compile Include="FormerClasses\AppLogic\BatchDataFetchers\ExcelFormerStudentsFetcher.cs" />
+    <Compile Include="Classes\AppLogic\ClassAdministration.cs" />
+    <Compile Include="Classes\System\Emails\EmailParameterResolvers\ClassParameterResolver.cs" />
+    <Compile Include="Registrations\System\Emails\EmailParameterResolvers\PersonAsRegistrationParameterResolver..cs" />
+    <Compile Include="Registrations\System\Emails\EmailParameterResolvers\LastClassParameterResolver.cs" />
+    <Compile Include="Classes\System\Emails\EmailParameterResolvers\MainCommonParameterResolver.cs" />
+    <Compile Include="FormerClasses\AppLogic\FormerStudentAdministration.cs" />
+    <Compile Include="Home\AppLogic\HomeService.cs" />
+    <Compile Include="Integration\System\WebEx\WebExRegistrationIntegrationSyncExecutor.cs" />
+    <Compile Include="Classes\System\JobRunExecutors\ActiveClassReportJobExecutor.cs" />
+    <Compile Include="MainAsyncRequestManagers\System\MainAsyncRequestManager.cs" />
+    <Compile Include="FileServices\System\MainFileService.cs" />
+    <Compile Include="Preferences\System\MainPreferenceProvider.cs" />
+    <Compile Include="Integration\System\NoIntegration\NoIntegrationEntityIntegrationProvider.cs" />
+    <Compile Include="Certificates\System\OpenXmlActions\PrepareForMerge.cs" />
+    <Compile Include="Persons\AppLogic\PersonAdministration.cs" />
+    <Compile Include="Preferences\AppLogic\PreferenceAdministration.cs" />
+    <Compile Include="PriceLists\AppLogic\PriceListService.cs" />
+    <Compile Include="Registrations\AppLogic\RegistrationAdministration.cs" />
+    <Compile Include="Registrations\System\RegistrationLogicProvider.cs" />
+    <Compile Include="Registrations\System\TypedRegistrationService.cs" />
+    <Compile Include="Reports\System\ReportGenerators\BaseExcelReportGenerator.cs" />
+    <Compile Include="Reports\System\ReportGenerators\BaseWordReportGenerator.cs" />
+    <Compile Include="Reports\System\ReportGenerators\CountriesReportGenerator.cs" />
+    <Compile Include="Reports\System\ReportGenerators\CrfClassReportGenerator.cs" />
+    <Compile Include="Reports\System\ReportGenerators\CrfLectureReportGenerator.cs" />
+    <Compile Include="Reports\System\ReportGenerators\CrfWwaClassReportGenerator.cs" />
+    <Compile Include="Reports\System\ReportGenerators\FaClosingStatementReportGenerator.cs" />
+    <Compile Include="Reports\System\ReportGenerators\FoiRoyaltyFormReportGenerator.cs" />
+    <Compile Include="Reports\System\ReportGenerators\GuestInstructorClosingStatementReportGenerator.cs" />
+    <Compile Include="Reports\System\ReportService.cs" />
+    <Compile Include="Reports\System\SheetUtilityCellTextProcessors\UnderscoreCellTextProcessor.cs" />
+    <Compile Include="Classes\AppLogic\ILanguageTranslationProvider.cs" />
+    <Compile Include="Classes\AppLogic\LanguageTranslationProvider.cs" />
+    <Compile Include="Classes\ClassServiceCollectionExtensions.cs" />
+    <Compile Include="Classes\Data\IClassDatabaseLayer.cs" />
+    <Compile Include="Reports\Data\IFinancialFormDatabaseLayer.cs" />
+    <Compile Include="MaterialDistribution\Data\IClassMaterialDatabaseLayer.cs" />
+    <Compile Include="FormerClasses\Data\IFormerDatabaseLayer.cs" />
+    <Compile Include="MaterialDistribution\Data\Models\ClassMaterialFileIncludes.cs" />
+    <Compile Include="MaterialDistribution\Data\Models\ClassMaterialIncludes.cs" />
+    <Compile Include="MaterialDistribution\Data\Models\ClassMaterialRecipientIncludes.cs" />
+    <Compile Include="Persons\Data\IPersonDatabaseLayer.cs" />
+    <Compile Include="PriceLists\Data\Extensions\PriceListIncludeExtensions.cs" />
+    <Compile Include="PriceLists\Data\Extensions\PriceListRemoveInactive.cs" />
+    <Compile Include="PriceLists\Data\IPriceListDatabaseLayer.cs" />
+    <Compile Include="Profiles\AppLogic\ProfileUsersAdministration.cs" />
+    <Compile Include="Profiles\Data\Extensions\ProfileFilterExtensions.cs" />
+    <Compile Include="Profiles\Data\Extensions\ProfileIncludeExtensions.cs" />
+    <Compile Include="Profiles\Data\Extensions\ProfileRemoveInactive.cs" />
+    <Compile Include="Profiles\Data\IProfileDatabaseLayer.cs" />
+    <Compile Include="Registrations\Data\Extensions\ClassRegistrationIncludeExtensions.cs" />
+    <Compile Include="Registrations\Data\Extensions\ClassRegistrationRemoveInActive.cs" />
+    <Compile Include="Registrations\Data\Models\ClassRegistrationStateSet.cs" />
+    <Compile Include="Registrations\Data\IRegistrationDatabaseLayer.cs" />
+    <Compile Include="Registrations\Data\Models\ClassRegistrationIncludes.cs" />
+    <Compile Include="MaterialDistribution\Data\Extensions\ClassMaterialActiveExtensions.cs" />
+    <Compile Include="Registrations\Data\Extensions\ClassRegistrationFilterExtensions.cs" />
+    <Compile Include="Classes\Data\ClassDatabaseLayer.cs" />
+    <Compile Include="Reports\Data\FinancialFormDatabaseLayer.cs" />
+    <Compile Include="MaterialDistribution\Data\ClassMaterialDatabaseLayer.cs" />
+    <Compile Include="FormerClasses\Data\FormerDatabaseLayer.cs" />
+    <Compile Include="Enums\Data\MainEnumDataProvider.cs" />
+    <Compile Include="MaterialDistribution\Data\Extensions\ClassMaterialIncludeExtensions.cs" />
+    <Compile Include="MaterialDistribution\Data\Extensions\ClassMaterialRemoveInactive.cs" />
+    <Compile Include="Persons\Data\PersonDatabaseLayer.cs" />
+    <Compile Include="PriceLists\Data\PriceListDatabaseLayer.cs" />
+    <Compile Include="Profiles\Data\Models\ProfileIncludes.cs" />
+    <Compile Include="Profiles\Data\ProfileDatabaseLayer.cs" />
+    <Compile Include="Registrations\Data\RegistrationDatabaseLayer.cs" />
+    <Compile Include="DistanceClassTemplates\AppLogic\DistanceClassTemplateAdministration.cs" />
+    <Compile Include="DistanceClassTemplates\AppLogic\DistanceClassTemplateFactory.cs" />
+    <Compile Include="DistanceClassTemplates\AppLogic\DistanceClassTemplateHelper.cs" />
+    <Compile Include="DistanceClassTemplates\AppLogic\IDistanceClassTemplateFactory.cs" />
+    <Compile Include="DistanceClassTemplates\AppLogic\IDistanceClassTemplateHelper.cs" />
+    <Compile Include="DistanceClassTemplates\AppLogic\MappingProfiles\DistanceClassTemplateProfile.cs" />
+    <Compile Include="DistanceClassTemplates\Data\DistanceClassTemplateDatabaseLayer.cs" />
+    <Compile Include="DistanceClassTemplates\Data\IDistanceClassTemplateDatabaseLayer.cs" />
+    <Compile Include="DistanceClassTemplates\Data\Models\DistanceClassTemplateIncludes.cs" />
+    <Compile Include="DistanceClassTemplates\Data\Extensions\DistanceClassTemplateFilterExtensions.cs" />
+    <Compile Include="DistanceClassTemplates\Data\Extensions\DistanceClassTemplateIncludeExtensions.cs" />
+    <Compile Include="DistanceClassTemplates\Data\Extensions\DistanceClassTemplateRemoveInactive.cs" />
+    <Compile Include="DistanceClassTemplates\DistanceClassTemplateServiceCollectionExtensions.cs" />
+    <Compile Include="DistanceProfiles\AppLogic\DistanceProfileAdministration.cs" />
+    <Compile Include="DistanceProfiles\AppLogic\DistanceProfileFactory.cs" />
+    <Compile Include="DistanceProfiles\AppLogic\IDistanceProfileFactory.cs" />
+    <Compile Include="DistanceProfiles\AppLogic\MappingProfiles\DistanceProfileProfile.cs" />
+    <Compile Include="DistanceProfiles\Data\DistanceProfileDatabaseLayer.cs" />
+    <Compile Include="DistanceProfiles\Data\IDistanceProfileDatabaseLayer.cs" />
+    <Compile Include="DistanceProfiles\Data\Models\DistanceProfileIncludes.cs" />
+    <Compile Include="DistanceProfiles\Data\Extensions\DistanceProfileIncludeExtensions.cs" />
+    <Compile Include="DistanceProfiles\DistanceProfileServiceCollectionExtensions.cs" />
+    <Compile Include="Gui\Helpers\MainTextHelper.cs" />
+    <Compile Include="MainEnum\AppLogic\MappingProfiles\MainEnumProfile.cs" />
+    <Compile Include="MainServiceCollectionExtensions.cs" />
+    <Compile Include="Maintenance\AddMaintenanceServiceCollectionExtensions.cs" />
+    <Compile Include="Maintenance\Data\IMaintenanceDatabaseLayer.cs" />
+    <Compile Include="Maintenance\Data\MaintenanceDatabaseLayer.cs" />
+    <Compile Include="Maintenance\System\JobRunExecutors\DatabaseClearingJob.cs" />
+    <Compile Include="Maintenance\System\JobRunExecutors\DatabaseClearingJobFactory.cs" />
+    <Compile Include="PriceLists\AppLogic\Models\PriceListItemForValidation.cs" />
+    <Compile Include="PriceLists\Data\Models\PriceListIncludes.cs" />
+    <Compile Include="PriceLists\Data\Models\PriceListOperationOption.cs" />
+    <Compile Include="PriceLists\PriceListServiceCollectionExtensions.cs" />
+    <Compile Include="Profiles\ProfileServiceCollectionExtensions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Registrations\AppLogic\RegistrationDocumentAdministration.cs" />
+    <Compile Include="Registrations\AppLogic\RegistrationIntegrationAdministration.cs" />
+    <Compile Include="Registrations\AppLogic\RegistrationInvitationAdministration.cs" />
+    <Compile Include="Registrations\AppLogic\RegistrationPaymentAdministration.cs" />
+    <Compile Include="Registrations\AppLogic\RegistrationPersonalDataAdministration .cs" />
+    <Compile Include="Registrations\AppLogic\RegistrationReviewAdministration.cs" />
+    <Compile Include="Registrations\Data\Models\ClassRegistrationInvitationIncludes.cs" />
+    <Compile Include="Registrations\Data\Models\RegistrationOperationOption.cs" />
+    <Compile Include="Registrations\RegistrationServiceCollectionExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AutomationSystem.Base.Contract\AutomationSystem.Base.Contract.csproj">
+      <Project>{c359a55f-f29d-4b9d-905e-39f94684674d}</Project>
+      <Name>AutomationSystem.Base.Contract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AutomationSystem.Main.Contract\AutomationSystem.Main.Contract.csproj">
+      <Project>{35ce4262-d6e3-4a42-995e-6bc936e165df}</Project>
+      <Name>AutomationSystem.Main.Contract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AutomationSystem.Main.Model\AutomationSystem.Main.Model.csproj">
+      <Project>{828EC2CD-7D76-4541-8F06-B31E73601609}</Project>
+      <Name>AutomationSystem.Main.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AutomationSystem.Shared.Contract\AutomationSystem.Shared.Contract.csproj">
+      <Project>{3d11a1a6-698e-47d3-b1ab-af80bb62408b}</Project>
+      <Name>AutomationSystem.Shared.Contract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AutomationSystem.Shared.Model\AutomationSystem.Shared.Model.csproj">
+      <Project>{56F544A1-C8D2-4282-825A-71D2CC369A29}</Project>
+      <Name>AutomationSystem.Shared.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PerfectlyMadeInc.DesignTools.Contract\PerfectlyMadeInc.DesignTools.Contract.csproj">
+      <Project>{0868f547-f2ab-4bb5-ad56-b1a6d31f8f93}</Project>
+      <Name>PerfectlyMadeInc.DesignTools.Contract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PerfectlyMadeInc.Helpers.Contract\PerfectlyMadeInc.Helpers.Contract.csproj">
+      <Project>{7f634d5f-97e1-49e2-8efe-42f042b3334e}</Project>
+      <Name>PerfectlyMadeInc.Helpers.Contract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PerfectlyMadeInc.Helpers\PerfectlyMadeInc.Helpers.csproj">
+      <Project>{FADACD04-2834-48EA-9223-6315ECA4EB09}</Project>
+      <Name>PerfectlyMadeInc.Helpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PerfectlyMadeInc.WebEx.Contract\PerfectlyMadeInc.WebEx.Contract.csproj">
+      <Project>{edb1f9e1-e3dc-4e78-b14b-3ba27c4b3f6d}</Project>
+      <Name>PerfectlyMadeInc.WebEx.Contract</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Profiles\System\EmailPermissionResolvers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

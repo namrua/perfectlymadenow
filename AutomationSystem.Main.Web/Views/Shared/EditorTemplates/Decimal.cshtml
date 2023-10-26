@@ -1,0 +1,24 @@
+﻿@{
+
+    // creates base text input
+    var metadata = new EditorTemplateMetadataProvider<dynamic>(ViewData);
+    var name = metadata.Name;
+    var id = metadata.Id;
+    var value = (decimal?)Model;
+    var textInput = TextInput.New(id, name, TextHelper.GetPlainDecimalString(value), metadata.Placeholder, CssClassHelper.New());
+
+    // obtains text input options and sets them to text input
+    var textInputOptions = metadata.GetAttribute<TextInputOptions>();
+    textInput.SetTextInputOptions(textInputOptions);
+
+    // determines whether component is disabled
+    var isDisabled = metadata.IsDisabled;
+
+}
+
+
+@InputControl.AddTextInput(this, textInput)
+@if (!metadata.NoErrorPlaceholder)
+{
+    <div id="@TextHelper.DecorateName(id, "error-placeholder")"></div>
+}

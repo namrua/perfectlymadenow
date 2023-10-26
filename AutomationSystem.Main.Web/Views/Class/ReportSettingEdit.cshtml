@@ -1,0 +1,67 @@
+﻿@model ClassReportSettingForEdit
+@{
+    ViewBag.Title = CommonResources.MenuCoordinatorClasses;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+
+    var personHelper = Model.PersonHelper;
+}
+
+<form id="reportSettingForm" method="post" action="@Url.Action("ReportSettingEdit")">
+    
+    @Html.EditorFor(x => x.Form.ClassId)
+    
+    <div class="row">
+        
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.VenueName)
+            @Html.EditorFor(x => x.Form.VenueName)
+        </div>
+        
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.LocationCode)
+            @Html.EditorFor(x => x.Form.LocationCode)
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.LocationInfoId)
+            @Html.EditorFor(x => x.Form.LocationInfoId, new { Text = personHelper.GetPersonNameById(Model.Form.LocationInfoId) })
+        </div>
+
+    </div>
+    
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save)
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Reports", new { id = Model.Form.ClassId }))
+    }
+
+</form>
+
+@section scripts
+{
+    
+<script type="text/javascript">
+
+        var runPageScript = function() {
+
+            // INITIALIZATION AND VALIDATION
+
+            @Html.TypeaheadDropDownSource("personsForLocationInfo", personHelper.GetPickerItemsForRole(PersonRoleTypeEnum.Contact))
+
+            var settingForm = new CorabeuControl.Form("reportSettingForm");
+
+            var locationInfoId = new CorabeuControl.TypeaheadDropDownInput("locationInfoId", "LocationInfoId", personsForLocationInfo);
+
+            settingForm.validateControl($("#venueName"), "@Html.DisplayNameForJava(x => x.Form.VenueName)", { required: false, maxlength: 64 });
+            settingForm.validateControl($("#locationCode"), "@Html.DisplayNameForJava(x => x.Form.LocationCode)", { required: true, maxlength: 16 });
+
+            @if (ViewBag.TriggerValidation != null)
+            {
+                @:settingForm.valid();
+            }
+
+        }
+
+</script>
+    
+}

@@ -1,0 +1,62 @@
+﻿@model FormerStudentBatchItemForEdit
+@{
+    IContextManager cm = ContextHelper.GetContextManager(ViewBag);    
+    var currentContext = cm.Get();
+}
+
+<h5>Original data</h5>
+<dl class="row dl-compact">
+    @foreach (var originValuePair in Model.OriginalValues)
+    {
+        <dt class="col-sm-4 col-lg-2">@originValuePair.Key</dt>
+        <dd class="col-sm-8 col-lg-10">@originValuePair.Value</dd>
+    }
+</dl>
+
+
+<form id="formerStudentBatchItemForm" method="post" action="@Url.Action("StudentBatchItemEdit", new { id = Model.BatchUploadItemId, context = currentContext })">   
+    
+    <h5>Current data</h5>
+
+    @Html.EditorFor(x => x.Form.Address, new { Model.Countries })
+
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.Email)
+            @Html.EditorFor(x => x.Form.Email)
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.Phone)
+            @Html.EditorFor(x => x.Form.Phone)
+        </div>
+    </div>
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save)
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, cm.GetBackUrl(Url.Action("StudentBatchDetail", new { id = Model.BatchUploadId })))
+    }
+
+</form>
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // INITIALIZATION AND VALIDATION
+            var formerStudentBatchItemForm = new CorabeuControl.Form("formerStudentBatchItemForm");
+            var addressComponent = new AutomationSystem.Address(formerStudentBatchItemForm, "Address");
+            formerStudentBatchItemForm.validateControl($("#email"), "@Html.DisplayNameFor(x => x.Form.Email)", { required: true, maxlength: 128, email: true });
+            formerStudentBatchItemForm.validateControl($("#phone"), "@Html.DisplayNameFor(x => x.Form.Phone)", { maxlength: 15 });
+
+            formerStudentBatchItemForm.valid();            
+
+        }
+
+    </script>
+
+}

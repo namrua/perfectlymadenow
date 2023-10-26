@@ -1,0 +1,179 @@
+﻿@model EmailTemplateTextForEdit
+@{
+    IContextManager cm = ContextHelper.GetContextManager(ViewBag);
+    var currentContext = cm.Get();
+}
+
+<form id="emailTextForm" method="post" action="@Url.Action("EditText", new {context = currentContext })">
+
+    <h4>@MainTextHelper.GetEmailTemplateTitle(Model.Type, Model.Language)</h4>
+
+    @if (!string.IsNullOrEmpty(Model.FillingNote))
+    {       
+        <p>
+            <strong>@Html.DisplayNameFor(x => x.FillingNote)</strong><br />
+            @Html.DisplayFor(x => x.FillingNote)
+        </p>
+    }
+
+    @if (!Model.ValidationResult.IsValid)
+    {
+        <p class="alert alert-warning">
+            @TextHelper.GetValidationMessage(Model.ValidationResult.ValidationMessages)
+        </p>
+    }
+
+
+    @Html.EditorFor(x => x.Form.EmailTemplateId)
+
+    <div class="row">
+
+        <div class="form-group col-md-12">
+            @Html.LabelFor(x => x.Form.Subject)
+            @Html.EditorFor(x => x.Form.Subject)
+        </div>
+
+        <div class="form-group col-md-12">
+            @Html.LabelFor(x => x.Form.Text)
+            @Html.EditorFor(x => x.Form.Text)
+        </div>
+
+        <div class="form-group col-md-12">
+            @foreach (var parameter in Model.Parameters)
+            {
+                var buttonTypeClass = parameter.IsRequired ? "btn-warning" : "btn-outline-primary";
+                <button type="button" id="@TextHelper.DecorateName("btn", "param", parameter.EmailParameterId)" title="@parameter.Description"
+                        class="@CssClassHelper.New().Add("btn-email-param", "btn", "btn-sm", buttonTypeClass, "insert-param").Render()"
+                        data-required="@(parameter.IsRequired ? "true" : "false")" data-insert="@TextHelper.DoubleBrackets(parameter.Name)"
+                        data-class="@buttonTypeClass">
+                    @TextHelper.DoubleBrackets(parameter.Name)
+                </button>
+            }
+        </div>
+    </div>
+
+    <hr />
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save, ButtonStyle.Primary, Model.IsDisabled)
+        @bg.Command("Reset to default texts", ButtonStyle.Primary, Model.IsDisabled, new { id = "reset-command" })
+        @bg.Command("Validate email", ButtonStyle.Normal, Model.IsDisabled, new { id = "validate-command" })
+        @bg.Command("Send test email", ButtonStyle.Normal, false, new { id = "send-command" })
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, cm.GetBackUrl(Url.Action("Detail", new { id = Model.Form.EmailTemplateId })))
+    }
+
+</form>
+
+
+@section scripts
+{
+
+<script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // INITIALIZES COMPONENTS
+
+            // inits components
+            var subject = new CorabeuControl.TextBox("subject", "Subject");
+            var textEditor = new CorabeuControl.AceTextInput("text", "Text", { mode: "ace/mode/html", theme: "ace/theme/crimson_editor" });
+            var paramButtonPannel = new AutomationSystem.ParamButtonPannel("insert-param");
+            var mediator = new AutomationSystem.AcePannelMediator(subject, textEditor, paramButtonPannel, "@EmailConstants.ParameterRegexPattern");
+            var emailTextForm = new CorabeuControl.Form("emailTextForm");
+            mediator.initialize();
+
+            // disabling of components
+            @if (Model.IsDisabled)
+            {
+                <text>
+                    var postSubmit = function() {
+                        mediator.enable();
+                    }
+                    mediator.disable();
+
+                </text>
+            }
+            else
+            {
+                @:var postSubmit = function() {};
+            }
+
+
+            // COMMANDS
+
+            // request helper
+            var requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("reset", "@Url.Action("ResetEmailText", new { context = currentContext })");
+            requestHelper.addAction("validate", "@Url.Action("ValidateText", new { context = currentContext })");
+            requestHelper.addAction("send", "@Url.Action("SendTestText", new { context = currentContext })");
+
+
+            // handles reset of email text
+            $("#reset-command").click(function () {
+                var confirmed = confirm("Reseting of texts discards all your changes. Do you really want to reset texts of the email template to default values?");
+                if (!confirmed) return;
+                requestHelper.executePost("reset", { id: @Model.Form.EmailTemplateId });
+            });
+
+            // handles validate command
+            $("#validate-command").click(function () {
+                postSubmit();
+                requestHelper.submitFormToAction(emailTextForm.element, "validate");
+            });
+
+            // handles send test email command
+            $("#send-command").click(function() {
+                postSubmit();
+                requestHelper.submitFormToAction(emailTextForm.element, "send");
+            });
+
+
+            // VALIDATION
+
+            // not allowed parameter validator
+            jQuery.validator.addMethod("notAllowedParameterValidation",
+                function(value, element, param) {
+                    if (value == null) return true;
+                    var errorArray = mediator.getNotAllowedParameters(value);
+                    param.errorArray = errorArray.join(", ");
+                    var result = errorArray.length == 0;
+                    return result;
+                },
+                function(params, element) {
+                    var message = params.message + " " + params.errorArray;
+                    return message;
+                });
+
+            // missing required validator
+            jQuery.validator.addMethod("missingRequiredValidation",
+                function(value, element, param) {
+                    if (value == null) return true;
+                    var errorArray = mediator.getMissingRequired(value);
+                    param.errorArray = errorArray.join(", ");
+                    var result = errorArray.length == 0;
+                    return result;
+                },
+                function(params, element) {
+                    var message = params.message + " " + params.errorArray;
+                    return message;
+                });
+
+
+            // subject
+            emailTextForm.validateControl(textEditor.element, "@Html.DisplayNameFor(x => x.Form.Subject)", { required: true, maxlength: 256 });
+            CorabeuControl.ValidationHelper.addRuleWithoutMessage(subject.element, "notAllowedParameterValidation", { message: "Subject contains invalid parameters: "});
+
+            // text        
+            emailTextForm.validateControl(textEditor.element, "@Html.DisplayNameFor(x => x.Form.Text)", { required: true, maxlength: 4000 });
+            CorabeuControl.ValidationHelper.addRuleWithoutMessage(textEditor.element, "notAllowedParameterValidation", { message: "Body contains invalid parameters: "});
+            CorabeuControl.ValidationHelper.addRuleWithoutMessage(textEditor.element, "missingRequiredValidation", { message: "There is missing required parameters in the Body: "});
+
+            // always initializes validation
+            emailTextForm.valid();
+
+        }
+
+</script>
+
+}

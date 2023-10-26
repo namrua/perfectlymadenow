@@ -1,0 +1,77 @@
+﻿@model RegistrationAgreementPageModel
+@{
+    ViewBag.Title = LayoutTexts.PageTitleRegistrationString;
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+
+
+<content>
+
+    <h2>@TitleTexts.Agreement</h2>
+    <hr class="headline-hr" />
+
+    @ContentTexts.Agreement1
+    @ContentTexts.Agreement2
+
+</content>
+
+<content>
+
+    <h2>@TitleTexts.AgreementAcceptance</h2>
+    <hr class="headline-hr" />
+
+    <form id="acceptanceForm" method="post" action="@Url.Action("Agreement")">
+
+        @Html.EditorFor(x => x.Form.ClassRegistrationId)
+        
+        <p>
+            <em>@Html.Raw(string.Format(TextTexts.AcceptQuestionString, Model.Class.Title))</em>
+        </p>
+
+        <div class="row">
+
+            <div class="col-md-6 form-group">
+                                
+                @Html.EditorFor(x => x.Form.AcceptAgreements)
+
+            </div>
+
+        </div>
+        
+        
+        @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+        {
+            @bg.Submit(ButtonTexts.SaveString, ButtonStyle.PublicPrimary)
+            @bg.Link(ButtonTexts.BackString, ButtonStyle.PublicNormal, Url.Action("Confirmation", new { id = Model.Form.ClassRegistrationId }))
+        }
+
+    </form>
+
+
+   
+
+</content>
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function() {
+
+            // INITIALIZATION AND VALIDATION
+
+            var acceptanceForm = new CorabeuControl.Form("acceptanceForm");
+           
+            CorabeuControl.ValidationHelper.addRule($("#acceptAgreements"), "required", true, "@Ajax.JavaScriptStringEncode(ValidationTexts.AgreementString)");                   
+
+            @if (ViewBag.TriggerValidation != null)
+            {
+                @:acceptanceForm.valid();
+            }
+
+        }
+
+    </script>
+
+}

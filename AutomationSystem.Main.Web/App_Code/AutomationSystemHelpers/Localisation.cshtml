@@ -1,0 +1,14 @@
+﻿@using System.Web.Mvc
+@using Resources
+
+@helper Validation(WebViewPage view)
+{
+<script type="text/javascript">
+
+        CorabeuControl.ValidationMessages.required = "@view.Ajax.JavaScriptStringEncode(ValidationTexts.RequiredString)";
+        CorabeuControl.ValidationMessages.maxlength = "@view.Ajax.JavaScriptStringEncode(ValidationTexts.MaxLengthString)";
+        CorabeuControl.ValidationMessages.notSelected = "@view.Ajax.JavaScriptStringEncode(ValidationTexts.NotSelectedString)";
+        CorabeuControl.ValidationMessages.email = "@view.Ajax.JavaScriptStringEncode(ValidationTexts.EmailString)";
+
+</script>
+}

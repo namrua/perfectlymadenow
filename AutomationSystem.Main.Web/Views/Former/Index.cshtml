@@ -1,0 +1,130 @@
+﻿@model FormerClassesForList
+@{
+    IContextManager cm = ContextHelper.GetContextManager(ViewBag);
+    var pushContext = cm.UpdateBacks().Get();
+    var currentContext = cm.Get();
+    var formerContext = cm.GetCustomContext<FormerContext>();
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    if (Model.CanInsert)
+    {
+        @bg.Link(CommonResources.AddNew, ButtonStyle.Primary, Url.Action("ClassNew", new {context = pushContext}))
+    }
+    if (formerContext.Base != FormerBasePages.Classes)
+    {
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, cm.GetBackUrl(Url.Action("Index")))
+    }
+}
+
+<form id="filterForm" class="alert alert-info" method="get" action="@Url.Action("Index")">
+   
+    <div class="row">
+
+        <div class="form-group col-md-6 col-lg-4">
+            @Html.LabelFor(x => x.Filter.FromDate)
+            @Html.EditorFor(x => x.Filter.FromDate)
+        </div>
+
+        <div class="form-group col-md-6 col-lg-4">
+            @Html.LabelFor(x => x.Filter.ToDate)
+            @Html.EditorFor(x => x.Filter.ToDate)
+        </div>
+
+        <div class="form-group col-md-6 col-lg-4">
+            @Html.LabelFor(x => x.Filter.Location)
+            @Html.EditorFor(x => x.Filter.Location)
+        </div>
+        
+        <div class="form-group col-md-6 col-lg-4">
+            @Html.LabelFor(x => x.Filter.ClassTypeId)
+            @Html.EditorFor(x => x.Filter.ClassTypeId, new { Items = Model.ClassTypes.Select(x => DropDownItem.Item((ClassTypeEnum)x.Id, x.Description)) })
+        </div>
+
+    </div>
+    
+    @Html.HiddenConstant("search", true)
+    @Html.HiddenConstant("context", currentContext)
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.FilterGroup))
+    {
+        @bg.Submit(CommonResources.Search, ButtonStyle.FilterPrimary)
+        @bg.Command(CommonResources.Clear, ButtonStyle.FilterNormal, false, new { id = "clear-button" })
+    }
+
+
+</form>
+
+
+@*List of former classes*@
+@if (Model.Items.Count == 0)
+{
+    if (Model.WasSearched)
+    {
+        <p>
+            <em>@CommonResources.NoRecords</em>
+        </p>
+    }
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.Items[0].FullClassDate)</th>
+                <th>@Html.DisplayNameFor(x => x.Items[0].Location)</th>
+                <th>@Html.DisplayNameFor(x => x.Items[0].ClassType)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(x => item.FullClassDate)</td>
+                    <td>@Html.DisplayFor(x => item.Location)</td>
+                    <td>@Html.DisplayFor(x => item.ClassType)</td>
+
+                    <td>
+                        @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                        {
+                            @bg.Link(CommonResources.Detail, ButtonStyle.Primary, Url.Action("ClassDetail", new { id = item.FormerClassId, context = pushContext }))
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // INITIALIZE CONTROLS
+
+            var fromDate = new CorabeuControl.DateTimePicker("fromDate", "FromDate", { format: "MMMM DD, YYYY" });
+            var toDate = new CorabeuControl.DateTimePicker("toDate", "ToDate", { format: "MMMM DD, YYYY" });
+            var location = new CorabeuControl.TextBox("location", "Location");
+            var classTypeId = new CorabeuControl.DropDownList("classTypeId", "ClassTypeId");
+
+            var filterControls = [fromDate, toDate, location, classTypeId];
+
+
+            // connect delete-button
+            $("#clear-button").click(function () {
+                $.each(filterControls, function(index, control) {
+                    control.setDefaultValue();
+                });
+            });
+
+        }
+
+    </script>
+
+}

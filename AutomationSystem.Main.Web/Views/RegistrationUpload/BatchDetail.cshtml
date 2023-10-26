@@ -1,0 +1,99 @@
+﻿@model BatchUploadDetail<RegistrationStudentDetail>
+@{
+    ViewBag.Title = CommonResources.TitleCoordinatedRegistrations;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+
+    var isDiscardingDisabled = Model.BatchUpload.IsProcessed || Model.BatchUpload.BatchUploadStateId == BatchUploadStateEnum.Discarded;
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Command("Discard batch upload", ButtonStyle.Primary, isDiscardingDisabled, "discard", null, new { id = "discard-button" })
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Registrations", "Class", new { id = Model.BatchUpload.ParentEntityId }))
+}
+
+<h4>Registration batch upload</h4>
+@{
+    Html.RenderPartial("~/Views/Shared/BatchUploads/_BatchUploadDetail.cshtml", Model.BatchUpload);
+}
+
+
+@*List of updated former students*@
+@if (Model.Items.Count == 0)
+{
+    <p>
+        <em>@CommonResources.NoRecords</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.Items[0].Entity.Address.FullName)</th>
+                <th>@Html.DisplayNameFor(x => x.Items[0].Entity.Address)</th>
+                <th>@CommonResources.Contact</th>
+                <th>@Html.DisplayNameFor(x => x.Items[0].BatchUploadOperationType)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items.OrderBy(x => x.IsValid))
+            {
+                <tr>
+                    <td>@Html.DisplayFor(x => item.Entity.Address.FullName)</td>
+                    <td>
+                        @Html.DisplayFor(x => item.Entity.Address.FullStreet)<br />
+                        @Html.DisplayFor(x => item.Entity.Address.FullCity)<br />
+                        @Html.DisplayFor(x => item.Entity.Address.Country)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(x => item.Entity.Email)
+                        @if (!string.IsNullOrEmpty(item.Entity.Phone))
+                        {
+                            <br />
+                            @Html.DisplayFor(x => item.Entity.Phone)
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(x => item.BatchUploadOperationType)
+                    </td>
+                    <td>
+                        @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                        {
+                            @bg.Link("New/Updated", ButtonStyle.Primary, Url.Action("PersonalData", "Registration", new {id = item.EntityId}),
+                                !item.EntityId.HasValue, new {target = "_blank"})
+                            @bg.Link("Origin student", ButtonStyle.Primary, Url.Action("PersonalData", "Registration", new {id = item.PairEntityId}),
+                                !item.PairEntityId.HasValue || item.EntityId == item.PairEntityId, new {target = "_blank"})
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // registration helper
+            var requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("discard", "@Url.Action("BatchDiscard", new { id = Model.BatchUpload.BatchUploadId})");
+
+            // connect approve-button
+            $("#discard-button").click(function () {
+                var confirmed = confirm("@Html.Raw($"Are you sure to discard registration batch {Model.BatchUpload.Name}?")");
+                if (!confirmed) return;
+                requestHelper.executePost("discard");
+            });
+
+        }
+
+    </script>
+
+}

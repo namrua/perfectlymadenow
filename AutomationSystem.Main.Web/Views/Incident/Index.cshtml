@@ -1,0 +1,157 @@
+﻿@model IncidentsForList
+@{
+    ViewBag.Title = CommonResources.MenuCoreIncidents;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoreIncidents;
+
+    IContextManager cm = ContextHelper.GetContextManager(ViewBag);
+    var pushContext = cm.UpdateBacks().Get();
+    var currentContext = cm.Get();
+    var isRootPage = cm.LastHistory == null;
+}
+
+@if (!isRootPage)
+{
+    using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+    {
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, cm.GetBackUrl(Url.Action("Index")))
+    }
+}
+else
+{
+    <form id="filterForm" class="alert alert-info" method="get" action="@Url.Action("Index")">
+
+        @Html.HiddenConstant("search", true)
+        @Html.HiddenConstant("context", currentContext)
+
+        <div class="row">
+
+            <div class="form-group col-md-6 col-lg-4">
+                @Html.EditorFor(x => x.Filter.ExcludeReported)
+            </div>
+
+            <div class="form-group col-md-6 col-lg-4">
+                @Html.EditorFor(x => x.Filter.IncludeResolved)
+            </div>
+
+        </div>
+
+        @using (var bg = Html.ButtonGroup(ButtonGroupType.FilterGroup))
+        {
+            @bg.Submit(CommonResources.Search, ButtonStyle.FilterPrimary)
+            @bg.Command(CommonResources.Clear, ButtonStyle.FilterNormal, false, new {id = "clear-button"})
+        }
+
+    </form>
+}
+
+@*List of incidents*@
+@if (Model.Items.Count == 0)
+{
+    if (Model.WasSearched)
+    {
+        <p>
+            <em>@CommonResources.NoRecords</em>
+        </p>
+    }
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>
+                        <div class="badge-title">
+                            <h5>@item.Message</h5>
+                            @if (item.IsResolved)
+                            {
+                                <small class="badge badge-primary">resolved</small>
+                            }
+                        </div>
+                        <p>
+                            @ItemControl.ExpanseTextBlock(this, TextBlock.New(Html.Encode(item.Description) ?? "", item.IncidentId).Expanse(3, 200))
+                        </p>
+                        <div class="row">
+                            <div class="col-12 col-lg-9 row">
+                                <div class="col-lg-6">
+                                    <strong>@Html.DisplayNameFor(x => item.Occurred)</strong>
+                                    @Html.DisplayFor(x => item.Occurred, new { ShowOnlyDate = true })
+                                </div>
+                                <div class="col-lg-6">
+                                    <strong>@Html.DisplayNameFor(x => item.Resolved)</strong>
+                                    @Html.DisplayFor(x => item.Resolved, new { ShowOnlyDate = true })
+                                </div>
+                                <div class="col-lg-6">
+                                    <strong>@Html.DisplayNameFor(x => item.Reported)</strong>
+                                    @Html.DisplayFor(x => item.Reported, new { ShowOnlyDate = true })
+                                </div>
+                                <div class="col-lg-6">
+                                    <strong>@Html.DisplayNameFor(x => item.ReportingAttempts)</strong>
+                                    @Html.DisplayFor(x => item.ReportingAttempts)
+                                </div>
+                            </div>
+                            <div class="col-lg-3 row justify-content-center justify-content-lg-end align-self-end block-item-group-placeholder">
+                                @using (var bg = Html.ButtonGroup(ButtonGroupType.BlockItemGroup))
+                                {
+                                    @bg.Command(CommonResources.Resolve, "incidents", ButtonStyle.Primary, item.IsResolved, "resolve", item.IncidentId)
+                                    @bg.Command(CommonResources.Report, "incidents", ButtonStyle.Primary, item.IsReported, "report", item.IncidentId)
+                                    @bg.Link(CommonResources.Detail, ButtonStyle.Normal, Url.Action("Detail", new { id = item.IncidentId, context = pushContext }))
+                                }
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // COMMANDS
+
+            // connects expandable textblocks
+            var eg = new CorabeuControl.ExpansionGroup("expandable");
+            var requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("resolve", "@Url.Action("Resolve", "Incident", new { context = pushContext })");
+            requestHelper.addAction("report", "@Url.Action("Report", "Incident", new { context = pushContext })");
+
+            // connects command-incidents
+            $(".command-incidents").click(function() {
+                var sender = $(this);
+                var id = sender.attr("data-id");
+                var command = sender.attr("data-command");
+                if (requestHelper.hasAction(command))
+                    requestHelper.executePost(command, { id: id });
+                else
+                    alert("Unknown action " + command);
+
+            });
+
+            // CLEAR LOGIC
+
+            var filterControls = [
+                new CorabeuControl.CheckBox("excludeReported", "ExcludeReported"),
+                new CorabeuControl.CheckBox("includeResolved", "IncludeResolved")              
+            ];
+
+            // connect delete-button
+            $("#clear-button").click(function () {
+                $.each(filterControls, function(index, control) {
+                    control.setDefaultValue();
+                });
+            });
+
+            
+        }
+
+    </script>
+
+}

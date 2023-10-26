@@ -1,0 +1,70 @@
+﻿@model FormerClassDetail
+@{   
+    IContextManager cm = ContextHelper.GetContextManager(ViewBag);
+    var pushContext = cm.UpdateBacks().Get();
+    var currentContext = cm.Get();
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.FormerClass, TabItemId.FormerClassDetail, 
+        new { id = Model.FormerClassId, context = currentContext });
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    if (Model.CanEdit)
+    {
+        @bg.Link(CommonResources.Edit, ButtonStyle.Primary, Url.Action("ClassEdit", new {id = Model.FormerClassId, context = pushContext}))
+    }
+    if (Model.CanDelete)
+    {
+        @bg.Command(CommonResources.Delete, ButtonStyle.Primary, false, new {id = "delete-button"})
+    }
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, cm.GetBackUrl(Url.Action("Index")))
+}
+
+<h4>@Model.ClassTitle</h4>
+
+<h5>Class</h5>
+<dl class="row dl-compact">
+    <dt class="col-sm-4 col-lg-2">@Html.DisplayNameFor(x => x.FullClassDate)</dt>
+    <dd class="col-sm-8 col-lg-10">@Html.DisplayFor(x => x.FullClassDate)</dd>
+    <dt class="col-sm-4 col-lg-2">@Html.DisplayNameFor(x => x.Location)</dt>
+    <dd class="col-sm-8 col-lg-10">@Html.DisplayFor(x => x.Location)</dd>
+    <dt class="col-sm-4 col-lg-2">@Html.DisplayNameFor(x => x.ClassType)</dt>
+    <dd class="col-sm-8 col-lg-10">@Html.DisplayFor(x => x.ClassType)</dd>
+</dl>
+
+@if (Model.Profile != null)
+{
+    <dl class="row dl-compact">
+        <dt class="col-sm-4 col-lg-2">@Html.DisplayNameFor(x => x.Profile)</dt>
+        <dd class="col-sm-8 col-lg-10">@Html.DisplayFor(x => x.Profile)</dd>
+    </dl>
+
+}
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // DELETE FUNCTIONALITY
+
+            // registration helper
+            var requestHelper = new CorabeuControl.RequestHelper();
+            requestHelper.addAction("delete", "@Url.Action("ClassDelete", new { id = Model.FormerClassId, context = currentContext })");
+
+            // connect delete-button
+            $("#delete-button").click(function () {
+                var confirmed = confirm("@Html.Raw($"Are you sure to delete former class {Model.ClassTitle} along with all its former students?")");
+                if (!confirmed) return;
+                requestHelper.executePost("delete");
+            });
+
+        }
+
+    </script>
+
+}

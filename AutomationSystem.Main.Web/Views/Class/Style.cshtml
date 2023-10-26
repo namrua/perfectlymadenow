@@ -1,0 +1,74 @@
+﻿@model ClassStylePageModel
+@{
+    ViewBag.Title = CommonResources.MenuCoordinatorClasses;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.Class, TabItemId.ClassStyle, new { id = Model.Class.ClassId });
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Link(CommonResources.Edit, ButtonStyle.Primary, Url.Action("StyleEdit", new { id = Model.Class.ClassId }))
+    @bg.Link("Preview style", ButtonStyle.Normal, Url.Action("ClassStyle", "Preview", new { id = Model.Class.ClassId }))
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Index"))
+}
+
+<div class="badge-title">
+    <h4>@Model.Class.ClassTitle</h4>
+    @Html.ClassCategoryBadge(Model.Class.ClassCategoryId)
+    @Html.ClassStateBadge(Model.Class.ClassState)
+</div>
+
+<div class="row">
+
+    <div class="col-xl-6 align-content-start">
+
+        <h5>Class style</h5>
+
+        <dl class="row dl-compact">
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Style.HomepageUrl)</dt>
+            @if (!string.IsNullOrEmpty(Model.Style.HomepageUrl))
+            {
+                <dd class="col-sm-8"><a href="@Model.Style.HomepageUrl" target="_blank">@Model.Style.HomepageUrl</a></dd>
+            }
+            else
+            {
+                <dd class="col-sm-8"><em>default</em></dd>
+            }
+            <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Style.RegistrationColorScheme)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(x => x.Style.RegistrationColorScheme)</dd>
+
+            @if (Model.Style.HeaderPictureId.HasValue)
+            {
+                <dt class="col-12">Header picture</dt>
+                <dd class="col-12">
+                    <div class="img-preview-placeholder-detail-2 ">
+                        <img src="@Url.Action("Image", "File", new {id = Model.Style.HeaderPictureId})" />
+                    </div>
+                </dd>
+            }
+            else
+            {
+                <dt class="col-sm-4">Header picture</dt>
+                <dd class="col-sm-8"><em>default</em></dd>
+            }
+        </dl>
+
+    </div>
+    
+    @if (Model.Style.ShowClassBehaviorSettings)
+    {
+        <div class="col-xl-6 align-content-start">
+
+            <h5>Class behavior</h5>
+
+            <dl class="row dl-compact">
+                <dt class="col-sm-4">@Html.DisplayNameFor(x => x.Style.SendCertificatesByEmail)</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(x => x.Style.SendCertificatesByEmail)</dd>
+            </dl>
+
+        </div>
+    }
+
+</div>

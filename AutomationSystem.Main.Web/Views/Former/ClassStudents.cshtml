@@ -1,0 +1,66 @@
+﻿@model FormerClassStudents
+@{
+    IContextManager cm = ContextHelper.GetContextManager(ViewBag);
+    var pushContext = cm.UpdateBacks().Get();    
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.FormerClass, TabItemId.FormerClassStudents,
+        new { id = Model.Class.FormerClassId, context = cm.Get() });
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    if (Model.CanInsert)
+    {
+        @bg.Link(CommonResources.AddNew, ButtonStyle.Primary, Url.Action("StudentNew", "Former", new {formerClassId = Model.Class.FormerClassId, context = pushContext}))
+    }
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, cm.GetBackUrl(Url.Action("Index")))
+}
+
+<h4>@Model.Class.ClassTitle</h4>
+
+@*List of former students*@
+@if (Model.Students.Count == 0)
+{
+    <p>
+        <em>@CommonResources.NoRecords</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.Students[0].Address.FullName)</th>
+                <th>@CommonResources.Address</th>
+                <th>@Html.DisplayNameFor(x => x.Students[0].Address.Country)</th>
+                <th>@CommonResources.Contact</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Students)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(x => item.Address.FullName)</td>
+                    <td>@Html.DisplayFor(x => item.Address.FullStreet)<br />@Html.DisplayFor(x => item.Address.FullCity)</td>
+                    <td>@Html.DisplayFor(x => item.Address.Country)</td>
+                    <td>
+                        @Html.DisplayFor(x => item.Email)
+                        @if (!string.IsNullOrEmpty(item.Phone))
+                        {
+                            <br />
+                            @Html.DisplayFor(x => item.Phone)
+                        }
+                    </td>
+                    <td>
+                        @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                        {
+                            @bg.Link(CommonResources.Detail, ButtonStyle.Primary, Url.Action("StudentDetail", new { id = item.FormerStudentId, context = pushContext }))
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

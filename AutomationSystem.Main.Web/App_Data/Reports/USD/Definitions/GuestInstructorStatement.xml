@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<definition templatePath="Templates\IZI LLC Guest Instructor Closing Statement.xlsx"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <blocks>
+    <formatBlock id="USCurrencyInfoFormat">
+      <formatCell type="Number">[>=1000]"$"#_)##0.00;"$"###0.00</formatCell>
+      <formatCell positionX="0" positionY="2" type="Number">[>=1000]"$"#_)##0.00;"$"###0.00</formatCell>
+    </formatBlock>
+    <dataBlock id="GeneralInfoBlock">
+      <dataCell bind="ReportDate" fillingMethod="UnderscoreCellTextProcessor" />
+      <dataCell bind="EventName" positionX="0" positionY="1" fillingMethod="SheetUtility.AppendTextCellProcessor"/>
+      <dataCell bind="Coordinator" positionX="2" positionY="1"/>
+      <dataCell bind="EventLocation" positionX="0" positionY="2" fillingMethod="SheetUtility.AppendTextCellProcessor"/>
+      <dataCell bind="Address" positionX="2" positionY="2"/>
+      <dataCell bind="EventDates" positionX="0" positionY="3" fillingMethod="SheetUtility.AppendTextCellProcessor"/>
+      <dataCell bind="Phone" positionX="2"/>
+      <dataCell bind="GuestInstructor" positionX="0" positionY="4" fillingMethod="SheetUtility.AppendTextCellProcessor"/>
+      <dataCell bind="Email" positionX="2"/>
+      <!--<dataCell bind="SubmittedBy" positionX="0" positionY="5" fillingMethod="SheetUtility.AppendTextCellProcessor"/>-->
+    </dataBlock>
+    <dataBlock id="USCurrencyInfoBlock">
+      <dataCell bind="ClassRevenue"/>
+      <dataCell bind="PaidStudentsCount" positionX="0" positionY="1"/>
+      <dataCell bind="GuestInstructorFee" positionX="0" positionY="2"/>
+    </dataBlock>
+  </blocks>
+  <layout>
+    <solid id="GeneralInfoSolid" positionX="1" positionY="3" bind="GeneralInfo">
+      <block blockId="GeneralInfoBlock"/>
+    </solid>
+    <solid id="USCurrencyInfoSolid" positionX="4" positionY="13" bind="USCurrencyInfo">
+      <block blockId="USCurrencyInfoBlock"/>
+      <block blockId="USCurrencyInfoFormat"/>
+    </solid>    
+  </layout>
+</definition>

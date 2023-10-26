@@ -1,0 +1,57 @@
+﻿@model EnumLocalisationList
+@{
+    ViewBag.Title = CommonResources.MenuCoreLocalisation;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoreLocalisation;
+}
+
+<h4>@MainTextHelper.GetLanguageTitle(Model.EnumType.Description, Model.Language)</h4>
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("EnumTypeList", new { langId = Model.LanguageId }))
+}
+
+@*List of enum localisations*@
+@if (Model.Items.Count == 0)
+{
+    <p>
+        <em>No records</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.Items[0].ItemId)</th>
+                <th>@Html.DisplayNameFor(x => x.Items[0].Name)</th>
+                <th>@Html.DisplayNameFor(x => x.Items[0].Description)</th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr class="@CssClassHelper.New().AddIf(item.IsDescriptionLocalised || item.IsNameLocalised, "table-primary").Render()">
+                <td>@Html.DisplayFor(x => item.ItemId)</td>
+
+                <td class="@CssClassHelper.New().AddIf(item.IsNameLocalised, "strong").Render()">
+                    @Html.DisplayFor(x => item.Name)
+                </td>
+                <td class="@CssClassHelper.New().AddIf(item.IsDescriptionLocalised, "strong").Render()">
+                    @Html.DisplayFor(x => item.Description)
+                </td>
+
+                <td>
+                    @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                    {
+                        @bg.Link(CommonResources.Detail, ButtonStyle.Primary, 
+                            Url.Action("EnumEdit", new { langId = Model.LanguageId, typeId = Model.EnumType.EnumTypeId, id = item.ItemId }))
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

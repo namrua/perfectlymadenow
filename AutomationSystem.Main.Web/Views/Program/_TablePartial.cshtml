@@ -1,0 +1,42 @@
+﻿@model NewProgramList
+
+
+@*List of programs*@
+@if (Model.Items.Count == 0)
+{
+    <p>
+        <em>@CommonResources.NoRecords</em>
+    </p>
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => Model.Items[0].ProgramOuterId)</th>
+                <th>@Html.DisplayNameFor(x => Model.Items[0].Name)</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td><a target="_blank" href="@item.ProgramUrl">@Html.DisplayFor(x => item.ProgramOuterId)</a></td>
+                    <td>@Html.DisplayFor(x => item.Name)</td>
+                    <td>                        
+                        @Html.LoaderSmall(TextHelper.DecorateName("loader-small", index: item.ProgramOuterId), "spinner-small")
+                    </td>
+                    <td>
+                        @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                        {
+                            @bg.Command(CommonResources.Add, "add", ButtonStyle.Primary, false, null, item.ProgramOuterId)
+                            @bg.Link(CommonResources.Detail, ButtonStyle.Primary, null, true, new {id = $"detail-{item.ProgramOuterId}"})
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

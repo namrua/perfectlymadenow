@@ -1,0 +1,79 @@
+﻿@model EmailPreferencesForm
+
+@{
+    ViewBag.Title = CommonResources.MenuCorePreferences;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CorePreferences;
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.Preferences, TabItemId.PreferencesEmails);
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+}
+
+<form id="emailPreferencesForm" method="post" action="@Url.Action("Email", "Preference")">
+    
+    <h5>Email</h5>
+
+    <div class="row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.AdminRecipient)
+            @Html.EditorFor(x => x.AdminRecipient)
+        </div>
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.HelpdeskRecipient)
+            @Html.EditorFor(x => x.HelpdeskRecipient)
+        </div>       
+    </div>
+    
+    <hr/>
+
+    <div class="row">
+        <div class="form-group col-12">
+            @Html.LabelFor(x => x.SendGridApi)
+            @Html.EditorFor(x => x.SendGridApi)
+        </div>
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.SenderName)
+            @Html.EditorFor(x => x.SenderName)
+        </div>
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.SenderEmail)
+            @Html.EditorFor(x => x.SenderEmail)
+        </div>
+    </div>
+    
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save)
+    }
+
+</form>
+
+
+
+@section scripts
+{
+
+<script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // INITIALIZATION AND VALIDATION
+
+            var emailPreferencesForm = new CorabeuControl.Form("emailPreferencesForm");
+
+            emailPreferencesForm.validateControl($("#adminRecipient"), "@Html.DisplayNameFor(x => x.AdminRecipient)", { required: true, maxlength: 128, email: true });
+            emailPreferencesForm.validateControl($("#helpdeskRecipient"), "@Html.DisplayNameFor(x => x.HelpdeskRecipient)", { required: true, maxlength: 128, email: true });            
+            emailPreferencesForm.validateControl($("#sendGridApi"), "@Html.DisplayNameFor(x => x.SendGridApi)", { required: true, maxlength: 1024});
+            emailPreferencesForm.validateControl($("#senderName"), "@Html.DisplayNameFor(x => x.SenderName)", { required: true, maxlength: 64});
+            emailPreferencesForm.validateControl($("#senderEmail"), "@Html.DisplayNameFor(x => x.SenderEmail)", { required: true, maxlength: 128, email: true });
+
+            @if (ViewBag.TriggerValidation != null)
+            {
+                <text>emailPreferencesForm.valid();</text>
+            }
+
+           
+        }
+
+</script>
+
+}

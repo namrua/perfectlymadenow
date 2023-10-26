@@ -1,0 +1,98 @@
+﻿@model RegistrationPaymentForEdit
+@{
+    ViewBag.Title = CommonResources.TitleCoordinatedRegistrations;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+}
+
+<form id="paymentForm" method="post" action="@Url.Action("PaymentEdit")">
+
+   
+    @Html.EditorFor(x => x.Form.ClassRegistrationId)   
+          
+    
+    <div class="row">
+
+        <div class="form-group col-md-6">
+            @Html.EditorFor(x => x.Form.IsPaidPmi)
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.EditorFor(x => x.Form.IsAbsentee)
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.CheckNumber)
+            @Html.EditorFor(x => x.Form.CheckNumber)
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.TransactionNumber)
+            @Html.EditorFor(x => x.Form.TransactionNumber)
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.PayPalFee)
+            @Html.EditorFor(x => x.Form.PayPalFee, new { RightAddonText = Model.CurrencyCode })
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.TotalPayPal)
+            @Html.EditorFor(x => x.Form.TotalPayPal, new { RightAddonText = Model.CurrencyCode })
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.TotalCheck)
+            @Html.EditorFor(x => x.Form.TotalCheck, new { RightAddonText = Model.CurrencyCode })
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.TotalCash)
+            @Html.EditorFor(x => x.Form.TotalCash, new { RightAddonText = Model.CurrencyCode })
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(x => x.Form.TotalCreditCard)
+            @Html.EditorFor(x => x.Form.TotalCreditCard, new { RightAddonText = Model.CurrencyCode })
+        </div>
+
+
+    </div>
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+                @bg.Submit(CommonResources.Save);
+                @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Payment", new { id = Model.Form.ClassRegistrationId }))
+    }
+
+</form>
+
+
+@section scripts
+{
+
+<script type="text/javascript">
+
+        var runPageScript = function() {
+
+                    // INITIALIZATION AND VALIDATION
+
+                    var paymentForm = new CorabeuControl.Form("paymentForm");
+
+                    paymentForm.validateControl($("#checkNumber"), "@Html.DisplayNameFor(x => x.Form.CheckNumber)", { maxlength: 32 });
+                    paymentForm.validateControl($("#transactionNumber"), "@Html.DisplayNameFor(x => x.Form.TransactionNumber)", { maxlength: 32 });
+                    paymentForm.validateControl($("#payPalFee"), "@Html.DisplayNameFor(x => x.Form.PayPalFee)", { number: true, min: 0, max: 1000000 });
+                    paymentForm.validateControl($("#totalPayPal"), "@Html.DisplayNameFor(x => x.Form.TotalPayPal)", { number: true, min: 0, max: 1000000 });
+                    paymentForm.validateControl($("#totalCheck"), "@Html.DisplayNameFor(x => x.Form.TotalCheck)", { number: true, min: 0, max: 1000000 });
+                    paymentForm.validateControl($("#totalCash"), "@Html.DisplayNameFor(x => x.Form.TotalCash)", { number: true, min: 0, max: 1000000 });
+                    paymentForm.validateControl($("#totalCreditCard"), "@Html.DisplayNameFor(x => x.Form.TotalCreditCard)", { number: true, min: 0, max: 1000000 });
+
+                    @if (ViewBag.TriggerValidation != null)
+            {
+                @:paymentForm.valid();
+            }
+
+        }
+
+</script>
+
+}

@@ -1,0 +1,89 @@
+﻿@model EmailTemplateMetadataForEdit
+@{
+    ViewBag.Title = CommonResources.MenuCoreEmailTemplates;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoreEmailTemplates;
+
+    var requiredParameters = new HashSet<long>(Model.Form.RequiredParameters);
+}
+
+<form id="templateMetadataForm" method="post" action="@Url.Action("EditMetadata")">
+
+    <h4>@MainTextHelper.GetEmailTemplateTitle(Model.Type, Model.Language)</h4>
+
+    @Html.EditorFor(x => x.Form.EmailTypeId)
+    @Html.EditorFor(x => x.Form.LanguageId)
+    @Html.EditorFor(x => x.Form.EmailTemplateId)
+    @Html.EditorFor(x => x.Form.ParentEmailTemplateId)
+    @Html.EditorFor(x => x.Form.EntityTypeId)
+    @Html.EditorFor(x => x.Form.EntityId)
+
+    <div class="form-group">
+        @Html.LabelFor(x => x.Form.FillingNote)
+        @Html.EditorFor(x => x.Form.FillingNote)
+    </div>
+
+    <strong>@Html.DisplayNameFor(x => x.Parameters)</strong>
+
+    @*List of email parameters*@
+    @if (Model.Parameters.Count == 0)
+    {
+        <p>
+            <em>No records</em>
+        </p>
+    }
+    else
+    {
+        <table class="table table-hover table-sm">
+            <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.Parameters[0].Name)</th>
+                <th>@Html.DisplayNameFor(x => x.Parameters[0].Description)</th>
+                <th>@Html.DisplayNameFor(x => x.Parameters[0].IsRequired)</th>                   
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model.Parameters)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(x => item.Name)</td>
+                    <td>@Html.DisplayFor(x => item.Description)</td>
+                    <td>
+                        @Html.TableCheckBoxFor(x => x.Form.RequiredParameters, item.EmailParameterId, requiredParameters.Contains(item.EmailParameterId))
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+    {
+        @bg.Submit(CommonResources.Save)
+        @bg.Link(CommonResources.Back, ButtonStyle.Normal, Model.Form.EmailTemplateId == 0 
+            ? Url.Action("List", new { id = Model.Form.EmailTypeId, entityTypeId = Model.Form.EntityTypeId, entityId = Model.Form.EntityId })
+            : Url.Action("Detail", new { id = Model.Form.EmailTemplateId }))
+    }
+
+</form>
+
+@section scripts
+{
+    <script type="text/javascript">
+
+        // runs page script
+        var runPageScript = function() {
+             
+            // initializes validation
+            var templateMetadataForm = new CorabeuControl.Form("templateMetadataForm");
+
+            templateMetadataForm.validateControl($("#fillingNote"), "@Html.DisplayNameFor(x => x.Form.FillingNote)", { maxlength: 4000 });
+           
+            @if (ViewBag.TriggerValidation != null)
+            {
+                <text>templateMetadataForm.valid();</text>
+            }
+
+        }
+
+    </script>
+}

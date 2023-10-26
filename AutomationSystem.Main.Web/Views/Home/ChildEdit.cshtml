@@ -1,0 +1,107 @@
+﻿@model RegistrationForEdit<RegistrationChildForm>
+@{
+    ViewBag.Title = LayoutTexts.PageTitleRegistrationString;
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+
+<content>
+
+    <h2>@TitleTexts.RegistrationForm</h2>
+    <hr class="headline-hr" />
+
+    <form id="registrationForm" method="post" action="@Url.Action(ViewBag.ActionForSave)">
+
+        @Html.EditorFor(x => x.Form.ClassId)
+        @Html.EditorFor(x => x.Form.ClassRegistrationId)
+        @Html.EditorFor(x => x.Form.RegistrationTypeId)
+        @Html.EditorFor(x => x.Form.InvitationRequest)
+
+        <h5>@Html.DisplayNameFor(x => x.Form.ParentAddress)</h5>
+
+        @Html.EditorFor(x => x.Form.ParentAddress, new { Model.Countries })
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                @Html.LabelFor(x => x.Form.ParentEmail)
+                @Html.EditorFor(x => x.Form.ParentEmail)
+            </div>
+            <div class="form-group col-md-6">
+                @Html.LabelFor(x => x.Form.ParentPhone)
+                @Html.EditorFor(x => x.Form.ParentPhone)
+            </div>
+        </div>
+
+
+        <h5>@Html.DisplayNameFor(x => x.Form.ChildAddress)</h5>
+
+        @Html.EditorFor(x => x.Form.ChildAddress, new { Model.Countries })
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                @Html.LabelFor(x => x.Form.ChildEmail)
+                @Html.EditorFor(x => x.Form.ChildEmail)
+            </div>
+            <div class="form-group col-md-6">
+                @Html.LabelFor(x => x.Form.LanguageId)
+                @Html.EditorFor(x => x.Form.LanguageId, new { Items = Model.Languages.Select(x => DropDownItem.Item((LanguageEnum)x.Id, x.Description)) })
+            </div>
+        </div>
+
+        @using (var bg = Html.ButtonGroup(ButtonGroupType.PagePartGroup))
+        {
+            @bg.Submit(ButtonTexts.SaveString, ButtonStyle.PublicPrimary)
+            if (Model.Form.ClassRegistrationId == 0)
+            {
+                @bg.Link(ButtonTexts.BackString, ButtonStyle.PublicNormal, Url.Action("SelectRegistration",
+                    new {id = Model.Form.ClassId, backFromRegistrationTypeId = Model.Form.RegistrationTypeId }))
+            }
+        }
+
+    </form>
+
+</content>
+
+
+@section scripts
+{
+    
+    @Localisation.Validation(this)
+
+    <script type="text/javascript">
+
+        var runPageScript = function() {
+
+            // INITIALIZATION AND VALIDATION
+
+            var registrationForm = new CorabeuControl.Form("registrationForm");
+
+            var addressLocalisation = new AutomationSystem.AddressLocalisationTemplate();
+            addressLocalisation.firstName = "@Html.DisplayNameForJava(x => x.Form.ParentAddress.FirstName)";
+            addressLocalisation.lastName = "@Html.DisplayNameForJava(x => x.Form.ParentAddress.LastName)";
+            addressLocalisation.street = "@Html.DisplayNameForJava(x => x.Form.ParentAddress.Street)";
+            addressLocalisation.street2 = "@Html.DisplayNameForJava(x => x.Form.ParentAddress.Street2)";
+            addressLocalisation.city = "@Html.DisplayNameForJava(x => x.Form.ParentAddress.City)";
+            addressLocalisation.state = "@Html.DisplayNameForJava(x => x.Form.ParentAddress.State)";
+            addressLocalisation.country = "@Html.DisplayNameForJava(x => x.Form.ParentAddress.CountryId)";
+            addressLocalisation.zipCode = "@Html.DisplayNameForJava(x => x.Form.ParentAddress.ZipCode)";
+
+            var languageId = new CorabeuControl.DropDownList("languageId", "LanguageId");
+            var parentAddressComponent = new AutomationSystem.Address(registrationForm, "ParentAddress", {}, addressLocalisation);
+            var childAddressComponent = new AutomationSystem.Address(registrationForm, "ChildAddress", {}, addressLocalisation);
+
+            registrationForm.validateControl($("#parentEmail"), "@Html.DisplayNameForJava(x => x.Form.ParentEmail)", { required: true, maxlength: 128, email: true });
+            registrationForm.validateControl($("#parentPhone"), "@Html.DisplayNameForJava(x => x.Form.ParentPhone)", { maxlength: 15 });
+            registrationForm.validateControl($("#childEmail"), "@Html.DisplayNameForJava(x => x.Form.ChildEmail)", { required: true, maxlength: 128, email: true });
+            registrationForm.validateControl(languageId.element, "@Html.DisplayNameForJava(x => x.Form.LanguageId)",
+                { notSelected: true });
+
+            @if (ViewBag.TriggerValidation != null)
+            {
+                @:registrationForm.valid();
+            }
+
+        }
+
+    </script>
+
+}

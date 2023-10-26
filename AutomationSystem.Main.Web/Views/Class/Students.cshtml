@@ -1,0 +1,119 @@
+﻿@model RegistrationsForList
+@{
+    ViewBag.Title = CommonResources.MenuCoordinatorClasses;
+    ViewBag.ActiveMainMenuItemId = MenuItemId.CoordinatorClasses;
+
+    var tabMenuItems = ViewServices.LayoutHelper.GetTabMenuItems(TabItemId.Class, TabItemId.ClassStudents,
+        new { id = Model.Class.ClassId });
+    Html.RenderPartial("~/Views/Shared/_TabMenu.cshtml", tabMenuItems);
+}
+
+@using (var bg = Html.ButtonGroup(ButtonGroupType.TopCommandsGroup))
+{
+    @bg.Link(CommonResources.Back, ButtonStyle.Normal, Url.Action("Index"))
+}
+
+<div class="badge-title">
+    <h4>@Model.Class.ClassTitle</h4>
+    @Html.ClassCategoryBadge(Model.Class.ClassCategoryId)
+    @Html.ClassStateBadge(Model.Class.ClassState)
+</div>
+
+<form id="filterForm" class="alert alert-info" method="get" action="@Url.Action("Students")">
+
+    @Html.HiddenConstant("id", Model.Class.ClassId)
+    @Html.HiddenConstant("search", true)
+
+    <div class="row">
+        <div class="form-group col-md-6 col-lg-4">
+            @Html.LabelFor(x => x.Filter.RegistrationTypeIds)
+            @Html.EditorFor(x => x.Filter.RegistrationTypeIds,
+                     new { Set = Model.RegistrationTypes.GetPickerItemsByValues(Model.Filter.RegistrationTypeIds), Items = Model.RegistrationTypes.GetDropDownItems() })
+        </div>
+
+        <div class="form-group col-md-6 col-lg-4">
+            @Html.LabelFor(x => x.Filter.RegistrationState)
+            @Html.EditorFor(x => x.Filter.RegistrationState, new { Items = Model.RegistratonState.Select(x => DropDownItem.Item(x, MainTextHelper.GetRegistrationStateCapitalText(x))) })
+        </div>
+    </div>
+
+    @using (var bg = Html.ButtonGroup(ButtonGroupType.FilterGroup))
+    {
+        @bg.Submit(CommonResources.Search, ButtonStyle.FilterPrimary)
+        @bg.Command(CommonResources.Clear, ButtonStyle.FilterNormal, false, new { id = "clear-button" })
+    }
+
+</form>
+
+@*List of students*@
+@if (Model.Items.Count == 0)
+{
+    if (Model.WasSearched)
+    {
+        <p>
+            <em>@CommonResources.NoRecords</em>
+        </p>
+    }
+}
+else
+{
+    <table class="table table-hover table-sm">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.Items[0].Name)</th>
+                <th>@Html.DisplayNameFor(x => x.Items[0].Country)</th>
+                <th>@Html.DisplayNameFor(x => x.Items[0].RegistrationState)</th>
+                <th>@Html.DisplayNameFor(x => x.Items[0].RegistrationType)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(x => item.Name)</td>
+                    <td>@Html.DisplayFor(x => item.Country)</td>                   
+                    <td>@MainTextHelper.GetRegistrationStateCapitalText(item.RegistrationState)</td>
+                    <td>@Html.DisplayFor(x => item.RegistrationType)</td>
+
+                    <td>
+                        @using (var bg = Html.ButtonGroup(ButtonGroupType.ItemRightGroup))
+                        {
+                            @bg.Link(CommonResources.Detail, ButtonStyle.Primary, Url.Action("Detail", "Registration", new { id = item.ClassRegistrationId }))
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@InputControl.AddSetItemTemplate(this, "set-item-template")
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var runPageScript = function () {
+
+            // INITIALIZE CONTROLS
+
+            var registrationTypeIds = new CorabeuControl.DropDownListSetInput("registrationTypeIds", "RegistrationTypeIds", { itemTemplateId: "set-item-template" });
+            var registrationState = new CorabeuControl.DropDownList("registrationState", "RegistrationState");
+            
+        
+            var filterControls = [ registrationState, registrationTypeIds ];
+
+            // connect delete-button
+            $("#clear-button").click(function () {
+                $.each(filterControls, function (index, control) {                   
+                    control.setDefaultValue();
+                });
+            });
+
+        }
+
+    </script>
+
+}

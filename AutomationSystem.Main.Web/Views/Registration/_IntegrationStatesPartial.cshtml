@@ -1,0 +1,90 @@
+﻿@model List<IntegrationStateSummary>
+
+
+@if (!Model.Any())
+{
+    <p>
+        <em>@CommonResources.NoRecords</em>
+    </p>
+}
+else
+{
+    foreach (var item in Model.OrderBy(x => x.EventName))
+    {
+        var detail = item.Detail;
+
+        <h5>@Html.DisplayFor(x => item.EventName)</h5>
+
+        if (item.HasError)
+        {
+            <p class="alert alert-warning">
+                @Html.DisplayNameFor(x => detail.ErrorMessage):<br />
+                @Html.DisplayFor(x => detail.ErrorMessage)
+            </p>
+        }
+
+        if (item.IsInconsistent)
+        {
+            <div class="alert alert-warning">
+                @WebExTextHelper.GetInconsistencyTypeText(item.InconsistencyType)                
+                @if (item.InconsistentFields.Count > 0)
+                {
+                    <ul>
+                        @foreach (var field in item.InconsistentFields)
+                        {
+                            <li>@($"{field.FieldName} - {field.WebExValue} ({field.SystemValue})")</li>
+                        }
+                    </ul>
+                }                
+            </div>
+        }
+
+        <div class="row">
+
+            <div class="col-xl-6 align-content-start">
+
+                <dl class="row dl-compact">
+                    <dt class="col-sm-4">@Html.DisplayNameFor(x => detail.AtendeeId)</dt>
+                    <dd class="col-sm-8">@(detail.AtendeeId.HasValue ? detail.AtendeeId.ToString() : TextHelper.NoValueText)</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(x => detail.IntegrationStateType)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(x => detail.IntegrationStateType)</dd>
+                    <dt class="col-sm-4">@Html.DisplayNameFor(x => detail.LastChecked)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(x => detail.LastChecked)</dd>
+                </dl>
+
+            </div>
+
+            @if (detail.IntegrationStateTypeId == IntegrationStateTypeEnum.InWebEx)
+            {
+
+                <div class="col-xl-6 align-content-start">
+
+                    <dl class="row dl-compact">
+                        <dt class="col-sm-4">Name</dt>
+                        <dd class="col-sm-8">@MainTextHelper.GetFullName(detail.FirstName, detail.LastName)</dd>
+                    </dl>
+
+                    <dl class="row dl-compact">
+                        <dt class="col-sm-4">@CommonResources.Address</dt>
+                        <dd class="col-sm-8">
+                            @MainTextHelper.GetAddressStreet(detail.Street, detail.Street2)<br />
+                            @MainTextHelper.GetAddressCityState(detail.City, detail.State, detail.ZipCode)<br />
+                            @Html.DisplayFor(x => detail.Country)
+                        </dd>
+                    </dl>
+
+                    <dl class="row dl-compact">
+                        <dt class="col-sm-4">@Html.DisplayNameFor(x => detail.Email)</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(x => detail.Email)</dd>
+                    </dl>
+
+                </div>
+
+            }
+
+        </div>
+
+    }
+
+}
+
