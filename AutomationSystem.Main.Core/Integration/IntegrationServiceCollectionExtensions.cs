@@ -6,6 +6,7 @@ using AutomationSystem.Main.Core.Integration.System;
 using AutomationSystem.Main.Core.Integration.System.NoIntegration;
 using AutomationSystem.Main.Core.Integration.System.WebEx;
 using Microsoft.Extensions.DependencyInjection;
+using PerfectlyMadeInc.WebEx.Authentication;
 
 namespace AutomationSystem.Main.Core.Integration
 {
@@ -35,6 +36,8 @@ namespace AutomationSystem.Main.Core.Integration
             services.AddSingleton<IRegistrationIntegrationRequestHandlerFactory, WebExRegistrationIntegrationRequestHandlerFactory>();
             services.AddSingleton<IRegistrationIntegrationSyncExecutorFactory, WebExRegistrationIntegrationSyncExecutorFactory>();
 
+            //services.AddSingleton<IAuthentication, AuthenticationService>();
+            
             return services;
         }
     }

@@ -112,6 +112,8 @@
   <ItemGroup>
     <Compile Include="Accounts\AccountServiceCollectionExtensions.cs" />
     <Compile Include="Accounts\AppLogic\IAccountConvertor.cs" />
+    <Compile Include="Authentication\AuthenticationService.cs" />
+    <Compile Include="Authentication\IAuthentication.cs" />
     <Compile Include="Connectors\AppLogic\IConsistencyResolver.cs" />
     <Compile Include="Connectors\AppLogic\IIntegrationService.cs" />
     <Compile Include="Connectors\ConnectorServiceCollectionExtensions.cs" />

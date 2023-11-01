@@ -6,6 +6,7 @@ using AutomationSystem.Shared.Contract.Localisation.System;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using PerfectlyMadeInc.WebEx.Authentication;
 
 namespace AutomationSystem.Main.Web.Controllers
 {
@@ -16,15 +17,17 @@ namespace AutomationSystem.Main.Web.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private IAppUserDatabaseLayer _userDbLayer;
+        private IAuthentication _authentication;
 
         public AccountController()
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IAuthentication authentication)
         {
             UserManager = userManager;
-            SignInManager = signInManager;           
+            SignInManager = signInManager;
+            _authentication = authentication;
         }
 
         // changes language
@@ -64,9 +67,17 @@ namespace AutomationSystem.Main.Web.Controllers
         // GET: /Account/Login
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
-        {            
+        {
+            var auth = new AuthenticationService();
+            var clientId = "C92ebdee82575df4a62817c095a41e306687d1cafbaee58823a2f25d79bd546bc";
+            var responseType = "response_type";
+            var redirectUri = "https://google.com/";
+            var scope = "spark-admin:broadworks_enterprises_write";
+            var state = "set_state_here";
+            var authCode = auth.GetAuthenticationCode(clientId, responseType, scope, state, redirectUri);
             // Request a redirect to the external login provider
-            return new ChallengeResult("Google", Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
+            //return new ChallengeResult("Google", Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
+            return null;
         }
             
 

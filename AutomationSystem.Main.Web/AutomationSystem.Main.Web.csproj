@@ -300,6 +300,7 @@
     <Compile Include="Helpers\ButtonGroupType.cs" />
     <Compile Include="Helpers\ButtonStyle.cs" />
     <Compile Include="Helpers\ConfigHelper.cs" />
+    <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\EmailTemplates\UrlHelperEmailTemplatesExtensions.cs" />
     <Compile Include="Helpers\HtmlButtonHelper.cs" />
     <Compile Include="Helpers\ILayoutHelper.cs" />

@@ -767,6 +767,10 @@
       <Project>{edb1f9e1-e3dc-4e78-b14b-3ba27c4b3f6d}</Project>
       <Name>PerfectlyMadeInc.WebEx.Contract</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PerfectlyMadeInc.WebEx\PerfectlyMadeInc.WebEx.csproj">
+      <Project>{8D8C5BAA-6660-4D99-889B-301DDA952EC6}</Project>
+      <Name>PerfectlyMadeInc.WebEx</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Profiles\System\EmailPermissionResolvers\" />
