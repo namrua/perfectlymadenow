@@ -58,6 +58,15 @@ namespace AutomationSystem.Shared.Core.Identities.Data
 
         #endregion
 
+        public async Task<UserAccount> GetWebexUserAccount(int? accountId)
+        {
+            //default by first account for full authorization
+            accountId = accountId ?? 1;
+            var user = await context.UserAccounts
+                .FirstOrDefaultAsync(x => x.IsActive.HasValue && x.IsActive.Value && x.AccountId == accountId);
+            if (user == null) return null;
+            return user;
+        }
 
         #region IUserStore
 

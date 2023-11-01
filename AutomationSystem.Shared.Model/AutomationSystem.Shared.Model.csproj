@@ -226,6 +226,9 @@
     <Compile Include="User.cs">
       <DependentUpon>CoreContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="UserAccount.cs">
+      <DependentUpon>CoreContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="UserGroupType.cs">
       <DependentUpon>CoreContext.tt</DependentUpon>
     </Compile>

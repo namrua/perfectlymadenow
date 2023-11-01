@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using AutomationSystem.Shared.Contract.Identities.Data.Models;
+using AutomationSystem.Shared.Model;
 using Microsoft.AspNet.Identity;
 
 namespace AutomationSystem.Shared.Contract.Identities.Data
@@ -17,6 +18,7 @@ namespace AutomationSystem.Shared.Contract.Identities.Data
         // gets user by google account
         Task<ApplicationUser> GetUserByGoogleAccount(string googleAccount);
 
+        Task<UserAccount> GetWebexUserAccount(int? accountId);
     }    
 
 }

@@ -89,6 +89,7 @@
         <AssociationConnector Association="CoreModel.FK_Incident_EntityTypeId" />
         <AssociationConnector Association="CoreModel.FK_Incident_IncidentTypeId" />
         <AssociationConnector Association="CoreModel.FK_Incident_ParentIncidentId" />
+        <EntityTypeShape EntityType="CoreModel.UserAccount" Width="1.5" PointX="10.375" PointY="4.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

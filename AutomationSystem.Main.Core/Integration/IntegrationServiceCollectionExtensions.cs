@@ -36,8 +36,6 @@ namespace AutomationSystem.Main.Core.Integration
             services.AddSingleton<IRegistrationIntegrationRequestHandlerFactory, WebExRegistrationIntegrationRequestHandlerFactory>();
             services.AddSingleton<IRegistrationIntegrationSyncExecutorFactory, WebExRegistrationIntegrationSyncExecutorFactory>();
 
-            //services.AddSingleton<IAuthentication, AuthenticationService>();
-            
             return services;
         }
     }

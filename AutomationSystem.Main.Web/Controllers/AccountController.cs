@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using PerfectlyMadeInc.WebEx.Authentication;
+using static PerfectlyMadeInc.WebEx.Helper.Constants;
 
 namespace AutomationSystem.Main.Web.Controllers
 {
@@ -17,17 +18,16 @@ namespace AutomationSystem.Main.Web.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private IAppUserDatabaseLayer _userDbLayer;
-        private IAuthentication _authentication;
+        private IAuthentication _authentication = IocProvider.Get<IAuthentication>();
 
         public AccountController()
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IAuthentication authentication)
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
-            _authentication = authentication;
         }
 
         // changes language
@@ -63,21 +63,32 @@ namespace AutomationSystem.Main.Web.Controllers
 
         private IAuthenticationManager AuthenticationManager => HttpContext.GetOwinContext().Authentication;
 
+        public async Task GetAccessToken(string code)
+        {
+            var user = await UserDbLayer.GetWebexUserAccount(null);
+            if (user == null) return;
+            var accessToken = await _authentication.GetAccessToken(user.ClientId, user.ClientSecret, user.RedirectURI, code);
+            Session[WebexConstants.AccessToken] = accessToken;
+        }
+
+        public async Task<ActionResult> Authentication(int? accountId)
+        {
+            var user = await UserDbLayer.GetWebexUserAccount(accountId);
+            if(user == null)
+            {
+                return View("ExternalLoginFailure");
+            }
+            var authCode = await _authentication.GetAuthenticationCode(user.ClientId, user.ResponseType, user.Scope, user.State, user.RedirectURI);
+            return Content(authCode, "text/html");
+        }
+
         //
         // GET: /Account/Login
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            var auth = new AuthenticationService();
-            var clientId = "C92ebdee82575df4a62817c095a41e306687d1cafbaee58823a2f25d79bd546bc";
-            var responseType = "response_type";
-            var redirectUri = "https://google.com/";
-            var scope = "spark-admin:broadworks_enterprises_write";
-            var state = "set_state_here";
-            var authCode = auth.GetAuthenticationCode(clientId, responseType, scope, state, redirectUri);
             // Request a redirect to the external login provider
-            //return new ChallengeResult("Google", Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
-            return null;
+            return new ChallengeResult("Google", Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
             
 

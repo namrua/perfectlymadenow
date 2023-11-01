@@ -69,6 +69,7 @@ namespace AutomationSystem.Shared.Model
         public virtual DbSet<PayPalRecord> PayPalRecords { get; set; }
         public virtual DbSet<BatchUpload> BatchUploads { get; set; }
         public virtual DbSet<Incident> Incidents { get; set; }
+        public virtual DbSet<UserAccount> UserAccounts { get; set; }
     
         public virtual int ClearFiles(Nullable<System.DateTime> toDate, Nullable<int> maxItems, ObjectParameter rowcount)
         {

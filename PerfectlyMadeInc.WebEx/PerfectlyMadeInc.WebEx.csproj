@@ -117,6 +117,7 @@
     <Compile Include="Connectors\AppLogic\IConsistencyResolver.cs" />
     <Compile Include="Connectors\AppLogic\IIntegrationService.cs" />
     <Compile Include="Connectors\ConnectorServiceCollectionExtensions.cs" />
+    <Compile Include="Helper\Constants.cs" />
     <Compile Include="IntegrationStates\AppLogic\IIntegrationStateConvertor.cs" />
     <Compile Include="Connectors\AppLogic\IIntegrationStatePairingProvider.cs" />
     <Compile Include="Connectors\AppLogic\IWebExFactory.cs" />

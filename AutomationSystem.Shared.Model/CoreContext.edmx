@@ -532,6 +532,22 @@
           <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Description" Type="nvarchar" MaxLength="512" />
         </EntityType>
+        <EntityType Name="UserAccount">
+          <Key>
+            <PropertyRef Name="AccountId" />
+          </Key>
+          <Property Name="AccountId" Type="int" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="ClientId" Type="varchar" MaxLength="100" />
+          <Property Name="ClientSecret" Type="varchar" MaxLength="200" />
+          <Property Name="ResponseType" Type="varchar" MaxLength="20" />
+          <Property Name="RedirectURI" Type="varchar" MaxLength="50" />
+          <Property Name="Scope" Type="varchar" MaxLength="1000" />
+          <Property Name="State" Type="varchar" MaxLength="20" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="UpdatedDate" Type="datetime" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
         <Association Name="FK_AppLocalisation_LanguageId">
           <End Role="Language" Type="Self.Language" Multiplicity="1" />
           <End Role="AppLocalisation" Type="Self.AppLocalisation" Multiplicity="*" />
@@ -1650,6 +1666,7 @@
           <EntitySet Name="UserLogin" EntityType="Self.UserLogin" Schema="core" store:Type="Tables" />
           <EntitySet Name="UserRoleAssignment" EntityType="Self.UserRoleAssignment" Schema="core" store:Type="Tables" />
           <EntitySet Name="UserRoleType" EntityType="Self.UserRoleType" Schema="core" store:Type="Tables" />
+          <EntitySet Name="UserAccount" EntityType="Self.UserAccount" Schema="webex" store:Type="Tables" />
           <AssociationSet Name="FK_AppLocalisation_LanguageId" Association="Self.FK_AppLocalisation_LanguageId">
             <End Role="Language" EntitySet="Language" />
             <End Role="AppLocalisation" EntitySet="AppLocalisation" />
@@ -2542,6 +2559,7 @@
             <End Role="Incident" EntitySet="Incidents" />
             <End Role="Incident1" EntitySet="Incidents" />
           </AssociationSet>
+          <EntitySet Name="UserAccounts" EntityType="CoreModel.UserAccount" />
           </EntityContainer>
         <EnumType Name="BatchUploadTypeEnum" a:ExternalTypeName="AutomationSystem.Base.Contract.Enums.BatchUploadTypeEnum" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="IncidentTypeEnum" a:ExternalTypeName="AutomationSystem.Base.Contract.Enums.IncidentTypeEnum" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -3174,6 +3192,22 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="UserAccount">
+          <Key>
+            <PropertyRef Name="AccountId" />
+          </Key>
+          <Property Name="AccountId" Type="Int32" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ClientId" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ClientSecret" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ResponseType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="RedirectURI" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Scope" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4383,6 +4417,23 @@
                   <ScalarProperty Name="IncidentId" ParameterName="IncidentId" />
                 </DeleteFunction>
               </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserAccounts">
+            <EntityTypeMapping TypeName="CoreModel.UserAccount">
+              <MappingFragment StoreEntitySet="UserAccount">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Scope" ColumnName="Scope" />
+                <ScalarProperty Name="RedirectURI" ColumnName="RedirectURI" />
+                <ScalarProperty Name="ResponseType" ColumnName="ResponseType" />
+                <ScalarProperty Name="ClientSecret" ColumnName="ClientSecret" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+              </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           </EntityContainerMapping>
