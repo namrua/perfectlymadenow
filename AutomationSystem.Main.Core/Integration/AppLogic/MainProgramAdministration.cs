@@ -12,6 +12,7 @@ using AutomationSystem.Main.Core.Profiles.System.Extensions;
 using CorabeuControl.Components;
 using PerfectlyMadeInc.WebEx.Contract.Programs;
 using PerfectlyMadeInc.WebEx.Contract.Programs.Models;
+using PerfectlyMadeInc.WebEx.Contract.Webinars;
 
 namespace AutomationSystem.Main.Core.Integration.AppLogic
 {
@@ -73,6 +74,12 @@ namespace AutomationSystem.Main.Core.Integration.AppLogic
         public Task<NewProgramList> GetNewProgramsForList(long accountId)
         {
             return programAdministration.GetNewProgramsForList(accountId);
+        }
+
+        // gets webex webinar list by account
+        public Task<NewWebinarList> GetNewWebinarsForList(long accountId)
+        {
+            return programAdministration.GetNewWebinarsForList(accountId);
         }
 
         // gets program detail by id

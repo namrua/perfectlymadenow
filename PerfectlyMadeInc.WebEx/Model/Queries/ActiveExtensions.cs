@@ -12,6 +12,10 @@ namespace PerfectlyMadeInc.WebEx.Model.Queries
 			return query.Where(x => !x.Deleted);
 		}
 
+		public static IQueryable<UserAccount> Active(this IQueryable<UserAccount> query)
+		{
+			return query.Where(x => !x.Active);
+		}
 
 		// selects active Event entities 
 		public static IQueryable<Event> Active(this IQueryable<Event> query) 

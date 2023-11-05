@@ -19,6 +19,8 @@ namespace PerfectlyMadeInc.WebEx.Connectors.Integration
         // gets list of programs
         Task<List<WebExProgramInfo>> GetPrograms();
 
+        Task<WebexWebinarInfo> GetWebinar();
+
         // gets list of events by program id
         Task<List<WebExEventInfo>> GetsEventsByProgramId(long programId);
 

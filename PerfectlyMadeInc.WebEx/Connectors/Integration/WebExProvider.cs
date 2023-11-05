@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using Newtonsoft.Json;
 using PerfectlyMadeInc.WebEx.Connectors.Integration.Model;
 using PerfectlyMadeInc.WebEx.Contract.Connectors;
+using static PerfectlyMadeInc.WebEx.Helper.Constants;
 
 namespace PerfectlyMadeInc.WebEx.Connectors.Integration
 {
@@ -119,6 +122,28 @@ namespace PerfectlyMadeInc.WebEx.Connectors.Integration
                     throw;
             }            
             return result;
+        }
+
+        public async Task<WebexWebinarInfo> GetWebinar()
+        {
+            var _httpClient = new HttpClient();
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {WebexUrls.Access_Token}");
+            HttpResponseMessage response = await _httpClient.GetAsync(WebexUrls.BaseUrl + WebexUrls.ListMeeting).ConfigureAwait(false);
+            string responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var webinars = JsonConvert.DeserializeObject<WebexWebinarInfo>(responseBody);
+            return webinars;
+        }
+
+        public async Task<WebexWebinarInfo> GetWebinarById()
+        {
+            var _httpClient = new HttpClient();
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {WebexUrls.Access_Token}");
+            HttpResponseMessage response = await _httpClient.GetAsync(WebexUrls.BaseUrl + WebexUrls.ListMeeting).ConfigureAwait(false);
+            string responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var webinars = JsonConvert.DeserializeObject<WebexWebinarInfo>(responseBody);
+            return webinars;
         }
 
         // gets program by id

@@ -36,6 +36,17 @@ namespace PerfectlyMadeInc.WebEx.Accounts.Data
             }
         }
 
+        public UserAccount GetUserAccountById(long id)
+        {
+            using (var context = new WebExEntities())
+            {
+                var result = context.UserAccounts.Active().FirstOrDefault(x => x.AccountId == id);
+                if (result == null)
+                    throw new ArgumentException($"There is no WebEx account with id {id}.");
+                return result;
+            }
+        }
+
 
         // insert webEx account
         public long InsertAccount(Account model)

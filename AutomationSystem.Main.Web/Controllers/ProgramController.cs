@@ -69,9 +69,11 @@ namespace AutomationSystem.Main.Web.Controllers
         public async Task<ActionResult> LoadList(long accountId)
         {
             try
-            {                
-                var model = await programAdministration.GetNewProgramsForList(accountId);
-                return PartialView("_TablePartial", model);
+            {
+                //var model = await programAdministration.GetNewProgramsForList(accountId);
+                //return PartialView("_TablePartial", model);
+                var model = await programAdministration.GetNewWebinarsForList(accountId);
+                return PartialView("_TablePartialWebinar", model);
             }
             catch (Exception e)
             {                

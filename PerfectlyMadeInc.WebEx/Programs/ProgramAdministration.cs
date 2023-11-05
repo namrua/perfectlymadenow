@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using AutomationSystem.Base.Contract.Enums;
 using AutomationSystem.Base.Contract.Identities;
@@ -8,13 +10,18 @@ using AutomationSystem.Base.Contract.Identities.Extensions;
 using AutomationSystem.Base.Contract.Identities.Models;
 using AutomationSystem.Base.Contract.Integration;
 using CorabeuControl.Components;
+using Newtonsoft.Json;
 using PerfectlyMadeInc.WebEx.Connectors.AppLogic;
+using PerfectlyMadeInc.WebEx.Connectors.Integration;
+using PerfectlyMadeInc.WebEx.Connectors.Integration.Model;
 using PerfectlyMadeInc.WebEx.Contract.Programs;
 using PerfectlyMadeInc.WebEx.Contract.Programs.Models;
+using PerfectlyMadeInc.WebEx.Contract.Webinars;
 using PerfectlyMadeInc.WebEx.Model;
 using PerfectlyMadeInc.WebEx.Programs.AppLogic;
 using PerfectlyMadeInc.WebEx.Programs.Data;
 using PerfectlyMadeInc.WebEx.Programs.Data.Models;
+using static PerfectlyMadeInc.WebEx.Helper.Constants;
 
 namespace PerfectlyMadeInc.WebEx.Programs
 {
@@ -24,20 +31,18 @@ namespace PerfectlyMadeInc.WebEx.Programs
     /// </summary>
     public class ProgramAdministration : IProgramAdministration
     {
-      
+
         private readonly IProgramDatabaseLayer programDb;
-        private readonly IConferenceAccountService conferenceService;        
+        private readonly IConferenceAccountService conferenceService;
         private readonly IWebExFactory webExFactory;
         private readonly IIdentityResolver identityResolver;
-
         private readonly IProgramConvertor programConvertor;
 
-
         // constructor
-        public ProgramAdministration(IProgramDatabaseLayer programDb, IConferenceAccountService conferenceService, 
+        public ProgramAdministration(IProgramDatabaseLayer programDb, IConferenceAccountService conferenceService,
             IWebExFactory webExFactory, IIdentityResolver identityResolver)
         {
-            this.programDb = programDb;           
+            this.programDb = programDb;
             this.conferenceService = conferenceService;
             this.webExFactory = webExFactory;
             this.identityResolver = identityResolver;
@@ -46,7 +51,7 @@ namespace PerfectlyMadeInc.WebEx.Programs
 
         // gets list of program details
         public ProgramsForList GetProgramsForList(ProgramFilter filter, bool search = false)
-        {           
+        {
             var result = new ProgramsForList(filter);
             result.WasSearched = search;
             if (search)
@@ -91,7 +96,7 @@ namespace PerfectlyMadeInc.WebEx.Programs
             // filters conference accounts and returns new program model
             var conferenceAccounts = conferenceService.GetConferenceAccountsByFilter(confAccFilter);
             var result = new NewProgramModel();
-            result.Accounts = conferenceAccounts.Where(x => x.Active).Select(x => PickerItem.Item(x.AccountSettingsId, x.Name)).ToList();           
+            result.Accounts = conferenceAccounts.Where(x => x.Active).Select(x => PickerItem.Item(x.AccountSettingsId, x.Name)).ToList();
             return result;
         }
 
@@ -104,7 +109,7 @@ namespace PerfectlyMadeInc.WebEx.Programs
             identityResolver.CheckEntitleForConferenceAccountInfo(Entitle.WebExPrograms, confAccount);
 
             // gets programs from webex                                       
-            var provider = webExFactory.CreateWebExProvider(accountId);           
+            var provider = webExFactory.CreateWebExProvider(accountId);
             var programsApi = await provider.GetPrograms();
 
             // gets program ids in database - ALL PROGRAMS THROUGH ALL ACCOUNTS SHOULD BE CONSIDERED 
@@ -118,10 +123,36 @@ namespace PerfectlyMadeInc.WebEx.Programs
                 Items = programsApi
                     .Where(x => !loadedProgramsIds.Contains(x.ProgramId))
                     .Select(programConvertor.ConvertToNewProgramListItem).ToList()
-            };           
+            };
             return result;
         }
 
+        public async Task<NewWebinarList> GetNewWebinarsForList(long accountId)
+        {
+            // checks access rights for account
+            var confAccount = conferenceService.GetConferenceAccountByTypeAndSettingsId(ConferenceAccountTypeEnum.WebEx, accountId);
+            identityResolver.CheckEntitleForConferenceAccountInfo(Entitle.WebExPrograms, confAccount);
+
+            IWebExProvider provider = new WebExProvider();
+            var webinars = await provider.GetWebinar();
+
+            var loadedProgramsIds = new HashSet<string>(programDb.GetProgramsByFilter().Select(x => x.ProgramOuterId.ToString()));
+
+            // assembles result
+            var result = new NewWebinarList
+            {
+                AccountId = accountId,
+                Items = webinars?.Items
+                    .Where(x => !loadedProgramsIds.Contains(x.Id))
+                    .Select(m => new NewWebinarListItem
+                    {
+                        Title = m.Title,
+                        Id = m.Id,
+                        WebLink = m.WebLink
+                    }).ToList()
+            };
+            return result;
+        }
 
         // gets WebEx program by id
         public ProgramDetail GetProgramById(long programId)
@@ -135,7 +166,7 @@ namespace PerfectlyMadeInc.WebEx.Programs
             return result;
         }
 
-       
+
 
 
         // saves program from WebEx to db
@@ -147,7 +178,7 @@ namespace PerfectlyMadeInc.WebEx.Programs
 
             // gets provider
             var provider = webExFactory.CreateWebExProvider(accountId);
-          
+
             // loads webex program
             var program = await provider.GetProgramById(programOuterId);
             if (program == null)
@@ -158,7 +189,7 @@ namespace PerfectlyMadeInc.WebEx.Programs
             var dbProgram = programConvertor.ConvertToProgram(program, accountId);
             foreach (var webExEvent in events)
                 dbProgram.Events.Add(programConvertor.ConvertToEvent(webExEvent, accountId));
-          
+
             // save program
             var result = programDb.InsertProgram(dbProgram);
             return result;

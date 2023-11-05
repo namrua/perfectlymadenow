@@ -30,5 +30,6 @@ namespace PerfectlyMadeInc.WebEx.Model
         public virtual DbSet<IntegrationStateType> IntegrationStateTypes { get; set; }
         public virtual DbSet<Program> Programs { get; set; }
         public virtual DbSet<Event> Events { get; set; }
+        public virtual DbSet<UserAccount> UserAccounts { get; set; }
     }
 }

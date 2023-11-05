@@ -117,3 +117,5 @@ AutomationSystem.Main.Web/App_Data/Reports/_Temporary/*.xlsx
 ################
 # Git artifacts
 *.orig
+/packages/Newtonsoft.Json.13.0.3/lib
+/packages/Newtonsoft.Json.13.0.3

@@ -1449,6 +1449,7 @@
     <Content Include="Views\RegistrationUpload\BatchMerge.cshtml" />
     <Content Include="Views\RegistrationUpload\StudentBatchItemEdit.cshtml" />
     <Content Include="Views\Shared\BatchUploads\_BatchUploadDetail.cshtml" />
+    <Content Include="Views\Program\_TablePartialWebinar.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

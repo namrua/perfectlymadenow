@@ -11,6 +11,7 @@ namespace PerfectlyMadeInc.WebEx.Accounts.Data
 
         // gets list of webex accounts by ids
         List<Account> GetAccountsByIds(List<long> ids);
+        UserAccount GetUserAccountById(long id);
 
         // gets webEx account by id
         Account GetAccountById(long id);

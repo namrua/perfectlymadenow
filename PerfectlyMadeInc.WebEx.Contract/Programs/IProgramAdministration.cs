@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using AutomationSystem.Base.Contract.Enums;
 using PerfectlyMadeInc.WebEx.Contract.Programs.Models;
+using PerfectlyMadeInc.WebEx.Contract.Webinars;
 
 namespace PerfectlyMadeInc.WebEx.Contract.Programs
 {
@@ -18,6 +19,8 @@ namespace PerfectlyMadeInc.WebEx.Contract.Programs
 
         // gets webex program list by account
         Task<NewProgramList> GetNewProgramsForList(long accountId);
+
+        Task<NewWebinarList> GetNewWebinarsForList(long accountId);
 
         // gets program detail by id
         ProgramDetail GetProgramById(long programId);

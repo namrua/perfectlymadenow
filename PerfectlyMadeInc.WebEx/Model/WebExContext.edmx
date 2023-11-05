@@ -81,6 +81,22 @@
           <Property Name="Changed" Type="datetime" />
           <Property Name="Deleted" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="UserAccount">
+          <Key>
+            <PropertyRef Name="AccountId" />
+          </Key>
+          <Property Name="AccountId" Type="int" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ClientId" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ClientSecret" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="ResponseType" Type="varchar" MaxLength="20" />
+          <Property Name="RedirectURI" Type="varchar" MaxLength="50" />
+          <Property Name="Scope" Type="varchar" MaxLength="1000" />
+          <Property Name="State" Type="varchar" MaxLength="20" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="UpdatedDate" Type="datetime" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+        </EntityType>
         <Association Name="FK_Event_AccountId">
           <End Role="Account" Type="Self.Account" Multiplicity="1" />
           <End Role="Event" Type="Self.Event" Multiplicity="*" />
@@ -251,6 +267,7 @@
           <EntitySet Name="IntegrationState" EntityType="Self.IntegrationState" Schema="webex" store:Type="Tables" />
           <EntitySet Name="IntegrationStateType" EntityType="Self.IntegrationStateType" Schema="webex" store:Type="Tables" />
           <EntitySet Name="Program" EntityType="Self.Program" Schema="webex" store:Type="Tables" />
+          <EntitySet Name="UserAccount" EntityType="Self.UserAccount" Schema="webex" store:Type="Tables" />
           <AssociationSet Name="FK_Event_AccountId" Association="Self.FK_Event_AccountId">
             <End Role="Account" EntitySet="Account" />
             <End Role="Event" EntitySet="Event" />
@@ -394,6 +411,7 @@
             <End Role="Event" EntitySet="Events" />
             <End Role="IntegrationState" EntitySet="IntegrationStates" />
           </AssociationSet>
+          <EntitySet Name="UserAccounts" EntityType="WebExModel.UserAccount" />
         </EntityContainer>
         <EnumType Name="EntityTypeEnum" a:ExternalTypeName="AutomationSystem.Base.Contract.Enums.EntityTypeEnum" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="IntegrationStateTypeEnum" a:ExternalTypeName="AutomationSystem.Base.Contract.Enums.IntegrationStateTypeEnum" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -451,6 +469,22 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="UserAccount">
+          <Key>
+            <PropertyRef Name="AccountId" />
+          </Key>
+          <Property Name="AccountId" Type="Int32" Nullable="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ClientId" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ClientSecret" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ResponseType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="RedirectURI" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Scope" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -652,6 +686,23 @@
                   <ScalarProperty Name="EventId" ParameterName="EventId" />
                 </DeleteFunction>
               </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserAccounts">
+            <EntityTypeMapping TypeName="WebExModel.UserAccount">
+              <MappingFragment StoreEntitySet="UserAccount">
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Scope" ColumnName="Scope" />
+                <ScalarProperty Name="RedirectURI" ColumnName="RedirectURI" />
+                <ScalarProperty Name="ResponseType" ColumnName="ResponseType" />
+                <ScalarProperty Name="ClientSecret" ColumnName="ClientSecret" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+              </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
         </EntityContainerMapping>

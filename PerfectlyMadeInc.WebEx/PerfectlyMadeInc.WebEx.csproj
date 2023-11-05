@@ -73,6 +73,9 @@
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -117,6 +120,7 @@
     <Compile Include="Connectors\AppLogic\IConsistencyResolver.cs" />
     <Compile Include="Connectors\AppLogic\IIntegrationService.cs" />
     <Compile Include="Connectors\ConnectorServiceCollectionExtensions.cs" />
+    <Compile Include="Connectors\Integration\Model\WebexWebinarInfo.cs" />
     <Compile Include="Helper\Constants.cs" />
     <Compile Include="IntegrationStates\AppLogic\IIntegrationStateConvertor.cs" />
     <Compile Include="Connectors\AppLogic\IIntegrationStatePairingProvider.cs" />
@@ -125,6 +129,9 @@
     <Compile Include="Connectors\AppLogic\Models\WebExServiceResult.cs" />
     <Compile Include="Connectors\AppLogic\Models\PairingResult.cs" />
     <Compile Include="IntegrationStates\IntegrationStateServiceCollectionExtensions.cs" />
+    <Compile Include="Model\UserAccount.cs">
+      <DependentUpon>WebExModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Programs\AppLogic\IProgramConvertor.cs" />
     <Compile Include="Accounts\AppLogic\AccountConvertor.cs" />
     <Compile Include="Connectors\AppLogic\IntegrationStatePairingProvider.cs" />

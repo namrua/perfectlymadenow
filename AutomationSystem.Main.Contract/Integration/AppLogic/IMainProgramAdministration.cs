@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using AutomationSystem.Main.Contract.Integration.AppLogic.Models.Programs;
 using PerfectlyMadeInc.WebEx.Contract.Programs.Models;
+using PerfectlyMadeInc.WebEx.Contract.Webinars;
 
 namespace AutomationSystem.Main.Contract.Integration.AppLogic
 {
@@ -17,6 +18,8 @@ namespace AutomationSystem.Main.Contract.Integration.AppLogic
 
         // gets webex program list by account
         Task<NewProgramList> GetNewProgramsForList(long accountId);
+
+        Task<NewWebinarList> GetNewWebinarsForList(long accountId);
 
         // gets program detail by id
         MainProgramDetail GetProgramById(long programId);
