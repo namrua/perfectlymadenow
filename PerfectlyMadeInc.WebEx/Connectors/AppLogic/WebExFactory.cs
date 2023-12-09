@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Threading.Tasks;
 using AutomationSystem.Base.Contract.Enums;
 using AutomationSystem.Base.Contract.Integration;
 using PerfectlyMadeInc.DesignTools.Contract.Diagnostics;
 using PerfectlyMadeInc.WebEx.Accounts.Data;
+using PerfectlyMadeInc.WebEx.Authentication;
 using PerfectlyMadeInc.WebEx.Connectors.Integration;
 using PerfectlyMadeInc.WebEx.Connectors.Integration.Model;
 
@@ -54,6 +56,14 @@ namespace PerfectlyMadeInc.WebEx.Connectors.AppLogic
         {
             var provider = CreateWebExProvider(accountId);
             var result = new IntegrationService(provider, tracerFactory);
+            return result;
+        }
+
+        // get access_token
+        public IWebExProvider GetWebexAccessToken(long accountId)
+        {
+            var user =  accountDb.GetUserAccountById(accountId);
+            var result = new WebExProvider(user?.AccessToken);
             return result;
         }
 

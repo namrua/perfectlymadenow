@@ -24,6 +24,7 @@ namespace PerfectlyMadeInc.WebEx.Connectors.Integration
 
         // private fields
         private readonly WebExSettingInfo settings;
+        private readonly string accessToken;
 
         // private fields
         private readonly XNamespace xsi = "http://www.w3.org/2001/XMLSchema-instance";
@@ -38,6 +39,11 @@ namespace PerfectlyMadeInc.WebEx.Connectors.Integration
         public WebExProvider(WebExSettingInfo settings)
         {
             this.settings = settings;
+        }
+
+        public WebExProvider(string accessToken)
+        {
+            this.accessToken = accessToken;
         }
 
         // constructor
@@ -128,7 +134,7 @@ namespace PerfectlyMadeInc.WebEx.Connectors.Integration
         {
             var _httpClient = new HttpClient();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {WebexUrls.Access_Token}");
+            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {this.accessToken}");
             HttpResponseMessage response = await _httpClient.GetAsync(WebexUrls.BaseUrl + WebexUrls.ListMeeting).ConfigureAwait(false);
             string responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             var webinars = JsonConvert.DeserializeObject<WebexWebinarInfo>(responseBody);
@@ -139,7 +145,7 @@ namespace PerfectlyMadeInc.WebEx.Connectors.Integration
         {
             var _httpClient = new HttpClient();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {WebexUrls.Access_Token}");
+            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {this.accessToken}");
             HttpResponseMessage response = await _httpClient.GetAsync(WebexUrls.BaseUrl + WebexUrls.ListMeeting).ConfigureAwait(false);
             string responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             var webinars = JsonConvert.DeserializeObject<WebexWebinarInfo>(responseBody);

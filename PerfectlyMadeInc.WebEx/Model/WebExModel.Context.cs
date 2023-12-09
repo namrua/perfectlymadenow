@@ -31,5 +31,6 @@ namespace PerfectlyMadeInc.WebEx.Model
         public virtual DbSet<Program> Programs { get; set; }
         public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<UserAccount> UserAccounts { get; set; }
+        public virtual DbSet<Webinar> Webinars { get; set; }
     }
 }

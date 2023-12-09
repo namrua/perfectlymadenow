@@ -133,7 +133,7 @@ namespace PerfectlyMadeInc.WebEx.Programs
             var confAccount = conferenceService.GetConferenceAccountByTypeAndSettingsId(ConferenceAccountTypeEnum.WebEx, accountId);
             identityResolver.CheckEntitleForConferenceAccountInfo(Entitle.WebExPrograms, confAccount);
 
-            IWebExProvider provider = new WebExProvider();
+            IWebExProvider provider = webExFactory.GetWebexAccessToken(accountId);
             var webinars = await provider.GetWebinar();
 
             var loadedProgramsIds = new HashSet<string>(programDb.GetProgramsByFilter().Select(x => x.ProgramOuterId.ToString()));

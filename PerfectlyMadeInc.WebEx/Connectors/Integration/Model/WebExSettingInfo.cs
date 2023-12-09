@@ -12,6 +12,7 @@ namespace PerfectlyMadeInc.WebEx.Connectors.Integration.Model
         public string Password { get; set; }
         public string ServiceUrl { get; set; }
         public bool Enabled { get; set; }
+        public string AccessToken { get; set; }
 
         // constructor
         public WebExSettingInfo() { }

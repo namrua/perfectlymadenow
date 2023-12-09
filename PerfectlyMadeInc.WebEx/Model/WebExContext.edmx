@@ -85,7 +85,7 @@
           <Key>
             <PropertyRef Name="AccountId" />
           </Key>
-          <Property Name="AccountId" Type="int" Nullable="false" />
+          <Property Name="AccountId" Type="bigint" Nullable="false" />
           <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="ClientId" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="ClientSecret" Type="varchar" MaxLength="200" Nullable="false" />
@@ -96,6 +96,25 @@
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="UpdatedDate" Type="datetime" />
           <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="AccessToken" Type="varchar" MaxLength="500" />
+          <Property Name="AccessTokenTime" Type="int" />
+          <Property Name="RefreshToken" Type="varchar" MaxLength="500" />
+          <Property Name="RefreshTokenTime" Type="int" />
+        </EntityType>
+        <EntityType Name="Webinar">
+          <Key>
+            <PropertyRef Name="WebinarId" />
+          </Key>
+          <Property Name="WebinarId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccountId" Type="bigint" Nullable="false" />
+          <Property Name="EntityTypeId" Type="int" />
+          <Property Name="EntityId" Type="bigint" />
+          <Property Name="MeetingId" Type="nvarchar" MaxLength="256" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="WebLink" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Created" Type="datetime" />
+          <Property Name="Changed" Type="datetime" />
+          <Property Name="Deleted" Type="bit" />
         </EntityType>
         <Association Name="FK_Event_AccountId">
           <End Role="Account" Type="Self.Account" Multiplicity="1" />
@@ -153,6 +172,18 @@
               <PropertyRef Name="AccountId" />
             </Principal>
             <Dependent Role="Program">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserAccount_Webinar">
+          <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="1" />
+          <End Role="Webinar" Type="Self.Webinar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserAccount">
+              <PropertyRef Name="AccountId" />
+            </Principal>
+            <Dependent Role="Webinar">
               <PropertyRef Name="AccountId" />
             </Dependent>
           </ReferentialConstraint>
@@ -268,6 +299,7 @@
           <EntitySet Name="IntegrationStateType" EntityType="Self.IntegrationStateType" Schema="webex" store:Type="Tables" />
           <EntitySet Name="Program" EntityType="Self.Program" Schema="webex" store:Type="Tables" />
           <EntitySet Name="UserAccount" EntityType="Self.UserAccount" Schema="webex" store:Type="Tables" />
+          <EntitySet Name="Webinar" EntityType="Self.Webinar" Schema="webex" store:Type="Tables" />
           <AssociationSet Name="FK_Event_AccountId" Association="Self.FK_Event_AccountId">
             <End Role="Account" EntitySet="Account" />
             <End Role="Event" EntitySet="Event" />
@@ -287,6 +319,10 @@
           <AssociationSet Name="FK_Program_AccountId" Association="Self.FK_Program_AccountId">
             <End Role="Account" EntitySet="Account" />
             <End Role="Program" EntitySet="Program" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserAccount_Webinar" Association="Self.FK_UserAccount_Webinar">
+            <End Role="UserAccount" EntitySet="UserAccount" />
+            <End Role="Webinar" EntitySet="Webinar" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -412,6 +448,11 @@
             <End Role="IntegrationState" EntitySet="IntegrationStates" />
           </AssociationSet>
           <EntitySet Name="UserAccounts" EntityType="WebExModel.UserAccount" />
+          <EntitySet Name="Webinars" EntityType="WebExModel.Webinar" />
+          <AssociationSet Name="FK_UserAccount_Webinar" Association="WebExModel.FK_UserAccount_Webinar">
+            <End Role="UserAccount" EntitySet="UserAccounts" />
+            <End Role="Webinar" EntitySet="Webinars" />
+          </AssociationSet>
         </EntityContainer>
         <EnumType Name="EntityTypeEnum" a:ExternalTypeName="AutomationSystem.Base.Contract.Enums.EntityTypeEnum" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="IntegrationStateTypeEnum" a:ExternalTypeName="AutomationSystem.Base.Contract.Enums.IntegrationStateTypeEnum" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -473,7 +514,7 @@
           <Key>
             <PropertyRef Name="AccountId" />
           </Key>
-          <Property Name="AccountId" Type="Int32" Nullable="false" />
+          <Property Name="AccountId" Type="Int64" Nullable="false" />
           <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ClientId" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="ClientSecret" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
@@ -484,7 +525,40 @@
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="AccessToken" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="AccessTokenTime" Type="Int32" />
+          <Property Name="RefreshToken" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="RefreshTokenTime" Type="Int32" />
+          <NavigationProperty Name="Webinars" Relationship="WebExModel.FK_UserAccount_Webinar" FromRole="UserAccount" ToRole="Webinar" />
         </EntityType>
+        <EntityType Name="Webinar">
+          <Key>
+            <PropertyRef Name="WebinarId" />
+          </Key>
+          <Property Name="WebinarId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountId" Type="Int64" Nullable="false" />
+          <Property Name="EntityTypeId" Type="Int32" />
+          <Property Name="EntityId" Type="Int64" />
+          <Property Name="MeetingId" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="WebLink" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Created" Type="DateTime" Precision="3" />
+          <Property Name="Changed" Type="DateTime" Precision="3" />
+          <Property Name="Deleted" Type="Boolean" />
+          <NavigationProperty Name="UserAccount" Relationship="WebExModel.FK_UserAccount_Webinar" FromRole="Webinar" ToRole="UserAccount" />
+        </EntityType>
+        <Association Name="FK_UserAccount_Webinar">
+          <End Type="WebExModel.UserAccount" Role="UserAccount" Multiplicity="1" />
+          <End Type="WebExModel.Webinar" Role="Webinar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserAccount">
+              <PropertyRef Name="AccountId" />
+            </Principal>
+            <Dependent Role="Webinar">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -691,6 +765,10 @@
           <EntitySetMapping Name="UserAccounts">
             <EntityTypeMapping TypeName="WebExModel.UserAccount">
               <MappingFragment StoreEntitySet="UserAccount">
+                <ScalarProperty Name="RefreshTokenTime" ColumnName="RefreshTokenTime" />
+                <ScalarProperty Name="RefreshToken" ColumnName="RefreshToken" />
+                <ScalarProperty Name="AccessTokenTime" ColumnName="AccessTokenTime" />
+                <ScalarProperty Name="AccessToken" ColumnName="AccessToken" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
@@ -702,6 +780,22 @@
                 <ScalarProperty Name="ClientId" ColumnName="ClientId" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Webinars">
+            <EntityTypeMapping TypeName="WebExModel.Webinar">
+              <MappingFragment StoreEntitySet="Webinar">
+                <ScalarProperty Name="Deleted" ColumnName="Deleted" />
+                <ScalarProperty Name="Changed" ColumnName="Changed" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="WebLink" ColumnName="WebLink" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="MeetingId" ColumnName="MeetingId" />
+                <ScalarProperty Name="EntityId" ColumnName="EntityId" />
+                <ScalarProperty Name="EntityTypeId" ColumnName="EntityTypeId" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="WebinarId" ColumnName="WebinarId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

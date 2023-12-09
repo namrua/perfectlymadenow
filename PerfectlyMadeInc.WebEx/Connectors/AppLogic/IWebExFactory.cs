@@ -1,4 +1,5 @@
 ﻿using PerfectlyMadeInc.WebEx.Connectors.Integration;
+using System.Threading.Tasks;
 
 namespace PerfectlyMadeInc.WebEx.Connectors.AppLogic
 {
@@ -13,6 +14,6 @@ namespace PerfectlyMadeInc.WebEx.Connectors.AppLogic
 
         // get webEx service by account id
         IIntegrationService CreateIntegrationService(long accountId);
-
+        IWebExProvider GetWebexAccessToken(long accountId);
     }
 }

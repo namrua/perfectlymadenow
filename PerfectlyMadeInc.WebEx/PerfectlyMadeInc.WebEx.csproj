@@ -132,6 +132,9 @@
     <Compile Include="Model\UserAccount.cs">
       <DependentUpon>WebExModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\Webinar.cs">
+      <DependentUpon>WebExModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Programs\AppLogic\IProgramConvertor.cs" />
     <Compile Include="Accounts\AppLogic\AccountConvertor.cs" />
     <Compile Include="Connectors\AppLogic\IntegrationStatePairingProvider.cs" />

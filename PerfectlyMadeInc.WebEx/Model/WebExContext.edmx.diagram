@@ -15,7 +15,9 @@
         <AssociationConnector Association="WebExModel.FK_Event_AccountId" />
         <AssociationConnector Association="WebExModel.FK_Event_ProgramId" />
         <AssociationConnector Association="WebExModel.FK_IntegrationState_EventId" />
-        <EntityTypeShape EntityType="WebExModel.UserAccount" Width="1.5" PointX="8.375" PointY="0.75" />
+        <EntityTypeShape EntityType="WebExModel.UserAccount" Width="1.5" PointX="10.375" PointY="1" />
+        <EntityTypeShape EntityType="WebExModel.Webinar" Width="1.5" PointX="12.625" PointY="1.5" />
+        <AssociationConnector Association="WebExModel.FK_UserAccount_Webinar" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

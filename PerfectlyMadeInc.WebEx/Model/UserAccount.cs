@@ -14,7 +14,13 @@ namespace PerfectlyMadeInc.WebEx.Model
     
     public partial class UserAccount
     {
-        public int AccountId { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public UserAccount()
+        {
+            this.Webinars = new HashSet<Webinar>();
+        }
+    
+        public long AccountId { get; set; }
         public string Email { get; set; }
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
@@ -25,5 +31,12 @@ namespace PerfectlyMadeInc.WebEx.Model
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<System.DateTime> UpdatedDate { get; set; }
         public bool Active { get; set; }
+        public string AccessToken { get; set; }
+        public Nullable<int> AccessTokenTime { get; set; }
+        public string RefreshToken { get; set; }
+        public Nullable<int> RefreshTokenTime { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Webinar> Webinars { get; set; }
     }
 }
